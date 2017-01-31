@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class DriveTrain extends Subsystem {
-	private static DriveTrain instance = new DriveTrain();
+	private static DriveTrain instance;
 	
 	private VictorSP leftFront;
 	private VictorSP leftBack;
@@ -19,13 +19,13 @@ public class DriveTrain extends Subsystem {
 	private ADXRS450_Gyro gyro;
 	
 	private DriveTrain() {
-		this.leftFront = new VictorSP(RobotMap.LEFT_FRONT_DRIVE);
-		this.leftBack = new VictorSP(RobotMap.LEFT_BACK_DRIVE);
-		this.rightFront = new VictorSP(RobotMap.RIGHT_FRONT_DRIVE);
-		this.rightBack = new VictorSP(RobotMap.RIGHT_BACK_DRIVE);
-		this.encoderLeft = new Encoder(RobotMap.ENCODER_LEFT_A, RobotMap.ENCODER_LEFT_B);
-		this.encoderRight = new Encoder(RobotMap.ENCODER_RIGHT_A, RobotMap.ENCODER_RIGHT_B);
-		this.gyro = new ADXRS450_Gyro();
+		leftFront = new VictorSP(RobotMap.LEFT_FRONT_DRIVE);
+		leftBack = new VictorSP(RobotMap.LEFT_BACK_DRIVE);
+		rightFront = new VictorSP(RobotMap.RIGHT_FRONT_DRIVE);
+		rightBack = new VictorSP(RobotMap.RIGHT_BACK_DRIVE);
+		encoderLeft = new Encoder(RobotMap.ENCODER_LEFT_A, RobotMap.ENCODER_LEFT_B);
+		encoderRight = new Encoder(RobotMap.ENCODER_RIGHT_A, RobotMap.ENCODER_RIGHT_B);
+		gyro = new ADXRS450_Gyro();
 	}
 	
 	protected void initDefaultCommand() {
@@ -33,17 +33,17 @@ public class DriveTrain extends Subsystem {
 	}
 	
 	public static DriveTrain getInstance() {
-		return instance;
+		return instance==null ? new DriveTrain(): instance;
 	}
 	
 	public void setLeftMotorSpeed(double speed) {
-		this.leftFront.set(speed);
-		this.leftBack.set(speed);
+		leftFront.set(speed);
+		leftBack.set(speed);
 	}
 	
 	public void setRightMotorSpeed(double speed) {
-		this.rightFront.set(speed);
-		this.rightBack.set(speed);
+		rightFront.set(speed);
+		rightBack.set(speed);
 	}
 	
 	public double getLeftEncoder() {
@@ -55,18 +55,18 @@ public class DriveTrain extends Subsystem {
 	}
 	
 	public double getAverageEncoder() {
-		return (this.getLeftEncoder() + this.getRightEncoder()) / 2;
+		return (getLeftEncoder() + getRightEncoder()) / 2;
 	}
 	
 	public void calibrateGyro() {
-		this.gyro.calibrate();
+		gyro.calibrate();
 	}
 	
 	public void resetGyro() {
-		this.gyro.reset();
+		gyro.reset();
 	}
 	
 	public double getGyro() {
-		return this.gyro.getAngle();
+		return gyro.getAngle();
 	}
 }

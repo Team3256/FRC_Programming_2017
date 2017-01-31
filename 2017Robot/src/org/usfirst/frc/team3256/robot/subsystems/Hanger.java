@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  *
  */
 public class Hanger extends Subsystem {
-	private static Hanger instance = new Hanger();
+	private static Hanger instance;
 	
 	private VictorSP hanger1;
 	private VictorSP hanger2;
@@ -24,7 +24,7 @@ public class Hanger extends Subsystem {
     }
 	
 	public static Hanger getInstance() {
-		return instance;
+		return instance==null ? new Hanger() : instance;
 	}
     
     public void stopHang() {
