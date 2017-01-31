@@ -33,7 +33,7 @@ public class Roller extends Subsystem {
 		//TODO: implement
 	}
 	
-	public void shootBalls() {
+	public void outtakeBalls() {
 		//TODO: implement
 	}
 	
