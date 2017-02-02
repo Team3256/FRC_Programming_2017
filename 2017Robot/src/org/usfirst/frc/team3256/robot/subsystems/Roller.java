@@ -11,22 +11,21 @@ public class Roller extends Subsystem {
 	private VictorSP innerMotor;
 	private VictorSP outerMotor;
 	private DoubleSolenoid ballPivot;
-	private DoubleSolenoid gearPivot;
+	private DoubleSolenoid humanIntakePivot;
 	
 	private Roller() {
 		innerMotor = new VictorSP(RobotMap.INNER_MOTOR_ROLLER);
 		outerMotor = new VictorSP(RobotMap.OUTER_MOTOR_ROLLER);
 		ballPivot = new DoubleSolenoid(RobotMap.BALL_PIVOT_A, RobotMap.BALL_PIVOT_B);
-		gearPivot = new DoubleSolenoid(RobotMap.GEAR_PIVOT_A, RobotMap.GEAR_PIVOT_B);
-		
+		humanIntakePivot = new DoubleSolenoid(RobotMap.GEAR_PIVOT_A, RobotMap.GEAR_PIVOT_B);
 	}
 
     public void initDefaultCommand() {
-
+    	
     }
 	
 	public static Roller getInstance() {
-		return instance==null ? new Roller() : instance;
+		return instance == null ? instance = new Roller() : instance;
 	}
 	
 	public void intakeBalls() {
@@ -45,6 +44,11 @@ public class Roller extends Subsystem {
 		else{
 			//TODO:implement
 		}
+	}
+	
+	public void stop() {
+		innerMotor.set(0);
+		outerMotor.set(0);
 	}
 	
 	

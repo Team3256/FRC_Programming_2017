@@ -24,7 +24,11 @@ public class Hanger extends Subsystem {
     }
 	
 	public static Hanger getInstance() {
-		return instance==null ? new Hanger() : instance;
+		return instance == null ? instance = new Hanger() : instance;
+	}
+	
+	public void winchUp() {
+		//TODO:Implementation
 	}
     
     public void stopHang() {
