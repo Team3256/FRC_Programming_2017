@@ -14,6 +14,13 @@ public class Hanger extends Subsystem {
 	private VictorSP hanger1;
 	private VictorSP hanger2;
 	
+	public enum HangerState {
+		WINCH_UP,
+		WINCH_STOP;
+	}
+	
+	HangerState hangerState = HangerState.WINCH_STOP;
+	
 	private Hanger() {
 		hanger1 = new VictorSP(RobotMap.HANGER_1);
 		hanger2 = new VictorSP(RobotMap.HANGER_2);
@@ -27,13 +34,24 @@ public class Hanger extends Subsystem {
 		return instance == null ? instance = new Hanger() : instance;
 	}
 	
-	public void winchUp() {
-		//TODO:Implementation
+	public void setHangerState(HangerState wantedState) {
+		switch(wantedState) {
+			case WINCH_UP:
+				hangerState = HangerState.WINCH_UP;
+				//TODO: tune
+				hanger1.set(1);
+				hanger2.set(1);
+				break;
+			case WINCH_STOP:
+				hangerState = HangerState.WINCH_STOP;
+				//TODO: tune
+				hanger1.set(0);
+				hanger2.set(0);
+				break;
+			default:
+				hanger1.set(0);
+				hanger2.set(0);
+		}
 	}
-    
-    public void stopHang() {
-    	hanger1.set(0);
-    	hanger2.set(0);
-    }
 }
 
