@@ -1,6 +1,7 @@
 package org.usfirst.frc.team3256.robot.commands;
 
 import org.usfirst.frc.team3256.robot.subsystems.Manipulator;
+import org.usfirst.frc.team3256.robot.subsystems.Manipulator.HumanPlayerLoadingState;
 import org.usfirst.frc.team3256.robot.subsystems.Manipulator.IntakeState;
 
 import edu.wpi.first.wpilibj.command.Command;
@@ -18,11 +19,11 @@ public class GroundIntakeBalls extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	//continuous run ball intake
     	manipulator.setIntakeState(IntakeState.GROUND_INTAKE);
     }
 
@@ -33,6 +34,7 @@ public class GroundIntakeBalls extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
+    	//stop motors 
     	manipulator.setIntakeState(IntakeState.HOLD_BALLS);
     }
 
