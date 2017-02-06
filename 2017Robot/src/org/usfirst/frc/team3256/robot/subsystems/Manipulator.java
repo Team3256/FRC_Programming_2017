@@ -64,6 +64,7 @@ public class Manipulator extends Subsystem {
 				break;
 			default:
 				humanIntakePivot.set(DoubleSolenoid.Value.kOff);
+				break;
 			
 		}
 		
@@ -77,23 +78,26 @@ public class Manipulator extends Subsystem {
 				ballPivot.set(DoubleSolenoid.Value.kForward);
 				innerMotor.set(1);
 				outerMotor.set(1);
+				break;
 			case SPIT_BALLS:
 				intakeState = IntakeState.SPIT_BALLS;
 				//TODO: tune
 				ballPivot.set(DoubleSolenoid.Value.kReverse);
 				innerMotor.set(-1);
 				outerMotor.set(-1);
+				break;
 			case HOLD_BALLS:
 				intakeState = IntakeState.HOLD_BALLS;
 				//TODO: tune
 				ballPivot.set(DoubleSolenoid.Value.kForward);
 				innerMotor.set(0);
 				outerMotor.set(0);
+				break;
 			default:
 				ballPivot.set(DoubleSolenoid.Value.kOff);
 				innerMotor.set(0);
 				outerMotor.set(0);
-				
+				break;
 		}
 	}
 	
