@@ -1,6 +1,6 @@
 package org.usfirst.frc.team3256.robot.subsystems;
 
-import org.usfirst.frc.team3256.robot.RobotMap;
+import org.usfirst.frc.team3256.robot.Constants;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.VictorSP;
@@ -30,10 +30,10 @@ public class Manipulator extends Subsystem {
 	IntakeState intakeState = IntakeState.HOLD_BALLS;
 	
 	private Manipulator() {
-		innerMotor = new VictorSP(RobotMap.INNER_MOTOR_ROLLER);
-		outerMotor = new VictorSP(RobotMap.OUTER_MOTOR_ROLLER);
-		ballPivot = new DoubleSolenoid(RobotMap.BALL_PIVOT_A, RobotMap.BALL_PIVOT_B);
-		humanIntakePivot = new DoubleSolenoid(RobotMap.GEAR_PIVOT_A, RobotMap.GEAR_PIVOT_B);
+		innerMotor = new VictorSP(Constants.INNER_MOTOR_ROLLER);
+		outerMotor = new VictorSP(Constants.OUTER_MOTOR_ROLLER);
+		ballPivot = new DoubleSolenoid(Constants.BALL_PIVOT_A, Constants.BALL_PIVOT_B);
+		humanIntakePivot = new DoubleSolenoid(Constants.GEAR_PIVOT_A, Constants.GEAR_PIVOT_B);
 	}
 
     public void initDefaultCommand() {
