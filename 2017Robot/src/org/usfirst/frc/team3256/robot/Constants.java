@@ -19,12 +19,12 @@ public class Constants {
 	public static final int OUTER_MOTOR_ROLLER = 5;
 
 	// PCM
-	public static final int DRIVE_SHIFTER_A = 4;
-	public static final int DRIVE_SHIFTER_B = 5;
+	public static final int DRIVE_SHIFTER_A = 0;
+	public static final int DRIVE_SHIFTER_B = 1;
 	public static final int BALL_PIVOT_A = 2;
 	public static final int BALL_PIVOT_B = 3;
-	public static final int GEAR_PIVOT_A = 0;
-	public static final int GEAR_PIVOT_B = 1;
+	public static final int GEAR_PIVOT_A = 4;
+	public static final int GEAR_PIVOT_B = 5;
 
 	// Encoder
 	public static final int ENCODER_LEFT_A = 13;
