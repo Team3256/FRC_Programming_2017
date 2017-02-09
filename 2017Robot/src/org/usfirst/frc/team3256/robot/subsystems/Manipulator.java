@@ -76,15 +76,15 @@ public class Manipulator extends Subsystem {
 				intakeState = IntakeState.GROUND_INTAKE;
 				//TODO: tune
 				ballPivot.set(DoubleSolenoid.Value.kForward);
-				innerMotor.set(1);
-				outerMotor.set(1);
+				innerMotor.set(Constants.GROUND_INTAKE_POWER);
+				outerMotor.set(Constants.GROUND_INTAKE_POWER);
 				break;
 			case SPIT_BALLS:
 				intakeState = IntakeState.SPIT_BALLS;
 				//TODO: tune
 				ballPivot.set(DoubleSolenoid.Value.kReverse);
-				innerMotor.set(-1);
-				outerMotor.set(-1);
+				innerMotor.set(Constants.SHOOT_BALLS_POWER);
+				outerMotor.set(Constants.SHOOT_BALLS_POWER);
 				break;
 			case HOLD_BALLS:
 				intakeState = IntakeState.HOLD_BALLS;

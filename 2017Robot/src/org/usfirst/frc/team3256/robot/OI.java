@@ -1,10 +1,21 @@
 package org.usfirst.frc.team3256.robot;
 
+import org.usfirst.frc.team3256.robot.commands.GroundIntakeBalls;
+import org.usfirst.frc.team3256.robot.commands.HumanPlayerBallsIntake;
+import org.usfirst.frc.team3256.robot.commands.HumanPlayerGearIntake;
+import org.usfirst.frc.team3256.robot.commands.RunHang;
+import org.usfirst.frc.team3256.robot.commands.ShootBalls;
+import org.usfirst.frc.team3256.robot.commands.StopHang;
+import org.usfirst.frc.team3256.robot.commands.StopRollers;
+import org.usfirst.frc.team3256.robot.triggers.JoystickTrigger;
+
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.buttons.Trigger;
+import edu.wpi.first.wpilibj.command.Command;
 
 
 /**
@@ -22,14 +33,8 @@ public class OI {
 	public static Button buttonY1 = new JoystickButton(driver, 4);
 	public static Button leftBumper1 = new JoystickButton(driver, 5);
 	public static Button rightBumper1 = new JoystickButton(driver, 6);
-	
-	public static boolean getRightTrigger(XboxController joystick){
-		return joystick.getTriggerAxis(Hand.kRight)>0.5;
-	}
-	
-	public static boolean getLeftTrigger(XboxController joystick){
-		return joystick.getTriggerAxis(Hand.kLeft)>0.5;
-	}
+	public static Trigger rightTrigger1 = new JoystickTrigger(driver,3);
+	public static Trigger leftTrigger1 = new JoystickTrigger(driver,6);
 	
 	//Controller 2
     public static Button buttonA2 = new JoystickButton(manipulator, 1);
@@ -38,8 +43,18 @@ public class OI {
     public static Button buttonY2 = new JoystickButton(manipulator, 4);
     public static Button leftBumper2 = new JoystickButton(manipulator, 5);
     public static Button rightBumper2 = new JoystickButton(manipulator, 6);
-    
-    public OI(){
-    	
+	public static Trigger rightTrigger2 = new JoystickTrigger(manipulator,3);
+	public static Trigger leftTrigger2 = new JoystickTrigger(manipulator,6);
+	
+    public OI() {
+    	//TESTED ON HARDWARE
+    	buttonA2.whileHeld(new GroundIntakeBalls());
+    	buttonA2.whenInactive(new StopRollers());
+    	buttonY2.whileHeld(new ShootBalls());
+    	buttonY2.whenInactive(new StopRollers());
+    	rightTrigger2.toggleWhenActive(new RunHang());
+    	rightTrigger2.whenInactive(new StopHang());
+    	leftBumper2.whileHeld(new HumanPlayerBallsIntake());
+    	leftBumper2.whenReleased(new HumanPlayerGearIntake());
     }
 }

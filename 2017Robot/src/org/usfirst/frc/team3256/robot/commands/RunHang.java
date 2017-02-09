@@ -5,6 +5,7 @@ import org.usfirst.frc.team3256.robot.subsystems.Manipulator;
 import org.usfirst.frc.team3256.robot.subsystems.Hanger.HangerState;
 import org.usfirst.frc.team3256.robot.subsystems.Manipulator.IntakeState;
 
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
@@ -14,6 +15,7 @@ public class RunHang extends Command {
 
 	Hanger hanger = Hanger.getInstance();
 	Manipulator manipulator = Manipulator.getInstance();
+	PowerDistributionPanel pdp = new PowerDistributionPanel();
 	
     public RunHang() {
     	requires(hanger);
@@ -33,17 +35,18 @@ public class RunHang extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return true;
+        return false || pdp.getCurrent(12)>30;
     }
 
     // Called once after isFinished returns true
     protected void end() {
-    	//stop intake 
+    	//stop hang 
     	hanger.setHangerState(HangerState.WINCH_STOP);
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
+    	end();
     }
 }

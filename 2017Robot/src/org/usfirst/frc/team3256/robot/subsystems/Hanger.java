@@ -39,8 +39,8 @@ public class Hanger extends Subsystem {
 			case WINCH_UP:
 				hangerState = HangerState.WINCH_UP;
 				//TODO: tune
-				hanger1.set(1);
-				hanger2.set(1);
+				hanger1.set(0.5);
+				hanger2.set(0.5);
 				break;
 			case WINCH_STOP:
 				hangerState = HangerState.WINCH_STOP;

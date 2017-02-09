@@ -19,7 +19,8 @@ public class TeleopDrive extends Command {
 		TANK,
 		ARCADE;
 	}
-
+	
+	//TESTED ON HARDWARE
     public TeleopDrive(TeleopDriveMode wantedMode) {
         requires(driveTrain);
 		this.wantedMode = wantedMode;
@@ -33,11 +34,11 @@ public class TeleopDrive extends Command {
     protected void execute() {
     	if (wantedMode == TeleopDriveMode.TANK){
     		driveTrain.tankDrive(OI.driver.getY(Hand.kLeft), 
-    				OI.driver.getY(Hand.kRight), OI.getRightTrigger(OI.driver));
+    				OI.driver.getY(Hand.kRight), OI.rightTrigger1.get());
     	}
     	else{
     		driveTrain.arcadeDrive(OI.driver.getY(Hand.kLeft), 
-    				OI.driver.getX(Hand.kRight), OI.getRightTrigger(OI.driver));
+    				OI.driver.getX(Hand.kRight), OI.rightTrigger1.get());
     	}
     	driveTrain.shiftUp(OI.rightBumper1.get());
     }

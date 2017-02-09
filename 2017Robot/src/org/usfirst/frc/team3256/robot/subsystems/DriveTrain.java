@@ -89,6 +89,11 @@ public class DriveTrain extends Subsystem {
 		return (getLeftEncoder() + getRightEncoder()) / 2;
 	}
 	
+	public void resetEncoders() {
+		encoderLeft.reset();
+		encoderRight.reset();
+	}
+	
 	public void calibrateGyro() {
 		gyro.calibrate();
 	}
@@ -122,7 +127,7 @@ public class DriveTrain extends Subsystem {
 		setRightMotorPower(right);
 	}
 	
-	public double processJoystickValue(double num){
+	private double processJoystickValue(double num){
 		if (num < 0){
 			//handle deadband
 			if (num > -Constants.DEADBAND_VALUE) num = 0;
