@@ -41,7 +41,7 @@ public class Constants {
 	public static final double GROUND_INTAKE_POWER = 0.5;
 	public static final double SHOOT_BALLS_POWER = -0.5;
 	
-	//Robot Constants
-	public static final double MAX_VEL_HIGH_GEAR = 18.94;
-	public static final double MAX_VEL_LOW_GEAR = 6.48;
+	//Robot Constants 
+	public static final double MAX_VEL_HIGH_GEAR = 18.94; // ft/s
+	public static final double MAX_VEL_LOW_GEAR = 6.48;   // ft/s
 }
