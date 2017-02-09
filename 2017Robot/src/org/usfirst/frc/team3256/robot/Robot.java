@@ -1,6 +1,8 @@
 
 package org.usfirst.frc.team3256.robot;
 
+import org.usfirst.frc.team3256.robot.subsystems.DriveTrain;
+
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -16,6 +18,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * directory.
  */
 public class Robot extends IterativeRobot {
+	
+	DriveTrain driveTrain;
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -24,6 +28,16 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void robotInit() {
+		driveTrain = DriveTrain.getInstance();
+		try {
+			SmartDashboard.putBoolean("GYRO CALIBRATING", true);
+			driveTrain.calibrateGyro();
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		SmartDashboard.putBoolean("GYRO CALIBRATING", false);
 	}
 
 	/**
@@ -33,12 +47,13 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void disabledInit() {
-
+		
 	}
 
 	@Override
 	public void disabledPeriodic() {
 		Scheduler.getInstance().run();
+		driveTrain.logToDashboard();
 	}
 
 	/**
@@ -76,6 +91,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
+		driveTrain.logToDashboard();
 	}
 
 	/**

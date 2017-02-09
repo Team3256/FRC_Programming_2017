@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveTrain extends Subsystem {
 	private static DriveTrain instance;
@@ -27,10 +28,14 @@ public class DriveTrain extends Subsystem {
 		leftBack = new VictorSP(Constants.LEFT_BACK_DRIVE);
 		rightFront = new VictorSP(Constants.RIGHT_FRONT_DRIVE);
 		rightBack = new VictorSP(Constants.RIGHT_BACK_DRIVE);
+		leftFront.setInverted(true);
+		leftBack.setInverted(true);
+		rightFront.setInverted(false);
+		rightBack.setInverted(false);
 		encoderLeft = new Encoder(Constants.ENCODER_LEFT_A, Constants.ENCODER_LEFT_B);
 		encoderRight = new Encoder(Constants.ENCODER_RIGHT_A, Constants.ENCODER_RIGHT_B);
 		gyro = new ADXRS450_Gyro();
-		shifter = new DoubleSolenoid(Constants.DRIVE_SHIFTER_A,Constants.DRIVE_SHIFTER_B);;
+		shifter = new DoubleSolenoid(Constants.DRIVE_SHIFTER_A,Constants.DRIVE_SHIFTER_B);
 	}
 	
 	protected void initDefaultCommand() {
@@ -38,7 +43,23 @@ public class DriveTrain extends Subsystem {
 	}
 	
 	public static DriveTrain getInstance() {
-		return instance==null ? new DriveTrain(): instance;
+		return instance == null ? instance = new DriveTrain() : instance;
+	}
+	
+	public void logToDashboard(){
+		SmartDashboard.putNumber("Gyro Angle - SPI 0 ", getAngle());
+		SmartDashboard.putNumber("Left Encoder: - " + Constants.ENCODER_LEFT_A +
+				"," + Constants.ENCODER_LEFT_B + " ", getLeftEncoder());
+		SmartDashboard.putNumber("Right Encoder: - " + Constants.ENCODER_RIGHT_A + 
+				"," + Constants.ENCODER_RIGHT_B + " ", getRightEncoder());
+		SmartDashboard.putNumber("Left Front: PWM-" + leftFront.getChannel() + " ", 
+				leftFront.get());
+		SmartDashboard.putNumber("Right Front: PWM-" + rightFront.getChannel() + " ", 
+				rightFront.get());
+		SmartDashboard.putNumber("Left Back: PWM-" + leftBack.getChannel() + " ", 
+				leftBack.get());
+		SmartDashboard.putNumber("Right Back: PWM-" + rightBack.getChannel() + " ", 
+				rightBack.get());
 	}
 	
 	public void setLeftMotorPower(double power) {
@@ -76,7 +97,7 @@ public class DriveTrain extends Subsystem {
 		gyro.reset();
 	}
 	
-	public double getGyro() {
+	public double getAngle() {
 		return gyro.getAngle();
 	}
 	
@@ -92,12 +113,9 @@ public class DriveTrain extends Subsystem {
 	}
 	
 	public void arcadeDrive(double throttle, double turn, boolean wantsReverse){
-		//TODO: make sure reverse works here
-		if (wantsReverse){
-			throttle = -throttle;
-		}
-		double left = throttle + turn;
-		double right = throttle - turn;
+		if (wantsReverse) throttle *= -1;
+		double left = throttle - turn;
+		double right = throttle + turn;
 		left = processJoystickValue(left);
 		right = processJoystickValue(right);
 		setLeftMotorPower(left);
