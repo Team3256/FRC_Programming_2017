@@ -12,6 +12,10 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveTrain extends Subsystem {
+	
+	//Theoretical Max Speed: HG: 18.94 ft/s
+	//						 LG: 6.48 ft/s
+	
 	private static DriveTrain instance;
 	
 	private VictorSP leftFront;

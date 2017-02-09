@@ -4,6 +4,7 @@ import org.usfirst.frc.team3256.robot.Constants;
 
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
@@ -53,5 +54,6 @@ public class Hanger extends Subsystem {
 				hanger2.set(0);
 		}
 	}
+
 }
 

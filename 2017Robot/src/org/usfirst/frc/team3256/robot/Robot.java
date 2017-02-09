@@ -22,6 +22,7 @@ public class Robot extends IterativeRobot {
 	Manipulator manipulator;
 	Hanger hanger;
 	OI operatorInterface;
+	
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.

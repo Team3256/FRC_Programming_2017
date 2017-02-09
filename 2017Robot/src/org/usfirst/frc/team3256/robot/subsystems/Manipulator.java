@@ -101,7 +101,7 @@ public class Manipulator extends Subsystem {
 		}
 	}
 	
-	public void outputToDashboard(){
+	public void logToDashboard() {
 		SmartDashboard.putString("HumanPlayerIntakeState", "" + loadingState);
 		SmartDashboard.putString("IntakeState", "" + intakeState);
 	}
