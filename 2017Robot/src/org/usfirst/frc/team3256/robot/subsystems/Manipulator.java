@@ -1,6 +1,6 @@
 package org.usfirst.frc.team3256.robot.subsystems;
 
-import org.usfirst.frc.team3256.robot.RobotMap;
+import org.usfirst.frc.team3256.robot.Constants;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.VictorSP;
@@ -30,10 +30,10 @@ public class Manipulator extends Subsystem {
 	IntakeState intakeState = IntakeState.HOLD_BALLS;
 	
 	private Manipulator() {
-		innerMotor = new VictorSP(RobotMap.INNER_MOTOR_ROLLER);
-		outerMotor = new VictorSP(RobotMap.OUTER_MOTOR_ROLLER);
-		ballPivot = new DoubleSolenoid(RobotMap.BALL_PIVOT_A, RobotMap.BALL_PIVOT_B);
-		humanIntakePivot = new DoubleSolenoid(RobotMap.GEAR_PIVOT_A, RobotMap.GEAR_PIVOT_B);
+		innerMotor = new VictorSP(Constants.INNER_MOTOR_ROLLER);
+		outerMotor = new VictorSP(Constants.OUTER_MOTOR_ROLLER);
+		ballPivot = new DoubleSolenoid(Constants.BALL_PIVOT_A, Constants.BALL_PIVOT_B);
+		humanIntakePivot = new DoubleSolenoid(Constants.GEAR_PIVOT_A, Constants.GEAR_PIVOT_B);
 	}
 
     public void initDefaultCommand() {
@@ -76,15 +76,15 @@ public class Manipulator extends Subsystem {
 				intakeState = IntakeState.GROUND_INTAKE;
 				//TODO: tune
 				ballPivot.set(DoubleSolenoid.Value.kForward);
-				innerMotor.set(1);
-				outerMotor.set(1);
+				innerMotor.set(Constants.GROUND_INTAKE_POWER);
+				outerMotor.set(Constants.GROUND_INTAKE_POWER);
 				break;
 			case SPIT_BALLS:
 				intakeState = IntakeState.SPIT_BALLS;
 				//TODO: tune
 				ballPivot.set(DoubleSolenoid.Value.kReverse);
-				innerMotor.set(-1);
-				outerMotor.set(-1);
+				innerMotor.set(Constants.SHOOT_BALLS_POWER);
+				outerMotor.set(Constants.SHOOT_BALLS_POWER);
 				break;
 			case HOLD_BALLS:
 				intakeState = IntakeState.HOLD_BALLS;
@@ -101,7 +101,7 @@ public class Manipulator extends Subsystem {
 		}
 	}
 	
-	public void outputToDashboard(){
+	public void logToDashboard() {
 		SmartDashboard.putString("HumanPlayerIntakeState", "" + loadingState);
 		SmartDashboard.putString("IntakeState", "" + intakeState);
 	}

@@ -1,12 +1,13 @@
 
 package org.usfirst.frc.team3256.robot;
 
+import org.usfirst.frc.team3256.robot.subsystems.DriveTrain;
+import org.usfirst.frc.team3256.robot.subsystems.Hanger;
+import org.usfirst.frc.team3256.robot.subsystems.Manipulator;
+
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -16,7 +17,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * directory.
  */
 public class Robot extends IterativeRobot {
-
+	
+	DriveTrain driveTrain;
+	Manipulator manipulator;
+	Hanger hanger;
+	OI operatorInterface;
+	
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
@@ -24,6 +30,12 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void robotInit() {
+		driveTrain = DriveTrain.getInstance();
+		driveTrain.calibrateGyro();
+		driveTrain.resetEncoders();
+		manipulator = Manipulator.getInstance();
+		hanger = Hanger.getInstance();
+		operatorInterface = new OI();
 	}
 
 	/**
@@ -33,12 +45,13 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void disabledInit() {
-
+		
 	}
 
 	@Override
 	public void disabledPeriodic() {
 		Scheduler.getInstance().run();
+		driveTrain.logToDashboard();
 	}
 
 	/**
@@ -76,6 +89,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
+		driveTrain.logToDashboard();
 	}
 
 	/**

@@ -1,9 +1,10 @@
 package org.usfirst.frc.team3256.robot.subsystems;
 
-import org.usfirst.frc.team3256.robot.RobotMap;
+import org.usfirst.frc.team3256.robot.Constants;
 
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
@@ -22,8 +23,8 @@ public class Hanger extends Subsystem {
 	HangerState hangerState = HangerState.WINCH_STOP;
 	
 	private Hanger() {
-		hanger1 = new VictorSP(RobotMap.HANGER_1);
-		hanger2 = new VictorSP(RobotMap.HANGER_2);
+		hanger1 = new VictorSP(Constants.HANGER_1);
+		hanger2 = new VictorSP(Constants.HANGER_2);
 	}
 
     public void initDefaultCommand() {
@@ -39,8 +40,8 @@ public class Hanger extends Subsystem {
 			case WINCH_UP:
 				hangerState = HangerState.WINCH_UP;
 				//TODO: tune
-				hanger1.set(1);
-				hanger2.set(1);
+				hanger1.set(0.5);
+				hanger2.set(0.5);
 				break;
 			case WINCH_STOP:
 				hangerState = HangerState.WINCH_STOP;
@@ -53,5 +54,6 @@ public class Hanger extends Subsystem {
 				hanger2.set(0);
 		}
 	}
+
 }
 

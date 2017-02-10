@@ -13,8 +13,6 @@ public class HumanPlayerBallsIntake extends InstantCommand {
 	
 	Manipulator manipulator = Manipulator.getInstance();
 	
-	//there are no motors for this, this just switches the actuator into the fuel intake state
-	//so balls from the human player station can fall into the robot
     public HumanPlayerBallsIntake() {
         requires(manipulator);
     }
