@@ -15,7 +15,6 @@ public class RunHang extends Command {
 
 	Hanger hanger = Hanger.getInstance();
 	Manipulator manipulator = Manipulator.getInstance();
-	PowerDistributionPanel pdp = new PowerDistributionPanel();
 	
     public RunHang() {
     	requires(hanger);
@@ -35,7 +34,7 @@ public class RunHang extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false || pdp.getCurrent(12)>30;
+        return false;
     }
 
     // Called once after isFinished returns true

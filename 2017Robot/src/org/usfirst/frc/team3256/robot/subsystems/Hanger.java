@@ -1,5 +1,6 @@
 package org.usfirst.frc.team3256.robot.subsystems;
 
+import org.usfirst.frc.team3256.lib.Log;
 import org.usfirst.frc.team3256.robot.Constants;
 
 import edu.wpi.first.wpilibj.VictorSP;
@@ -9,7 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 /**
  *
  */
-public class Hanger extends Subsystem {
+public class Hanger extends Subsystem implements Log {
 	private static Hanger instance;
 	
 	private VictorSP hanger1;
@@ -55,5 +56,13 @@ public class Hanger extends Subsystem {
 		}
 	}
 
+	@Override
+	public void logToDashboard() {
+		SmartDashboard.putString("HangerState", "" + hangerState);
+		SmartDashboard.putNumber("HangerMotor1: PWM-" + hanger1.getChannel() + " ", 
+				hanger1.get());
+		SmartDashboard.putNumber("HangerMotor2: PWM-" + hanger2.getChannel() + " ", 
+				hanger2.get());
+	}
 }
 

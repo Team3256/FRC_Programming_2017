@@ -1,5 +1,6 @@
 package org.usfirst.frc.team3256.robot.subsystems;
 
+import org.usfirst.frc.team3256.lib.Log;
 import org.usfirst.frc.team3256.robot.Constants;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -7,7 +8,7 @@ import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class Manipulator extends Subsystem {
+public class Manipulator extends Subsystem implements Log {
 	private static Manipulator instance;
 	private VictorSP innerMotor;
 	private VictorSP outerMotor;
@@ -101,9 +102,16 @@ public class Manipulator extends Subsystem {
 		}
 	}
 	
+	@Override
 	public void logToDashboard() {
 		SmartDashboard.putString("HumanPlayerIntakeState", "" + loadingState);
 		SmartDashboard.putString("IntakeState", "" + intakeState);
+		SmartDashboard.putNumber("Inner Motor: PWM-" + innerMotor.getChannel() + " ", 
+				innerMotor.get());
+		SmartDashboard.putNumber("Outer Motor: PWM-" + outerMotor.getChannel() + " ", 
+				outerMotor.get());
+		SmartDashboard.putString("Ball Pivot: ", "" + ballPivot.get());
+		SmartDashboard.putString("Human Player Intake Pivot: ", "" + humanIntakePivot.get());
 	}
 	
 }

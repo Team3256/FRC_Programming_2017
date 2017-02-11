@@ -1,6 +1,7 @@
 
 package org.usfirst.frc.team3256.robot;
 
+import org.usfirst.frc.team3256.lib.Logger;
 import org.usfirst.frc.team3256.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team3256.robot.subsystems.Hanger;
 import org.usfirst.frc.team3256.robot.subsystems.Manipulator;
@@ -22,6 +23,7 @@ public class Robot extends IterativeRobot {
 	Manipulator manipulator;
 	Hanger hanger;
 	OI operatorInterface;
+	Logger logger;
 	
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -32,9 +34,15 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
 		driveTrain = DriveTrain.getInstance();
 		driveTrain.calibrateGyro();
+		driveTrain.resetGyro();
 		driveTrain.resetEncoders();
 		manipulator = Manipulator.getInstance();
 		hanger = Hanger.getInstance();
+		logger = new Logger();
+		logger.addLog(driveTrain);
+		logger.addLog(manipulator);
+		logger.addLog(hanger);
+		logger.start();
 		operatorInterface = new OI();
 	}
 
