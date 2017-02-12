@@ -19,7 +19,7 @@ public class DriveToDistance extends Command {
 	private double setpoint;
 	private boolean goForward;
 	
-    public DriveToDistance(double setpoint, boolean goForward) {
+    public DriveToDistance(double setpoint, final boolean goForward) {
         requires(drive);
         this.setpoint = setpoint;
         this.goForward = goForward;

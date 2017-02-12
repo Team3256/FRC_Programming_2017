@@ -18,12 +18,20 @@ public class TurnToAngle extends Command {
 	private double setpoint;
 	private boolean turnRight;
 	
-    public TurnToAngle(double setpoint, boolean turnRight) {
+    public TurnToAngle(double setpoint, final boolean turnRight) {
         requires(drive);
         pid = new PIDController(Constants.KP_TURN, Constants.KI_TURN, Constants.KD_TURN);
-        pid.setMinMaxOutput(0.25, 0.75);
+        pid.setMinMaxOutput(0.3, 0.7);
+        pid.setTolerance(0.25);
     	this.setpoint = setpoint;
     	this.turnRight = turnRight;
+    }
+
+    // Called just before this Command runs the first time
+    protected void initialize() {
+    	drive.resetGyro();
+    	drive.shiftUp(true);
+    	pid.setSetpoint(setpoint);
         notifier = new Notifier(new Runnable(){
 			@Override
 			public void run() {
@@ -31,17 +39,13 @@ public class TurnToAngle extends Command {
 	    	 * Perform PID to calculate PWM value
 	    	 * Apply PWM value to motors
 	    	 */
-	    	double output = pid.update(drive.getAngle());
+			System.out.println("RUNNING ????????????");
+	    	double output = pid.update(Math.abs(drive.getAngle()));
 	    	if (turnRight) drive.tankDrive(output, -output, false);
 	    	else drive.tankDrive(-output, output, false);
+	    	pid.logToDashboard();
 			}
-        	
         });
-    }
-
-    // Called just before this Command runs the first time
-    protected void initialize() {
-    	drive.resetGyro();
     	notifier.startPeriodic(Constants.CONTROL_LOOP_DT);
     }
 

@@ -12,6 +12,7 @@ public class DriveStraightController {
 	private TrajectoryFollower trajectoryFollower;
 	private PIDController headingController;
 	private DriveTrain drive = DriveTrain.getInstance();
+	private double output, headingAdjustment, leftOutput, rightOutput;
 	
 	public DriveStraightController(){
 		trajectoryGenerator = new TrajectoryGenerator();
@@ -43,10 +44,10 @@ public class DriveStraightController {
 	}
 	
 	public Pair<Double, Double> update(){
-		double output = trajectoryFollower.calcMotorOutput(drive.getAveragePosition());
-		double headingAdjustment = headingController.update(drive.getAngle());
-		double leftOutput = output - headingAdjustment;
-		double rightOutput = output + headingAdjustment;
+		output = trajectoryFollower.calcMotorOutput(drive.getAveragePosition());
+		headingAdjustment = headingController.update(drive.getAngle());
+		leftOutput = output - headingAdjustment;
+		rightOutput = output + headingAdjustment;
 		Pair<Double, Double> driveOutputPair = new Pair<Double, Double>(leftOutput, rightOutput);
 		return driveOutputPair;
 	}

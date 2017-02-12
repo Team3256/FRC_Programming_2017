@@ -2,6 +2,7 @@
 package org.usfirst.frc.team3256.robot;
 
 import org.usfirst.frc.team3256.lib.Logger;
+import org.usfirst.frc.team3256.robot.commands.TurnTesting;
 import org.usfirst.frc.team3256.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team3256.robot.subsystems.Hanger;
 import org.usfirst.frc.team3256.robot.subsystems.Manipulator;
@@ -38,12 +39,13 @@ public class Robot extends IterativeRobot {
 		driveTrain.resetEncoders();
 		manipulator = Manipulator.getInstance();
 		hanger = Hanger.getInstance();
+		operatorInterface = new OI();
 		logger = new Logger();
 		logger.addLog(driveTrain);
 		logger.addLog(manipulator);
 		logger.addLog(hanger);
+		logger.addLog(operatorInterface);
 		logger.start();
-		operatorInterface = new OI();
 	}
 
 	/**
@@ -75,7 +77,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-		
+		new TurnTesting().start();
 	}
 
 	/**

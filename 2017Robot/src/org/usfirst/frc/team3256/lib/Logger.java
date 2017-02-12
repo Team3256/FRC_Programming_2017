@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import org.usfirst.frc.team3256.robot.Constants;
 
 public class Logger {
 

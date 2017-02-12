@@ -30,7 +30,7 @@ public class Constants {
 
 	// PCM
 	public static final int DRIVE_SHIFTER_A = 0;
-	public static final int DRIVE_SHIFTER_B = 1;
+	public static final int DRIVE_SHIFTER_B = 7;
 	public static final int BALL_PIVOT_A = 2;
 	public static final int BALL_PIVOT_B = 3;
 	public static final int GEAR_PIVOT_A = 4;
@@ -64,9 +64,9 @@ public class Constants {
 	public static final double CONTROL_LOOP_DT = 0.02;
 	
 	//Turn PID Gains
-	public static final double KP_TURN = 1.0;
+	public static final double KP_TURN = 0.0125;
 	public static final double KI_TURN = 0.0;
-	public static final double KD_TURN = 0.0;
+	public static final double KD_TURN = 0.055;
 	//Distance FeedForward Gains 
 	public static final double KV_DISTANCE = 1/MAX_VEL_HIGH_GEAR;
 	public static final double KA_DISTANCE = 0.0;
@@ -78,4 +78,5 @@ public class Constants {
 	public static final double KP_STRAIGHT = 0.0;
 	public static final double KI_STRAIGHT = 0.0;
 	public static final double KD_STRAIGHT = 0.0;
+
 }

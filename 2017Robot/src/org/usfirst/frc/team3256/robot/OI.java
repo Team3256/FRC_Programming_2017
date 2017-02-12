@@ -1,5 +1,6 @@
 package org.usfirst.frc.team3256.robot;
 
+import org.usfirst.frc.team3256.lib.Log;
 import org.usfirst.frc.team3256.robot.commands.GroundIntakeBalls;
 import org.usfirst.frc.team3256.robot.commands.HumanPlayerBallsIntake;
 import org.usfirst.frc.team3256.robot.commands.HumanPlayerGearIntake;
@@ -9,17 +10,19 @@ import org.usfirst.frc.team3256.robot.commands.StopHang;
 import org.usfirst.frc.team3256.robot.commands.StopRollers;
 import org.usfirst.frc.team3256.robot.triggers.JoystickTrigger;
 
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.buttons.Trigger;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 /**
  * This class is the glue that binds the controls on the physical operator
  * interface to the commands and command groups that allow control of the robot.
  */
-public class OI {
+public class OI implements Log{
 	public static XboxController driver = new XboxController(Constants.DRIVER_CONTROLLER);
 	public static XboxController manipulator = new XboxController(Constants.MANIPULATOR_CONTROLLER);
 	
@@ -54,4 +57,10 @@ public class OI {
     	leftBumper2.whileHeld(new HumanPlayerBallsIntake());
     	leftBumper2.whenReleased(new HumanPlayerGearIntake());
     }
+
+	@Override
+	public void logToDashboard() {
+		SmartDashboard.putNumber("LEFT Y", driver.getY(Hand.kLeft));
+		SmartDashboard.putNumber("RIGHT X: ", driver.getX(Hand.kRight));
+	}
 }

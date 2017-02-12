@@ -88,8 +88,7 @@ public class DriveTrain extends Subsystem implements Log {
 	}
 	
 	public void shiftUp(boolean wantsHighGear){
-		//TODO: determine which direction is actually high and low gear
-		shifter.set(wantsHighGear?DoubleSolenoid.Value.kForward:DoubleSolenoid.Value.kReverse);
+		shifter.set(wantsHighGear?DoubleSolenoid.Value.kReverse:DoubleSolenoid.Value.kForward);
 	}
 	
 	public double getLeftPosition() {
@@ -122,8 +121,10 @@ public class DriveTrain extends Subsystem implements Log {
 	}
 	
 	public void tankDrive(double left, double right, boolean wantsReverse){
-		left = processJoystickValue(left);
-		right = processJoystickValue(right);
+		if (left > 1) left = 1;
+		if (left < -1) left = -1;
+		if (right > 1) right = 1;
+		if (right < -1) right = -1;
 		if (wantsReverse){
 			left *= -1;
 			right *= -1;
@@ -134,27 +135,15 @@ public class DriveTrain extends Subsystem implements Log {
 	
 	public void arcadeDrive(double throttle, double turn, boolean wantsReverse){
 		if (wantsReverse) throttle *= -1;
+		if (Math.abs(throttle) < Constants.XBOX_DEADBAND_VALUE) throttle = 0;
+		if (Math.abs(turn) < Constants.XBOX_DEADBAND_VALUE) turn = 0;
 		double left = throttle - turn;
 		double right = throttle + turn;
-		left = processJoystickValue(left);
-		right = processJoystickValue(right);
+		if (left > 1) left = 1;
+		if (left < -1) left = -1;
+		if (right > 1) right = 1;
+		if (right < -1) right = -1;
 		setLeftMotorPower(left);
 		setRightMotorPower(right);
-	}
-	
-	private double processJoystickValue(double num){
-		if (num < 0){
-			//handle deadband
-			if (num > -Constants.XBOX_DEADBAND_VALUE) num = 0;
-			//set value lower limit to -1
-			if (num < -1) num = -1;
-		}
-		else if (num > 0){
-			//handle deadband
-			if (num < Constants.XBOX_DEADBAND_VALUE) num = 0;
-			//set value upper limit to 1
-			if (num > 1) num = 1;
-		}
-		return num;
 	}
 }
