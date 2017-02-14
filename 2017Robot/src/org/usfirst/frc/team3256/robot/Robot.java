@@ -2,6 +2,7 @@
 package org.usfirst.frc.team3256.robot;
 
 import org.usfirst.frc.team3256.lib.Logger;
+import org.usfirst.frc.team3256.robot.commands.DriveTesting;
 import org.usfirst.frc.team3256.robot.commands.TurnTesting;
 import org.usfirst.frc.team3256.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team3256.robot.subsystems.Hanger;
@@ -37,6 +38,7 @@ public class Robot extends IterativeRobot {
 		driveTrain.calibrateGyro();
 		driveTrain.resetGyro();
 		driveTrain.resetEncoders();
+		driveTrain.shiftUp(true);
 		manipulator = Manipulator.getInstance();
 		hanger = Hanger.getInstance();
 		operatorInterface = new OI();
@@ -61,7 +63,6 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void disabledPeriodic() {
 		Scheduler.getInstance().run();
-		driveTrain.logToDashboard();
 	}
 
 	/**
@@ -77,7 +78,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-		new TurnTesting().start();
+		new DriveTesting().start();
 	}
 
 	/**
@@ -90,7 +91,7 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void teleopInit() {
-		
+		driveTrain.resetEncoders();
 	}
 
 	/**
@@ -99,7 +100,6 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
-		driveTrain.logToDashboard();
 	}
 
 	/**

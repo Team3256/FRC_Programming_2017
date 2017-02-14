@@ -40,8 +40,9 @@ public class TurnToAngle extends Command {
 	    	 * Apply PWM value to motors
 	    	 */
 	    	double output = pid.update(Math.abs(drive.getAngle()));
-	    	if (turnRight) drive.tankDrive(output, -output, false);
-	    	else drive.tankDrive(-output, output, false);
+	    	//hack to make turn left and right work
+	    	if (turnRight) drive.tankDrive(-output, output, false);
+	    	else drive.tankDrive(output, -output, false);
 	    	pid.logToDashboard();
 			}
         });

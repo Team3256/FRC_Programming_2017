@@ -21,6 +21,7 @@ public class TrajectoryGenerator{
 	
 	//Generates a trajectory (list of segments) for the given constraints
 	public Trajectory generateTraj(double start_vel, double end_vel, double end_pos){
+		System.out.println(end_pos);
 		Trajectory traj;
 		//Calculates the cruise_velocity for the parameters given depending on the distance to travel
 		double start_dist_offset = (0.5*start_vel*start_vel)/accel;

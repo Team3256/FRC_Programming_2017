@@ -56,6 +56,8 @@ public class TrajectoryFollower{
 	}
 
 	public double calcMotorOutput(double currentTrajPos){
+		System.out.println("FINISHED???????? " + isFinished());
+		System.out.println(curr_segment);
 		if (!isFinished()){ 
 			Segment s = traj.getCurrentSegment(curr_segment);
 			currentTrajPos = s.getPos();

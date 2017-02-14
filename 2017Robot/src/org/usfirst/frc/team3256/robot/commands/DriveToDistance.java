@@ -1,5 +1,6 @@
 package org.usfirst.frc.team3256.robot.commands;
 
+import org.usfirst.frc.team3256.lib.DrivePWM;
 import org.usfirst.frc.team3256.lib.DriveStraightController;
 import org.usfirst.frc.team3256.robot.Constants;
 import org.usfirst.frc.team3256.robot.subsystems.DriveTrain;
@@ -23,20 +24,20 @@ public class DriveToDistance extends Command {
         requires(drive);
         this.setpoint = setpoint;
         this.goForward = goForward;
-        controller = new DriveStraightController();
-        notifier = new Notifier(new Runnable(){
-			@Override
-			public void run() {
-				Pair<Double, Double> driveOutputPair = controller.update();
-				drive.tankDrive(driveOutputPair.getKey(), driveOutputPair.getValue(), goForward);
-			}
-        });
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
     	drive.resetEncoders();
-    	drive.resetGyro();
+    	drive.resetGyro();        
+    	controller = new DriveStraightController();
+        notifier = new Notifier(new Runnable(){
+			@Override
+			public void run() {
+				DrivePWM signal = controller.update();
+				drive.tankDrive(signal.getLeftPWM(), signal.getRightPWM(), goForward);
+			}
+        });
     	controller.setSetpoint(setpoint);
     	notifier.startPeriodic(Constants.CONTROL_LOOP_DT);
     }

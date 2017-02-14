@@ -75,6 +75,8 @@ public class DriveTrain extends Subsystem implements Log {
 				pdp.getCurrent(Constants.PDP_LEFT_BACK_DRIVE));
 		SmartDashboard.putNumber("Right Back Current: PDP-" + Constants.PDP_RIGHT_BACK_DRIVE + " ", 
 				pdp.getCurrent(Constants.PDP_RIGHT_BACK_DRIVE));
+		SmartDashboard.putNumber("Left Velocity", getLeftVelocity());
+		SmartDashboard.putNumber("Right Velocity", getRightVelocity());
 	}
 	
 	public void setLeftMotorPower(double power) {
@@ -92,17 +94,28 @@ public class DriveTrain extends Subsystem implements Log {
 	}
 	
 	public double getLeftPosition() {
-		return encoderLeft.get();
+		return encoderLeft.getDistance();
 	}
 	
 	public double getRightPosition() {
-		return encoderRight.get();
+		return encoderRight.getDistance();
 	}
 	
 	public double getAveragePosition() {
 		return (getLeftPosition() + getRightPosition()) / 2;
 	}
 	
+	public double getLeftVelocity(){
+		return encoderLeft.getRate();
+	}
+	
+	public double getRightVelocity(){
+		return encoderRight.getRate();
+	}
+	
+	public double getAverageVelocity(){
+		return (getLeftVelocity() + getRightVelocity()) / 2;
+	}
 	public void resetEncoders() {
 		encoderLeft.reset();
 		encoderRight.reset();

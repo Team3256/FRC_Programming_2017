@@ -45,30 +45,31 @@ public class Constants {
 	// Joystick
 	public static final int DRIVER_CONTROLLER = 0;
 	public static final int MANIPULATOR_CONTROLLER = 1;
-	public static final double XBOX_DEADBAND_VALUE = 0.18;
+	public static final double XBOX_DEADBAND_VALUE = 0.25;
 	
 	//Motor Powers
 	public static final double GROUND_INTAKE_POWER = 0.5;
 	public static final double SHOOT_BALLS_POWER = -0.5;
 	
 	//Robot Constants 
-	public static final double MAX_VEL_HIGH_GEAR = 18.94; // ft/s
-	public static final double MAX_VEL_LOW_GEAR = 6.48;   // ft/s
+	public static final double MAX_VEL_HIGH_GEAR_IN = 15 * 12; // 18.94 theoretical ft/s
+	public static final double MAX_VEL_LOW_GEAR_IN = 4.5 * 12; // 6.48 ft/s
 	public static final double MAX_ACCEL_HIGH_GEAR = 15;
 	public static final double MAX_ACCEL_LOW_GEAR = 20;
 	public static final int GRAYHILL_TICKS_PER_ROT = 256;
-	public static final int WHEEL_DIAMETER = 4; //inches
+	public static final double WHEEL_DIAMETER = 4.212; //inches -- theoretical 4", includes tread
 	public static final double INCHES_PER_TICK = WHEEL_DIAMETER*Math.PI/GRAYHILL_TICKS_PER_ROT;
 	
 	//Software Constants
 	public static final double CONTROL_LOOP_DT = 0.02;
 	
-	//Turn PID Gains
+	//Turn PID Gains - LOW GEAR
 	public static final double KP_TURN = 0.0126;
 	public static final double KI_TURN = 0.0;
 	public static final double KD_TURN = 0.019;
+	
 	//Distance FeedForward Gains 
-	public static final double KV_DISTANCE = 1/MAX_VEL_HIGH_GEAR;
+	public static final double KV_DISTANCE = 1/MAX_VEL_HIGH_GEAR_IN;
 	public static final double KA_DISTANCE = 0.0;
 	//Distance PID Gains
 	public static final double KP_DISTANCE = 0.0;

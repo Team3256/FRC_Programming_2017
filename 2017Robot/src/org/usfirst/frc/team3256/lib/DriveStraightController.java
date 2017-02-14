@@ -17,7 +17,7 @@ public class DriveStraightController {
 	public DriveStraightController(){
 		trajectoryGenerator = new TrajectoryGenerator();
 		trajectoryFollower = new TrajectoryFollower();
-		trajectoryGenerator.setConfig(Constants.MAX_VEL_HIGH_GEAR, Constants.MAX_ACCEL_HIGH_GEAR, Constants.CONTROL_LOOP_DT);
+		trajectoryGenerator.setConfig(Constants.MAX_VEL_HIGH_GEAR_IN, Constants.MAX_ACCEL_HIGH_GEAR, Constants.CONTROL_LOOP_DT);
 		headingController = new PIDController(Constants.KP_STRAIGHT, Constants.KI_STRAIGHT, Constants.KD_STRAIGHT);
 	}
 	
@@ -43,13 +43,15 @@ public class DriveStraightController {
 		return trajectoryFollower.isFinished();
 	}
 	
-	public Pair<Double, Double> update(){
-		output = trajectoryFollower.calcMotorOutput(drive.getAveragePosition());
+	public DrivePWM update(){
+		//drive.getRightPosition() for now because only one encoder is plugged in
+		System.out.println("output--------------------------" + output);
+		output = trajectoryFollower.calcMotorOutput(drive.getRightPosition());
 		headingAdjustment = headingController.update(drive.getAngle());
 		leftOutput = output - headingAdjustment;
 		rightOutput = output + headingAdjustment;
-		Pair<Double, Double> driveOutputPair = new Pair<Double, Double>(leftOutput, rightOutput);
-		return driveOutputPair;
+		DrivePWM signal = new DrivePWM(leftOutput, rightOutput);
+		return signal;
 	}
 	
 	
