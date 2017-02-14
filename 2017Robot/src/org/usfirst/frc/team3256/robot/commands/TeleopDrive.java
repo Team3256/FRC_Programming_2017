@@ -3,6 +3,7 @@ package org.usfirst.frc.team3256.robot.commands;
 import org.usfirst.frc.team3256.robot.OI;
 import org.usfirst.frc.team3256.robot.subsystems.DriveTrain;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -32,6 +33,7 @@ public class TeleopDrive extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	if (DriverStation.getInstance().isAutonomous()) return;
     	if (wantedMode == TeleopDriveMode.TANK){
     		driveTrain.tankDrive(OI.driver.getY(Hand.kLeft), 
     				OI.driver.getY(Hand.kRight), OI.rightTrigger1.get());

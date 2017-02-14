@@ -1,5 +1,6 @@
 package org.usfirst.frc.team3256.lib;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class PIDController {
@@ -8,6 +9,7 @@ public class PIDController {
 	private double error, sumError, changeError, prevError, output;
 	private double setpoint, tolerance, maxPower, minPower;
 	private boolean started = false;
+	private double startTime = 0, dt = 0;
 	
 	/**
 	 * PIDController
@@ -70,6 +72,7 @@ public class PIDController {
 	 */
 	public double update(double current){
 		if (!started) started = true;
+		startTime = Timer.getFPGATimestamp();
 		error = setpoint-current;
 		if (kP*Math.abs(error)<maxPower){
 			sumError += error;
@@ -87,6 +90,7 @@ public class PIDController {
 			if (output < minPower) output = minPower;
 			if (output > maxPower) output = maxPower;
 		}
+		dt = Timer.getFPGATimestamp()-startTime;
 		return output;
 	}
 	
@@ -97,5 +101,7 @@ public class PIDController {
 	public void logToDashboard() {
 		SmartDashboard.putNumber("PID ERROR" , error);
 		SmartDashboard.putNumber("Output", output);
+		System.out.println(dt);
+		SmartDashboard.putBoolean("ISFINISHED", isFinished());
 	}
 }

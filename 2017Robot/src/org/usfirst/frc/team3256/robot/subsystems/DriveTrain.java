@@ -88,7 +88,7 @@ public class DriveTrain extends Subsystem implements Log {
 	}
 	
 	public void shiftUp(boolean wantsHighGear){
-		shifter.set(wantsHighGear?DoubleSolenoid.Value.kReverse:DoubleSolenoid.Value.kForward);
+		shifter.set(wantsHighGear?DoubleSolenoid.Value.kForward:DoubleSolenoid.Value.kReverse);
 	}
 	
 	public double getLeftPosition() {
