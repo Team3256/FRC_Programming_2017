@@ -9,27 +9,43 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Manipulator extends Subsystem implements Log {
+	
+	//Singleton instance of the Manipulator Subsystem
 	private static Manipulator instance;
+	
 	private VictorSP innerMotor;
 	private VictorSP outerMotor;
 	private DoubleSolenoid ballPivot;
 	private DoubleSolenoid humanIntakePivot;
 	private DoubleSolenoid gearDeployer;
 	
+	/**
+	 * The states of the human player intake 
+	 */
 	public enum HumanPlayerLoadingState{
 		GEAR_INTAKE,
 		GEAR_DEPLOY,
 		BALLS_INTAKE;
 	}
 	
+	/**
+	 * The states of the intake/shooter of the robot
+	 */
 	public enum IntakeState{
 		GROUND_INTAKE,
 		SPIT_BALLS,
 		HOLD_BALLS;
 	}
+	
+	//The current states of the systems
 	HumanPlayerLoadingState loadingState = HumanPlayerLoadingState.GEAR_INTAKE;
 	IntakeState intakeState = IntakeState.HOLD_BALLS;
 	
+	/**
+	 * Cannot be instantiated out of the class and initializes the manipulator motors and actuators
+	 * so we will always only have one Manipulator instance
+	 * Use the getInstance() method
+	 */
 	private Manipulator() {
 		innerMotor = new VictorSP(Constants.INNER_MOTOR_ROLLER);
 		outerMotor = new VictorSP(Constants.OUTER_MOTOR_ROLLER);
@@ -37,14 +53,24 @@ public class Manipulator extends Subsystem implements Log {
 		humanIntakePivot = new DoubleSolenoid(Constants.GEAR_PIVOT_A, Constants.GEAR_PIVOT_B);
 	}
 
+	/**
+	 * Sets the default command of the Manipulator Subsystem
+	 * There is no default command for it.
+	 */
     public void initDefaultCommand() {
     	
     }
 	
+    /**
+     * @return The singleton instance of the Manipulator class
+     */
 	public static Manipulator getInstance() {
 		return instance == null ? instance = new Manipulator() : instance;
 	}
 	
+	/**
+	 * @param wantedState - The wanted human player loading state of the Manipulator subsystem.
+	 */
 	public void setHumanLoadingState(HumanPlayerLoadingState wantedState) {
 		switch (wantedState){
 			case GEAR_INTAKE: 
@@ -71,6 +97,10 @@ public class Manipulator extends Subsystem implements Log {
 		
 	}
 	
+	/**
+	 * 
+	 * @param wantedState - the wanted intake state of the Manipulator subsystem
+	 */
 	public void setIntakeState(IntakeState wantedState){
 		switch (wantedState) {
 			case GROUND_INTAKE:

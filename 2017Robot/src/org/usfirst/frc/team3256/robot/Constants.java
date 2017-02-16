@@ -8,7 +8,7 @@ package org.usfirst.frc.team3256.robot;
  */
 public class Constants {
 
-	// PWM Motor
+	// PWM Motor Controller ports
 	public static final int LEFT_FRONT_DRIVE = 0;
 	public static final int LEFT_BACK_DRIVE = 1;
 	public static final int RIGHT_FRONT_DRIVE = 2;
@@ -18,7 +18,7 @@ public class Constants {
 	public static final int INNER_MOTOR_ROLLER = 4;
 	public static final int OUTER_MOTOR_ROLLER = 5;
 	
-	//PDP
+	//PDP Motor ports
 	public static final int PDP_LEFT_FRONT_DRIVE = 0;
 	public static final int PDP_LEFT_BACK_DRIVE = 1;
 	public static final int PDP_RIGHT_FRONT_DRIVE = 2;
@@ -28,7 +28,7 @@ public class Constants {
 	public static final int PDP_INNER_MOTOR_ROLLER = 6;
 	public static final int PDP_OUTER_MOTOR_ROLLER = 7;
 
-	// PCM
+	//PCM Solenoid ports
 	public static final int DRIVE_SHIFTER_A = 0;
 	public static final int DRIVE_SHIFTER_B = 7;
 	public static final int BALL_PIVOT_A = 2;
@@ -36,22 +36,23 @@ public class Constants {
 	public static final int GEAR_PIVOT_A = 4;
 	public static final int GEAR_PIVOT_B = 5;
 
-	// Encoder
+	//Encoder ports on the Spartan Board 
 	public static final int ENCODER_LEFT_A = 13;
 	public static final int ENCODER_LEFT_B = 12;
 	public static final int ENCODER_RIGHT_A = 11;
 	public static final int ENCODER_RIGHT_B = 10;
 
-	// Joystick
+	// Joystick ports and deadband
 	public static final int DRIVER_CONTROLLER = 0;
 	public static final int MANIPULATOR_CONTROLLER = 1;
 	public static final double XBOX_DEADBAND_VALUE = 0.25;
 	
-	//Motor Powers
+	//Preset Motor Powers
 	public static final double GROUND_INTAKE_POWER = 0.5;
 	public static final double SHOOT_BALLS_POWER = -0.5;
+	public static final double WINCH_HANGER_POWER = 0.5;
 	
-	//Robot Constants 
+	//Physical Robot Constants 
 	public static final double MAX_VEL_HIGH_GEAR_IN = 15 * 12; // 18.94 theoretical ft/s
 	public static final double MAX_VEL_LOW_GEAR_IN = 4.5 * 12; // 6.48 ft/s
 	public static final double MAX_ACCEL_HIGH_GEAR = 15;
