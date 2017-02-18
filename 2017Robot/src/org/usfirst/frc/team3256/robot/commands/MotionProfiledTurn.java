@@ -1,6 +1,6 @@
 package org.usfirst.frc.team3256.robot.commands;
 
-import org.usfirst.frc.team3256.lib.PIDController;
+import org.usfirst.frc.team3256.lib.TurnInPlaceController;
 import org.usfirst.frc.team3256.robot.Constants;
 import org.usfirst.frc.team3256.robot.subsystems.DriveTrain;
 
@@ -10,53 +10,50 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class TurnToAngle extends Command {
+public class MotionProfiledTurn extends Command {
 
-	private DriveTrain drive = DriveTrain.getInstance();
-	private Notifier notifier;
-	private PIDController pid;
+	DriveTrain drive = DriveTrain.getInstance();
+	TurnInPlaceController turnController;
+	Notifier notifier;
 	private double setpoint;
 	private boolean turnRight;
 	
-    public TurnToAngle(double setpoint, final boolean turnRight) {
+    public MotionProfiledTurn(double setpoint, boolean turnRight) {
         requires(drive);
-        pid = new PIDController(Constants.KP_TURN, Constants.KI_TURN, Constants.KD_TURN);
-        pid.setMinMaxOutput(0.2, 0.7);
-        pid.setTolerance(0.25);
-    	this.setpoint = setpoint;
-    	this.turnRight = turnRight;
+        this.setpoint = setpoint;
+        this.turnRight = turnRight;
+        turnController = new TurnInPlaceController();
     }
- 
+
     // Called just before this Command runs the first time
     protected void initialize() {
     	drive.resetGyro();
     	drive.shiftUp(false);
-    	pid.setSetpoint(setpoint);  
-        notifier = new Notifier(new Runnable(){
+    	notifier = new Notifier(new Runnable(){
 			@Override
 			public void run() {
-		    	double output = pid.update(Math.abs(drive.getAngle()));
-		    	//hack to make turn left and right work
-		    	if (turnRight) drive.tankDrive(-output, output, false);
+				double output = turnController.update();
+				if (turnRight) drive.tankDrive(-output, output, false);
 		    	else drive.tankDrive(output, -output, false);
 			}
-        });
+    		
+    	});
+    	turnController.setSetpoint(setpoint);
     	notifier.startPeriodic(Constants.CONTROL_LOOP_DT);
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	
-	}	
+    }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return pid.isFinished();
+        return turnController.isFinished();
     }
 
     // Called once after isFinished returns true
     protected void end() {
-    	drive.tankDrive(0, 0, false);
+    	drive.tankDrive(0, 0, true);
     	notifier.stop();
     	notifier = null;
     }
@@ -64,6 +61,5 @@ public class TurnToAngle extends Command {
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
-    	end();
     }
 }

@@ -82,7 +82,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-		new DriveTesting().start();
+		new TurnTesting().start();
 	}
 
 	/**

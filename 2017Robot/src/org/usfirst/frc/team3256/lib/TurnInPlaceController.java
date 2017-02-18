@@ -10,21 +10,19 @@ public class TurnInPlaceController {
 	private TrajectoryGenerator trajectoryGenerator;
 	private TrajectoryFollower trajectoryFollower;
 	private double output;
-	private boolean reversed;
 	
 	public TurnInPlaceController(){
 		trajectoryGenerator = new TrajectoryGenerator();
 		trajectoryFollower = new TrajectoryFollower();
-		trajectoryGenerator.setConfig(Constants.MAX_VEL_HIGH_GEAR_IN, Constants.MAX_ACCEL_HIGH_GEAR, Constants.CONTROL_LOOP_DT);
+		trajectoryGenerator.setConfig(Constants.MAX_VEL_TURN_LOW_GEAR_IN, Constants.MAX_ACCEL_TURN_LOW_GEAR_IN2, Constants.CONTROL_LOOP_DT);
 	}
 	
-	public void setSetpoint(double setpoint, boolean reversed){
+	public void setSetpoint(double setpoint){
 		trajectory = trajectoryGenerator.generateTraj(0, 0, setpoint);
 		trajectoryFollower.setTrajectory(trajectory);
 		trajectoryFollower.setGains(Constants.KV_DISTANCE, Constants.KA_DISTANCE, 
 				Constants.KP_DISTANCE, Constants.KI_DISTANCE, Constants.KD_DISTANCE);
 		trajectoryFollower.setLoopTime(Constants.CONTROL_LOOP_DT);
-		this.reversed = reversed;
 		reset();
 	}
 	
@@ -39,7 +37,7 @@ public class TurnInPlaceController {
 	}
 	
 	public double update(){
-		output = trajectoryFollower.calcMotorOutput(drive.getAngle());
+		output = trajectoryFollower.calcMotorOutput(Math.abs(drive.getAngle()));
 		return output;
 	}
 }

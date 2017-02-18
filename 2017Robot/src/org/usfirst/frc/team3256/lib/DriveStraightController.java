@@ -18,7 +18,7 @@ public class DriveStraightController {
 	public DriveStraightController(){
 		trajectoryGenerator = new TrajectoryGenerator();
 		trajectoryFollower = new TrajectoryFollower();
-		trajectoryGenerator.setConfig(Constants.MAX_VEL_HIGH_GEAR_IN, Constants.MAX_ACCEL_HIGH_GEAR, Constants.CONTROL_LOOP_DT);
+		trajectoryGenerator.setConfig(Constants.MAX_VEL_HIGH_GEAR_IN, Constants.MAX_ACCEL_HIGH_GEAR_IN2, Constants.CONTROL_LOOP_DT);
 		headingController = new PIDController(Constants.KP_STRAIGHT, Constants.KI_STRAIGHT, Constants.KD_STRAIGHT);
 	}
 	
