@@ -45,7 +45,7 @@ public class DriveToDistance extends Command {
 				}
 			}
         });
-    	controller.setSetpoint(setpoint);
+    	controller.setSetpoint(setpoint, !goForward);
     	notifier.startPeriodic(Constants.CONTROL_LOOP_DT);
     }
 

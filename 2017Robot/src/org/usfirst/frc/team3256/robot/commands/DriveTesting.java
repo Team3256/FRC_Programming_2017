@@ -10,8 +10,8 @@ public class DriveTesting extends CommandGroup {
 
     public DriveTesting() {
         addSequential(new DriveToDistance(60,true));
-        /*addSequential(new WaitCommand(1));
-        addSequential(new DriveToDistance(36,false));*/
+        addSequential(new WaitCommand(1));
+        addSequential(new DriveToDistance(60,false));
     }
 }
  	

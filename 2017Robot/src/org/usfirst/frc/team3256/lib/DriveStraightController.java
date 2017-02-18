@@ -13,6 +13,7 @@ public class DriveStraightController {
 	private PIDController headingController;
 	private DriveTrain drive = DriveTrain.getInstance();
 	private double output, headingAdjustment, leftOutput, rightOutput;
+	private boolean reversed;
 	
 	public DriveStraightController(){
 		trajectoryGenerator = new TrajectoryGenerator();
@@ -21,13 +22,14 @@ public class DriveStraightController {
 		headingController = new PIDController(Constants.KP_STRAIGHT, Constants.KI_STRAIGHT, Constants.KD_STRAIGHT);
 	}
 	
-	public void setSetpoint(double setpoint){
+	public void setSetpoint(double setpoint, boolean reversed){
 		trajectory = trajectoryGenerator.generateTraj(0, 0, setpoint);
 		trajectoryFollower.setTrajectory(trajectory);
 		trajectoryFollower.setGains(Constants.KV_DISTANCE, Constants.KA_DISTANCE, 
 				Constants.KP_DISTANCE, Constants.KI_DISTANCE, Constants.KD_DISTANCE);
 		trajectoryFollower.setLoopTime(Constants.CONTROL_LOOP_DT);
 		headingController.setSetpoint(0);
+		this.reversed = reversed;
 		reset();
 	}
 
@@ -47,7 +49,7 @@ public class DriveStraightController {
 		//drive.getRightPosition() for now because only one encoder is plugged in
 		output = trajectoryFollower.calcMotorOutput(Math.abs(drive.getAveragePosition()));
 		SmartDashboard.putNumber("MOTION PROFILE OUTPUT", output);
-		headingAdjustment = headingController.update(drive.getAngle());
+		headingAdjustment = headingController.update(drive.getAngle() * (reversed ? -1 : 1));
 		SmartDashboard.putNumber("Gyro Adjustment", headingAdjustment);
 		SmartDashboard.putNumber("GYRO ERROR DRIVE STRAIGHT", 0-drive.getAngle());
 		leftOutput = output - headingAdjustment;
