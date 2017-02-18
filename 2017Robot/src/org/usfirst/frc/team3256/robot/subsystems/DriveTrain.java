@@ -43,6 +43,8 @@ public class DriveTrain extends Subsystem implements Log {
 		//set the ticks/inch for the encoders
 		encoderLeft.setDistancePerPulse(Constants.INCHES_PER_TICK);
 		encoderRight.setDistancePerPulse(Constants.INCHES_PER_TICK);
+		encoderLeft.setReverseDirection(false);
+		encoderRight.setReverseDirection(true);
 		//Gyro for the drivetrain
 		gyro = new ADXRS450_Gyro();
 		//Shifter to shift between high and low gear
@@ -53,7 +55,7 @@ public class DriveTrain extends Subsystem implements Log {
 	 * Sets the default command of the DriveTrain Subsystem, which is the TeleopDrive Command
 	 */
 	protected void initDefaultCommand() {
-		setDefaultCommand(new TeleopDrive(TeleopDriveMode.ARCADE));
+		setDefaultCommand(new TeleopDrive(TeleopDriveMode.TANK));
 	}
 	
 	/**
@@ -104,7 +106,7 @@ public class DriveTrain extends Subsystem implements Log {
 	 * @param wantsHighGear - Shifts the robot to high gear if we wantsHighGear is true, otherwise it shifts the robot to low gear
 	 */
 	public void shiftUp(boolean wantsHighGear){
-		shifter.set(wantsHighGear?DoubleSolenoid.Value.kForward:DoubleSolenoid.Value.kReverse);
+		shifter.set(wantsHighGear?DoubleSolenoid.Value.kReverse:DoubleSolenoid.Value.kForward);
 	}
 	
 	/**
@@ -185,6 +187,8 @@ public class DriveTrain extends Subsystem implements Log {
 	 * Tank Drive allows direct control of the left and right drives of the robot
 	 */
 	public void tankDrive(double left, double right, boolean wantsReverse){
+		if (Math.abs(left) < Constants.XBOX_DEADBAND_VALUE) left = 0;
+		if (Math.abs(right) < Constants.XBOX_DEADBAND_VALUE) right = 0;
 		if (left > 1) left = 1;
 		if (left < -1) left = -1;
 		if (right > 1) right = 1;

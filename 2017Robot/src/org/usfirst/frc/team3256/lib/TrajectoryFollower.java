@@ -2,6 +2,8 @@ package org.usfirst.frc.team3256.lib;
 
 import org.usfirst.frc.team3256.lib.Trajectory.Segment;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class TrajectoryFollower{
 	
 	private double kP, kI, kD, kV, kA, dt;
@@ -44,6 +46,7 @@ public class TrajectoryFollower{
 
 	private double calcFeedBack(double setpoint_pos, double curr_pos, double curr_vel){
 		error = setpoint_pos-curr_pos;
+		SmartDashboard.putNumber("error", error);
 		sumError+=error;
 		changeError = (error-prevError)/dt - curr_vel;
 		prevError = error;
@@ -57,11 +60,16 @@ public class TrajectoryFollower{
 
 	public double calcMotorOutput(double currentTrajPos){
 		System.out.println("FINISHED???????? " + isFinished());
-		System.out.println(curr_segment);
+		System.out.println(curr_segment + "--" + traj.getLength());
 		if (!isFinished()){ 
 			Segment s = traj.getCurrentSegment(curr_segment);
-			currentTrajPos = s.getPos();
+			System.out.println("pos " + s.getPos());
+			System.out.println("time " + s.getTime());
+			SmartDashboard.putNumber("Theoretical Vel", s.getVel());
 			feedForwardValue = calcFeedForward(s.getVel(), s.getAccel());
+			System.out.println("FF VALUE" + feedForwardValue);
+			SmartDashboard.putNumber("Current THeoretcial POs", s.getPos());
+			SmartDashboard.putNumber("CURRENT ENCODER POS", currentTrajPos);
 			feedBackValue = calcFeedBack(s.getPos(), currentTrajPos, s.getVel());
 			output = feedForwardValue + feedBackValue;
 			curr_segment++;

@@ -27,11 +27,11 @@ public class Constants {
 	public static final int PDP_OUTER_MOTOR_ROLLER = 7;
 
 	//PCM Solenoid ports
-	public static final int DRIVE_SHIFTER_A = 0;
-	public static final int DRIVE_SHIFTER_B = 7;
+	public static final int DRIVE_SHIFTER_A = 4;
+	public static final int DRIVE_SHIFTER_B = 3;
 	public static final int BALL_PIVOT_A = 2;
-	public static final int BALL_PIVOT_B = 3;
-	public static final int GEAR_PIVOT_A = 4;
+	public static final int BALL_PIVOT_B = 0;
+	public static final int GEAR_PIVOT_A = 1;
 	public static final int GEAR_PIVOT_B = 5;
 
 	//Encoder ports on the Spartan Board 
@@ -51,8 +51,8 @@ public class Constants {
 	public static final double WINCH_HANGER_POWER = 0.5;
 	
 	//Physical Robot Constants 
-	public static final double MAX_VEL_HIGH_GEAR_IN = 15 * 12; // 18.94 theoretical ft/s
-	public static final double MAX_VEL_LOW_GEAR_IN = 4.5 * 12; // 6.48 ft/s
+	public static final double MAX_VEL_HIGH_GEAR_IN = 15.0 * 12.0; // 18.94 theoretical ft/s
+	public static final double MAX_VEL_LOW_GEAR_IN = 4.5 * 12.0; // 6.48 ft/s
 	public static final double MAX_ACCEL_HIGH_GEAR = 15;
 	public static final double MAX_ACCEL_LOW_GEAR = 20;
 	public static final int GRAYHILL_TICKS_PER_ROT = 256;
@@ -68,10 +68,10 @@ public class Constants {
 	public static final double KD_TURN = 0.019;
 	
 	//Distance FeedForward Gains 
-	public static final double KV_DISTANCE = 1/MAX_VEL_HIGH_GEAR_IN;
-	public static final double KA_DISTANCE = 0.0;
+	public static final double KV_DISTANCE = 0.014;
+	public static final double KA_DISTANCE = 0.001;
 	//Distance PID Gains
-	public static final double KP_DISTANCE = 0.0;
+	public static final double KP_DISTANCE = 0.05;
 	public static final double KI_DISTANCE = 0.0;
 	public static final double KD_DISTANCE = 0.0;
 	//Distance Straight Gains

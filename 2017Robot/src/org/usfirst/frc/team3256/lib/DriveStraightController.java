@@ -3,6 +3,7 @@ package org.usfirst.frc.team3256.lib;
 import org.usfirst.frc.team3256.robot.Constants;
 import org.usfirst.frc.team3256.robot.subsystems.DriveTrain;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import javafx.util.Pair;
 
 public class DriveStraightController {
@@ -45,12 +46,13 @@ public class DriveStraightController {
 	
 	public DrivePWM update(){
 		//drive.getRightPosition() for now because only one encoder is plugged in
-		System.out.println("output--------------------------" + output);
-		output = trajectoryFollower.calcMotorOutput(drive.getRightPosition());
+		output = trajectoryFollower.calcMotorOutput(Math.abs(drive.getAveragePosition()));
+		SmartDashboard.putNumber("MOTION PROFILE OUTPUT", output);
 		headingAdjustment = headingController.update(drive.getAngle());
 		leftOutput = output - headingAdjustment;
 		rightOutput = output + headingAdjustment;
-		DrivePWM signal = new DrivePWM(leftOutput, rightOutput);
+		DrivePWM signal = new DrivePWM(output, output);
+		//DrivePWM signal = new DrivePWM(leftOutput, rightOutput);
 		return signal;
 	}
 	

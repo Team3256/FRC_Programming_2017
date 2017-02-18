@@ -30,12 +30,20 @@ public class DriveToDistance extends Command {
     protected void initialize() {
     	drive.resetEncoders();
     	drive.resetGyro();        
+    	drive.shiftUp(true);
     	controller = new DriveStraightController();
         notifier = new Notifier(new Runnable(){
 			@Override
 			public void run() {
 				DrivePWM signal = controller.update();
-				drive.tankDrive(signal.getLeftPWM(), signal.getRightPWM(), goForward);
+				if (!goForward){
+					drive.setLeftMotorPower(-signal.getLeftPWM());
+					drive.setRightMotorPower(-signal.getRightPWM());
+				}
+				else{
+					drive.setLeftMotorPower(signal.getLeftPWM());
+					drive.setRightMotorPower(signal.getRightPWM());
+				}
 			}
         });
     	controller.setSetpoint(setpoint);
