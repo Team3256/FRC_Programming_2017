@@ -8,6 +8,7 @@ import org.usfirst.frc.team3256.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team3256.robot.subsystems.Hanger;
 import org.usfirst.frc.team3256.robot.subsystems.Manipulator;
 
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
@@ -24,6 +25,7 @@ public class Robot extends IterativeRobot {
 	DriveTrain driveTrain;
 	Manipulator manipulator;
 	Hanger hanger;
+	Compressor compressor;
 	OI operatorInterface;
 	Logger logger;
 	
@@ -41,6 +43,8 @@ public class Robot extends IterativeRobot {
 		driveTrain.shiftUp(true);
 		manipulator = Manipulator.getInstance();
 		hanger = Hanger.getInstance();
+		compressor = new Compressor(0);
+		compressor.setClosedLoopControl(true);
 		operatorInterface = new OI();
 		logger = new Logger();
 		logger.addLog(driveTrain);

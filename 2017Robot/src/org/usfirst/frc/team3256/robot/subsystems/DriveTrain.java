@@ -18,10 +18,8 @@ public class DriveTrain extends Subsystem implements Log {
 	//Singleton Instance of the DriveTrain Subsystem
 	private static DriveTrain instance;
 	
-	private VictorSP leftFront;
-	private VictorSP leftBack;
-	private VictorSP rightFront;
-	private VictorSP rightBack;
+	private VictorSP leftDrive;
+	private VictorSP rightDrive;
 	private Encoder encoderLeft;
 	private Encoder encoderRight;
 	private ADXRS450_Gyro gyro;
@@ -34,15 +32,11 @@ public class DriveTrain extends Subsystem implements Log {
 	 */
 	private DriveTrain() {
 		//VictorSP motor controllers for the drivetrain motors
-		leftFront = new VictorSP(Constants.LEFT_FRONT_DRIVE);
-		leftBack = new VictorSP(Constants.LEFT_BACK_DRIVE);
-		rightFront = new VictorSP(Constants.RIGHT_FRONT_DRIVE);
-		rightBack = new VictorSP(Constants.RIGHT_BACK_DRIVE);
+		leftDrive = new VictorSP(Constants.LEFT_DRIVE);
+		rightDrive = new VictorSP(Constants.RIGHT_DRIVE);
 		//Flip the right side of the drivetrain (they are mirrored)
-		leftFront.setInverted(true);
-		leftBack.setInverted(true);
-		rightFront.setInverted(false);
-		rightBack.setInverted(false);
+		leftDrive.setInverted(true);
+		rightDrive.setInverted(false);
 		//Encoders for the left and right side of the drivetrain
 		encoderLeft = new Encoder(Constants.ENCODER_LEFT_A, Constants.ENCODER_LEFT_B);
 		encoderRight = new Encoder(Constants.ENCODER_RIGHT_A, Constants.ENCODER_RIGHT_B);
@@ -76,22 +70,18 @@ public class DriveTrain extends Subsystem implements Log {
 				"," + Constants.ENCODER_LEFT_B + " ", getLeftPosition());
 		SmartDashboard.putNumber("Right Encoder: MXP- " + Constants.ENCODER_RIGHT_A + 
 				"," + Constants.ENCODER_RIGHT_B + " ", getRightPosition());
-		SmartDashboard.putNumber("Left Front: PWM-" + leftFront.getChannel() + " ", 
-				leftFront.get());
-		SmartDashboard.putNumber("Right Front: PWM-" + rightFront.getChannel() + " ", 
-				rightFront.get());
-		SmartDashboard.putNumber("Left Back: PWM-" + leftBack.getChannel() + " ", 
-				leftBack.get());
-		SmartDashboard.putNumber("Right Back: PWM-" + rightBack.getChannel() + " ", 
-				rightBack.get());
-		SmartDashboard.putNumber("Left Front Current: PDP-" + Constants.PDP_LEFT_FRONT_DRIVE + " ", 
-				pdp.getCurrent(Constants.PDP_LEFT_FRONT_DRIVE));
-		SmartDashboard.putNumber("Right Front Current: PDP-" + Constants.PDP_RIGHT_FRONT_DRIVE + " ", 
-				pdp.getCurrent(Constants.PDP_RIGHT_FRONT_DRIVE));
-		SmartDashboard.putNumber("Left Back Current: PDP-" + Constants.PDP_LEFT_BACK_DRIVE + " ", 
-				pdp.getCurrent(Constants.PDP_LEFT_BACK_DRIVE));
-		SmartDashboard.putNumber("Right Back Current: PDP-" + Constants.PDP_RIGHT_BACK_DRIVE + " ", 
-				pdp.getCurrent(Constants.PDP_RIGHT_BACK_DRIVE));
+		SmartDashboard.putNumber("Left: PWM-" + leftDrive.getChannel() + " ", 
+				leftDrive.get());
+		SmartDashboard.putNumber("Right: PWM-" + rightDrive.getChannel() + " ", 
+				rightDrive.get());
+		SmartDashboard.putNumber("Left Front Current: PDP-" + Constants.PDP_LEFT_FRONT + " ", 
+				pdp.getCurrent(Constants.PDP_LEFT_FRONT));
+		SmartDashboard.putNumber("Left Back Current: PDP-" +  Constants.PDP_LEFT_BACK + " ",
+				pdp.getCurrent(Constants.PDP_LEFT_BACK));
+		SmartDashboard.putNumber("Right Front Current: PDP-" + Constants.PDP_RIGHT_FRONT + " ", 
+				pdp.getCurrent(Constants.PDP_RIGHT_FRONT));
+		SmartDashboard.putNumber("Right Back Current: PDP-" + Constants.PDP_RIGHT_BACK + " ",
+				pdp.getCurrent(Constants.PDP_RIGHT_BACK));
 		SmartDashboard.putNumber("Left Velocity", getLeftVelocity());
 		SmartDashboard.putNumber("Right Velocity", getRightVelocity());
 	}
@@ -100,16 +90,14 @@ public class DriveTrain extends Subsystem implements Log {
 	 * @param power - Sends the given power to run the left drive motors in open loop mode
 	 */
 	public void setLeftMotorPower(double power) {
-		leftFront.set(power);
-		leftBack.set(power);
+		leftDrive.set(power);
 	}
 	
 	/**
 	 * @param power - Sends the given power to run the right drive motors in open loop mode
 	 */
 	public void setRightMotorPower(double power) {
-		rightFront.set(power);
-		rightBack.set(power);
+		rightDrive.set(power);
 	}
 	
 	/**

@@ -9,20 +9,18 @@ package org.usfirst.frc.team3256.robot;
 public class Constants {
 
 	// PWM Motor Controller ports
-	public static final int LEFT_FRONT_DRIVE = 0;
-	public static final int LEFT_BACK_DRIVE = 1;
-	public static final int RIGHT_FRONT_DRIVE = 2;
-	public static final int RIGHT_BACK_DRIVE = 3;
+	public static final int LEFT_DRIVE = 0;
+	public static final int RIGHT_DRIVE = 1;
 	public static final int HANGER_1 = 6;
 	public static final int HANGER_2 = 7;
 	public static final int INNER_MOTOR_ROLLER = 4;
 	public static final int OUTER_MOTOR_ROLLER = 5;
 	
 	//PDP Motor ports
-	public static final int PDP_LEFT_FRONT_DRIVE = 0;
-	public static final int PDP_LEFT_BACK_DRIVE = 1;
-	public static final int PDP_RIGHT_FRONT_DRIVE = 2;
-	public static final int PDP_RIGHT_BACK_DRIVE = 3;
+	public static final int PDP_LEFT_FRONT = 0;
+	public static final int PDP_RIGHT_FRONT = 1;
+	public static final int PDP_LEFT_BACK = 2;
+	public static final int PDP_RIGHT_BACK = 3;
 	public static final int PDP_HANGER_1 = 4;
 	public static final int PDP_HANGER_2 = 5;
 	public static final int PDP_INNER_MOTOR_ROLLER = 6;
