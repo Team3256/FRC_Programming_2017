@@ -4,7 +4,6 @@ import org.usfirst.frc.team3256.robot.Constants;
 import org.usfirst.frc.team3256.robot.subsystems.DriveTrain;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import javafx.util.Pair;
 
 public class DriveStraightController {
 	

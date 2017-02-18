@@ -7,7 +7,6 @@ import org.usfirst.frc.team3256.robot.subsystems.DriveTrain;
 
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.command.Command;
-import javafx.util.Pair;
 
 /**
  *
