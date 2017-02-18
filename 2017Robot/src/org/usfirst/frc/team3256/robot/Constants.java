@@ -69,13 +69,13 @@ public class Constants {
 	
 	//Distance FeedForward Gains 
 	public static final double KV_DISTANCE = 0.014;
-	public static final double KA_DISTANCE = 0.001;
+	public static final double KA_DISTANCE = 0.005;
 	//Distance PID Gains
-	public static final double KP_DISTANCE = 0.05;
+	public static final double KP_DISTANCE = 0.07;
 	public static final double KI_DISTANCE = 0.0;
 	public static final double KD_DISTANCE = 0.0;
 	//Distance Straight Gains
-	public static final double KP_STRAIGHT = 0.0;
+	public static final double KP_STRAIGHT = 0.02;
 	public static final double KI_STRAIGHT = 0.0;
 	public static final double KD_STRAIGHT = 0.0;
 

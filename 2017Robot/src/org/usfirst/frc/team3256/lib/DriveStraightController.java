@@ -49,10 +49,13 @@ public class DriveStraightController {
 		output = trajectoryFollower.calcMotorOutput(Math.abs(drive.getAveragePosition()));
 		SmartDashboard.putNumber("MOTION PROFILE OUTPUT", output);
 		headingAdjustment = headingController.update(drive.getAngle());
+		SmartDashboard.putNumber("Gyro Adjustment", headingAdjustment);
+		SmartDashboard.putNumber("GYRO ERROR DRIVE STRAIGHT", 0-drive.getAngle());
 		leftOutput = output - headingAdjustment;
 		rightOutput = output + headingAdjustment;
-		DrivePWM signal = new DrivePWM(output, output);
-		//DrivePWM signal = new DrivePWM(leftOutput, rightOutput);
+		SmartDashboard.putNumber("Left Output", leftOutput);
+		SmartDashboard.putNumber("Right Output", rightOutput);
+		DrivePWM signal = new DrivePWM(leftOutput, rightOutput);
 		return signal;
 	}
 	
