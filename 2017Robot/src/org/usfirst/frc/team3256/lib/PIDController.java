@@ -10,10 +10,10 @@ public class PIDController {
 	private boolean started = false;
 	
 	/**
+	 * Sets the tolerance to zero, the minimum output to 0, and the maximum power to 1
 	 * @param kP - The P gain for the PIDController
 	 * @param kI - The I gain for the PIDController
 	 * @param kD - The D gain for the PIDController
-	 * Sets the tolerance to zero, the minimum output to 0, and the maximum power to 1
 	 */
 	public PIDController(double kP, double kI, double kD){
 		this.kP = kP;

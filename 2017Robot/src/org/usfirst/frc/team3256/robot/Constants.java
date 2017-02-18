@@ -55,28 +55,38 @@ public class Constants {
 	public static final double MAX_VEL_LOW_GEAR_IN = 4.5 * 12.0; // 6.48 ft/s
 	public static final double MAX_ACCEL_HIGH_GEAR = 15;
 	public static final double MAX_ACCEL_LOW_GEAR = 20;
+	public static final double MAX_VEL_TURN_LOW_GEAR_IN = 10.0;
+	public static final double 
 	public static final int GRAYHILL_TICKS_PER_ROT = 256;
-	public static final double WHEEL_DIAMETER = 4.212; //inches -- theoretical 4", includes tread
+	public static final double WHEEL_DIAMETER = 4.07; //inches -- theoretical 4", includes tread
 	public static final double INCHES_PER_TICK = WHEEL_DIAMETER*Math.PI/GRAYHILL_TICKS_PER_ROT;
 	
 	//Software Constants
 	public static final double CONTROL_LOOP_DT = 0.02;
 	
 	//Turn PID Gains - LOW GEAR
-	public static final double KP_TURN = 0.0126;
+	/*
+	public static final double KP_TURN = 0.013;
 	public static final double KI_TURN = 0.0;
-	public static final double KD_TURN = 0.019;
+	public static final double KD_TURN = 0.019;*/
 	
+	//-------------------DISTANCE MOTION PROFILING-------------------
 	//Distance FeedForward Gains 
-	public static final double KV_DISTANCE = 0.014;
-	public static final double KA_DISTANCE = 0.005;
+	public static final double KV_DISTANCE = 1/MAX_VEL_HIGH_GEAR_IN;
+	public static final double KA_DISTANCE = 0.007;
 	//Distance PID Gains
-	public static final double KP_DISTANCE = 0.07;
+	public static final double KP_DISTANCE = 0.16;
 	public static final double KI_DISTANCE = 0.0;
 	public static final double KD_DISTANCE = 0.0;
 	//Distance Straight Gains
-	public static final double KP_STRAIGHT = 0.02;
+	public static final double KP_STRAIGHT = 0.025;
 	public static final double KI_STRAIGHT = 0.0;
 	public static final double KD_STRAIGHT = 0.0;
-
+	
+	//-------------------TURN MOTION PROFILING-------------------
+	public static final double KV_TURN = 0.0;
+	public static final double KA_TURN = 0.0;
+	public static final double KP_TURN = 0.16;
+	public static final double KI_TURN = 0.0;
+	public static final double KD_TURN = 0.0;
 }

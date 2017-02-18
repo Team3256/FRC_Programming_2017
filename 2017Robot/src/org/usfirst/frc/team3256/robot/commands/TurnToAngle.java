@@ -30,7 +30,7 @@ public class TurnToAngle extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
     	drive.resetGyro();
-    	drive.shiftUp(true);
+    	drive.shiftUp(false);
     	pid.setSetpoint(setpoint);  
         notifier = new Notifier(new Runnable(){
 			@Override
