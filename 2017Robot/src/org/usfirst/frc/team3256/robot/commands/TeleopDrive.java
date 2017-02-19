@@ -42,7 +42,7 @@ public class TeleopDrive extends Command {
     		driveTrain.arcadeDrive(OI.driver.getY(Hand.kLeft), 
     				OI.driver.getX(Hand.kRight), OI.rightTrigger1.get());
     	}
-    	driveTrain.shiftUp(OI.rightBumper1.get());
+    	driveTrain.shiftUp(!OI.rightBumper1.get());
     }
 
     // Make this return true when this Command no longer needs to run execute()

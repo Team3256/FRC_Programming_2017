@@ -36,9 +36,8 @@ public class TurnToAngle extends Command {
 			@Override
 			public void run() {
 		    	double output = pid.update(Math.abs(drive.getAngle()));
-		    	//hack to make turn left and right work
-		    	if (turnRight) drive.tankDrive(-output, output, false);
-		    	else drive.tankDrive(output, -output, false);
+		    	if (turnRight) drive.tankDrive(output, -output, false);
+		    	else drive.tankDrive(-output, output, false);
 			}
         });
     	notifier.startPeriodic(Constants.CONTROL_LOOP_DT);

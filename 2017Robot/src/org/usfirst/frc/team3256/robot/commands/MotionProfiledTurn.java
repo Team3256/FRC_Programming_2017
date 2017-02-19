@@ -6,6 +6,7 @@ import org.usfirst.frc.team3256.robot.subsystems.DriveTrain;
 
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
@@ -22,22 +23,23 @@ public class MotionProfiledTurn extends Command {
         requires(drive);
         this.setpoint = setpoint;
         this.turnRight = turnRight;
-        turnController = new TurnInPlaceController();
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
+        turnController = new TurnInPlaceController();
     	drive.resetGyro();
     	drive.shiftUp(false);
     	notifier = new Notifier(new Runnable(){
 			@Override
 			public void run() {
 				double output = turnController.update();
-				if (turnRight) drive.tankDrive(-output, output, false);
-		    	else drive.tankDrive(output, -output, false);
+				SmartDashboard.putNumber("OUTPUT MP TURN", output);
+				if (turnRight) drive.tankDrive(output, -output, false);
+		    	else drive.tankDrive(-output, output, false);
 			}
-    		
     	});
+    	turnController.reset();
     	turnController.setSetpoint(setpoint);
     	notifier.startPeriodic(Constants.CONTROL_LOOP_DT);
     }

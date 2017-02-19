@@ -35,8 +35,8 @@ public class DriveTrain extends Subsystem implements Log {
 		leftDrive = new VictorSP(Constants.LEFT_DRIVE);
 		rightDrive = new VictorSP(Constants.RIGHT_DRIVE);
 		//Flip the right side of the drivetrain (they are mirrored)
-		leftDrive.setInverted(true);
-		rightDrive.setInverted(false);
+		leftDrive.setInverted(false);
+		rightDrive.setInverted(true);
 		//Encoders for the left and right side of the drivetrain
 		encoderLeft = new Encoder(Constants.ENCODER_LEFT_A, Constants.ENCODER_LEFT_B);
 		encoderRight = new Encoder(Constants.ENCODER_RIGHT_A, Constants.ENCODER_RIGHT_B);
@@ -55,7 +55,7 @@ public class DriveTrain extends Subsystem implements Log {
 	 * Sets the default command of the DriveTrain Subsystem, which is the TeleopDrive Command
 	 */
 	protected void initDefaultCommand() {
-		setDefaultCommand(new TeleopDrive(TeleopDriveMode.TANK));
+		setDefaultCommand(new TeleopDrive(TeleopDriveMode.ARCADE));
 	}
 	
 	/**
@@ -68,6 +68,7 @@ public class DriveTrain extends Subsystem implements Log {
 	@Override
 	public void logToDashboard(){
 		SmartDashboard.putNumber("Gyro Angle - SPI 0 ", getAngle());
+		SmartDashboard.putNumber("GYRO RATE", getAngularVelocity());
 		SmartDashboard.putNumber("Left Encoder: MXP- " + Constants.ENCODER_LEFT_A +
 				"," + Constants.ENCODER_LEFT_B + " ", getLeftPosition());
 		SmartDashboard.putNumber("Right Encoder: MXP- " + Constants.ENCODER_RIGHT_A + 
@@ -180,6 +181,10 @@ public class DriveTrain extends Subsystem implements Log {
 		return gyro.getAngle();
 	}
 	
+	public double getAngularVelocity(){
+		return gyro.getRate();
+	}
+	
 	/**
 	 * @param left - The left throttle value
 	 * @param right - The right throttle value
@@ -210,8 +215,8 @@ public class DriveTrain extends Subsystem implements Log {
 		if (wantsReverse) throttle *= -1;
 		if (Math.abs(throttle) < Constants.XBOX_DEADBAND_VALUE) throttle = 0;
 		if (Math.abs(turn) < Constants.XBOX_DEADBAND_VALUE) turn = 0;
-		double left = throttle - turn;
-		double right = throttle + turn;
+		double left = throttle + turn;
+		double right = throttle - turn;
 		if (left > 1) left = 1;
 		if (left < -1) left = -1;
 		if (right > 1) right = 1;

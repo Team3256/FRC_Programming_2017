@@ -1,11 +1,5 @@
 package org.usfirst.frc.team3256.robot;
 
-/**
- * The RobotMap is a mapping from the ports sensors and actuators are wired into
- * to a variable name. This provides flexibility changing wiring, makes checking
- * the wiring easier and significantly reduces the number of magic numbers
- * floating around.
- */
 public class Constants {
 
 	// PWM Motor Controller ports
@@ -45,20 +39,21 @@ public class Constants {
 	public static final int MANIPULATOR_CONTROLLER = 1;
 	public static final double XBOX_DEADBAND_VALUE = 0.25;
 	
-	//Preset Motor Powers
+	//Preset Values
 	public static final double GROUND_INTAKE_POWER = 0.5;
 	public static final double SHOOT_BALLS_POWER = -0.5;
 	public static final double WINCH_HANGER_POWER = 0.5;
 	
+	
 	//Physical Robot Constants 
 	public static final double MAX_VEL_HIGH_GEAR_IN = 15.0 * 12.0; // 18.94 theoretical ft/s
-	public static final double MAX_VEL_LOW_GEAR_IN = 4.5 * 12.0; // 6.48 ft/s
 	public static final double MAX_ACCEL_HIGH_GEAR_IN2 = 15;
+	public static final double MAX_VEL_LOW_GEAR_IN = 4.5 * 12.0; // 6.48 theoretical ft/s
 	public static final double MAX_ACCEL_LOW_GEAR_IN2 = 20;
-	public static final double MAX_VEL_TURN_LOW_GEAR_IN = 10.0;
-	public static final double MAX_ACCEL_TURN_LOW_GEAR_IN2 = 0.0;
+	public static final double MAX_VEL_TURN_LOW_GEAR_DEG = 100.0;
+	public static final double MAX_ACCEL_TURN_LOW_GEAR_DEG2 = 25.0;
 	public static final int GRAYHILL_TICKS_PER_ROT = 256;
-	public static final double WHEEL_DIAMETER = 4.07; //inches -- theoretical 4", includes tread
+	public static final double WHEEL_DIAMETER = 4.09; //inches -- theoretical 4", includes tread
 	public static final double INCHES_PER_TICK = WHEEL_DIAMETER*Math.PI/GRAYHILL_TICKS_PER_ROT;
 	
 	//Software Constants
@@ -66,16 +61,16 @@ public class Constants {
 	
 	//Turn PID Gains - LOW GEAR
 	/*
-	public static final double KP_TURN = 0.013;
-	public static final double KI_TURN = 0.0;
-	public static final double KD_TURN = 0.019;*/
+	public static final double KP_PID_TURN = 0.013;
+	public static final double KI_PID_TURN = 0.0;
+	public static final double KD_PID_TURN = 0.019;*/
 	
 	//-------------------DISTANCE MOTION PROFILING-------------------
 	//Distance FeedForward Gains 
-	public static final double KV_DISTANCE = 1/MAX_VEL_HIGH_GEAR_IN;
-	public static final double KA_DISTANCE = 0.007;
+	public static final double KV_DISTANCE = 1.0/MAX_VEL_HIGH_GEAR_IN;
+	public static final double KA_DISTANCE = 0.003;
 	//Distance PID Gains
-	public static final double KP_DISTANCE = 0.16;
+	public static final double KP_DISTANCE = 0.14;
 	public static final double KI_DISTANCE = 0.0;
 	public static final double KD_DISTANCE = 0.0;
 	//Distance Straight Gains
@@ -84,9 +79,9 @@ public class Constants {
 	public static final double KD_STRAIGHT = 0.0;
 	
 	//-------------------TURN MOTION PROFILING-------------------
-	public static final double KV_TURN = 0.0;
+	public static final double KV_TURN = 1.0/MAX_VEL_TURN_LOW_GEAR_DEG;
 	public static final double KA_TURN = 0.0;
-	public static final double KP_TURN = 0.16;
+	public static final double KP_TURN = 0.004;
 	public static final double KI_TURN = 0.0;
 	public static final double KD_TURN = 0.0;
 }

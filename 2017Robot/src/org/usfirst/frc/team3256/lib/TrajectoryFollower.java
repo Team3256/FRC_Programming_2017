@@ -59,15 +59,14 @@ public class TrajectoryFollower{
 	}
 
 	public double calcMotorOutput(double currentTrajPos){
-		System.out.println("FINISHED???????? " + isFinished());
-		System.out.println(curr_segment + "--" + traj.getLength());
-		if (!isFinished()){ 
+		SmartDashboard.putNumber("TRAJECTORY LENGTH", traj.getLength());
+		if (!isFinished()){  
 			Segment s = traj.getCurrentSegment(curr_segment);
 			System.out.println("pos " + s.getPos());
-			System.out.println("time " + s.getTime());
+			SmartDashboard.putNumber("PROFILE TIME", s.getTime());
 			SmartDashboard.putNumber("Theoretical Vel", s.getVel());
 			feedForwardValue = calcFeedForward(s.getVel(), s.getAccel());
-			System.out.println("FF VALUE" + feedForwardValue);
+			SmartDashboard.putNumber("FF VALUE", feedForwardValue);
 			SmartDashboard.putNumber("Current THeoretcial POs", s.getPos());
 			SmartDashboard.putNumber("CURRENT ENCODER POS", currentTrajPos);
 			feedBackValue = calcFeedBack(s.getPos(), currentTrajPos, s.getVel());

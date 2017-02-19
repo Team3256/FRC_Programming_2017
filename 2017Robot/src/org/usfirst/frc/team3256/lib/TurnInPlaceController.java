@@ -3,6 +3,9 @@ package org.usfirst.frc.team3256.lib;
 import org.usfirst.frc.team3256.robot.Constants;
 import org.usfirst.frc.team3256.robot.subsystems.DriveTrain;
 
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class TurnInPlaceController {
 
 	private Trajectory trajectory;
@@ -10,25 +13,27 @@ public class TurnInPlaceController {
 	private TrajectoryGenerator trajectoryGenerator;
 	private TrajectoryFollower trajectoryFollower;
 	private double output;
+	private Timer t;
 	
 	public TurnInPlaceController(){
 		trajectoryGenerator = new TrajectoryGenerator();
 		trajectoryFollower = new TrajectoryFollower();
-		trajectoryGenerator.setConfig(Constants.MAX_VEL_TURN_LOW_GEAR_IN, Constants.MAX_ACCEL_TURN_LOW_GEAR_IN2, Constants.CONTROL_LOOP_DT);
+		trajectoryGenerator.setConfig(Constants.MAX_VEL_TURN_LOW_GEAR_DEG, Constants.MAX_ACCEL_TURN_LOW_GEAR_DEG2, Constants.CONTROL_LOOP_DT);
 	}
 	
 	public void setSetpoint(double setpoint){
+		reset();
+		t = new Timer();
+		t.start();
 		trajectory = trajectoryGenerator.generateTraj(0, 0, setpoint);
 		trajectoryFollower.setTrajectory(trajectory);
-		trajectoryFollower.setGains(Constants.KV_DISTANCE, Constants.KA_DISTANCE, 
-				Constants.KP_DISTANCE, Constants.KI_DISTANCE, Constants.KD_DISTANCE);
+		trajectoryFollower.setGains(Constants.KV_TURN, Constants.KA_TURN, 
+				Constants.KP_TURN, Constants.KI_TURN, Constants.KD_TURN);
 		trajectoryFollower.setLoopTime(Constants.CONTROL_LOOP_DT);
-		reset();
 	}
 	
 	public void reset(){
 		trajectoryFollower.resetController();
-		drive.resetEncoders();
 		drive.resetGyro();
 	}
 	
@@ -37,6 +42,7 @@ public class TurnInPlaceController {
 	}
 	
 	public double update(){
+		SmartDashboard.putNumber("CURRENT TIME", t.get());
 		output = trajectoryFollower.calcMotorOutput(Math.abs(drive.getAngle()));
 		return output;
 	}
