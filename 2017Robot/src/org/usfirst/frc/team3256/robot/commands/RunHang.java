@@ -28,7 +28,7 @@ public class RunHang extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	//when hanging is running, stop other motors that are not being used
-    	manipulator.setIntakeState(IntakeState.HOLD_BALLS);
+    	manipulator.setIntakeState(IntakeState.LIFT_FOR_DRIVING);
     	hanger.setHangerState(HangerState.WINCH_UP);
     }
 

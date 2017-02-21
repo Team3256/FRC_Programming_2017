@@ -20,7 +20,7 @@ public class StopRollers extends InstantCommand {
 
     // Called once when the command executes
     protected void initialize() {
-    	manipulator.setIntakeState(IntakeState.HOLD_BALLS);
+    	manipulator.setIntakeState(IntakeState.LIFT_FOR_DRIVING);
     }
 
 }
