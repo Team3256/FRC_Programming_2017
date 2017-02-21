@@ -23,16 +23,16 @@ public class Constants {
 	public static final int PDP_OUTER_MOTOR_ROLLER = 7; //7
 
 	//PCM Solenoid ports
-	public static final int DRIVE_SHIFTER_A = 0; //4
-	public static final int DRIVE_SHIFTER_B = 6; //3
+	public static final int DRIVE_SHIFTER_A = 3; //4
+	public static final int DRIVE_SHIFTER_B = 7; //3
 	public static final int BALL_PIVOT_A = 2; //2
-	public static final int BALL_PIVOT_B = 3; //0
+	public static final int BALL_PIVOT_B = 0; //0
 	public static final int GEAR_PIVOT_A = 1; //1
 	public static final int GEAR_PIVOT_B = 5; //5
 
 	//Encoder ports on the Spartan Board 
-	public static final int ENCODER_LEFT_A = 11; //13
-	public static final int ENCODER_LEFT_B = 10; //12
+	public static final int ENCODER_LEFT_A = 15; //13
+	public static final int ENCODER_LEFT_B = 14; //12
 	public static final int ENCODER_RIGHT_A = 13; //11
 	public static final int ENCODER_RIGHT_B = 12; //10
 	
@@ -78,7 +78,7 @@ public class Constants {
 	
 	//Turn Motion Profile Gains - LOW GEAR
 	public static final double KV_TURN = 1.0/MAX_VEL_TURN_LOW_GEAR_DEG_SEC;
-	public static final double KA_TURN = 0.002;
+	public static final double KA_TURN = 0.003;
 	public static final double KP_TURN = 0.02;
 	public static final double KI_TURN = 0.0;
 	public static final double KD_TURN = 0.0;
