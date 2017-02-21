@@ -7,9 +7,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveStraightController {
 	
+	//Motion profiling for distance
 	private Trajectory trajectory;
 	private TrajectoryGenerator trajectoryGenerator;
 	private TrajectoryFollower trajectoryFollower;
+	//PID for driving straight
 	private PIDController headingController;
 	private DriveTrain drive = DriveTrain.getInstance();
 	private double output, headingAdjustment, leftOutput, rightOutput;
@@ -22,6 +24,10 @@ public class DriveStraightController {
 		headingController = new PIDController(Constants.KP_STRAIGHT, Constants.KI_STRAIGHT, Constants.KD_STRAIGHT);
 	}
 	
+	/**
+	 * @param setpoint the setpoint or goal to reach
+	 * @param reversed true if we are driving backwards, false if we are not reversed and driving forward
+	 */
 	public void setSetpoint(double setpoint, boolean reversed){
 		trajectory = trajectoryGenerator.generateTraj(0, 0, setpoint);
 		trajectoryFollower.setTrajectory(trajectory);
@@ -32,8 +38,11 @@ public class DriveStraightController {
 		this.reversed = reversed;
 		reset();
 	}
-
 	
+	/**
+	 * Resets both the motion profiling and pid controllers
+	 * Resets the encoders and the gyro
+	 */
 	public void reset(){
 		trajectoryFollower.resetController();
 		headingController.reset();
@@ -41,21 +50,25 @@ public class DriveStraightController {
 		drive.resetGyro();
 	}
 	
+	/**
+	 * @return true when the follower (distnace controller) has finished 
+	 */
 	public boolean isFinished(){
 		return trajectoryFollower.isFinished();
 	}
 	
+	/**
+	 * @return DrivePWM with the left and right velocities of the robot
+	 * calculated based on our current position and angle
+	 */
 	public DrivePWM update(){
-		//drive.getRightPosition() for now because only one encoder is plugged in
-		output = trajectoryFollower.calcMotorOutput(Math.abs(drive.getAveragePosition()));
-		SmartDashboard.putNumber("MOTION PROFILE OUTPUT", output);
+		//follower output for distance
+		output = trajectoryFollower.update(Math.abs(drive.getAveragePosition()));
+		//pid output for driving straight
 		headingAdjustment = headingController.update(drive.getAngle() * (reversed ? -1 : 1));
-		SmartDashboard.putNumber("Gyro Adjustment", headingAdjustment);
-		SmartDashboard.putNumber("GYRO ERROR DRIVE STRAIGHT", 0-drive.getAngle());
+		//adjust values for the left and right sides of the drivetrain
 		leftOutput = output - headingAdjustment;
 		rightOutput = output + headingAdjustment;
-		SmartDashboard.putNumber("Left Output", leftOutput);
-		SmartDashboard.putNumber("Right Output", rightOutput);
 		DrivePWM signal = new DrivePWM(leftOutput, rightOutput);
 		return signal;
 	}

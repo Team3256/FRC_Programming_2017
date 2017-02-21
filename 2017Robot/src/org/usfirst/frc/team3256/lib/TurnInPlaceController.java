@@ -13,7 +13,6 @@ public class TurnInPlaceController {
 	private TrajectoryGenerator trajectoryGenerator;
 	private TrajectoryFollower trajectoryFollower;
 	private double output;
-	private Timer t;
 	
 	public TurnInPlaceController(){
 		trajectoryGenerator = new TrajectoryGenerator();
@@ -23,8 +22,6 @@ public class TurnInPlaceController {
 	
 	public void setSetpoint(double setpoint){
 		reset();
-		t = new Timer();
-		t.start();
 		trajectory = trajectoryGenerator.generateTraj(0, 0, setpoint);
 		trajectoryFollower.setTrajectory(trajectory);
 		trajectoryFollower.setGains(Constants.KV_TURN, Constants.KA_TURN, 
@@ -42,8 +39,7 @@ public class TurnInPlaceController {
 	}
 	
 	public double update(){
-		SmartDashboard.putNumber("CURRENT TIME", t.get());
-		output = trajectoryFollower.calcMotorOutput(Math.abs(drive.getAngle()));
+		output = trajectoryFollower.update(Math.abs(drive.getAngle()));
 		return output;
 	}
 	

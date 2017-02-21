@@ -34,7 +34,7 @@ public class DriveTrain extends Subsystem implements Log {
 		//VictorSP motor controllers for the drivetrain motors
 		leftDrive = new VictorSP(Constants.LEFT_DRIVE);
 		rightDrive = new VictorSP(Constants.RIGHT_DRIVE);
-		//Flip the right side of the drivetrain (they are mirrored)
+		//set motor directions
 		leftDrive.setInverted(false);
 		rightDrive.setInverted(true);
 		//Encoders for the left and right side of the drivetrain
@@ -43,6 +43,7 @@ public class DriveTrain extends Subsystem implements Log {
 		//set the ticks/inch for the encoders
 		encoderLeft.setDistancePerPulse(Constants.INCHES_PER_TICK);
 		encoderRight.setDistancePerPulse(Constants.INCHES_PER_TICK);
+		//set encoder directions
 		encoderLeft.setReverseDirection(false);
 		encoderRight.setReverseDirection(true);
 		//Gyro for the drivetrain
@@ -65,6 +66,9 @@ public class DriveTrain extends Subsystem implements Log {
 		return instance == null ? instance = new DriveTrain() : instance;
 	}
 	
+	/**
+	 * Logs information about the drivetrain components to the SmartDashboard
+	 */
 	@Override
 	public void logToDashboard(){
 		SmartDashboard.putNumber("Gyro Angle - SPI 0 ", getAngle());
@@ -175,12 +179,15 @@ public class DriveTrain extends Subsystem implements Log {
 	}
 	
 	/**
-	 * @return the current angle of the robot from the gyro since the last reset
+	 * @return the current angle in degrees of the robot from the gyro since the last reset
 	 */
 	public double getAngle() {
 		return gyro.getAngle();
 	}
 	
+	/**
+	 * @return the angular velocity of the robot, in degrees per second
+	 */
 	public double getAngularVelocity(){
 		return gyro.getRate();
 	}

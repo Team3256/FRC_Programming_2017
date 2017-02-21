@@ -4,6 +4,10 @@ import org.usfirst.frc.team3256.lib.Trajectory.Segment;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+/**
+ * Class to follow a trajectory and calculate the motor output 
+ * based on the trajectory and our current position
+ */
 public class TrajectoryFollower{
 	
 	private double kP, kI, kD, kV, kA, dt;
@@ -16,10 +20,20 @@ public class TrajectoryFollower{
 
 	}
 
+	/**
+	 * @param traj the trajectory for the follower to follow
+	 */
 	public void setTrajectory(Trajectory traj){
 		this.traj = traj;
 	}
 	
+	/**
+	 * @param kV Feedforward velocity Gain - usually 1/maxVel
+	 * @param kA Feedforward acceleration Gain - increase to increase acceleration
+	 * @param kP Feedback proportional Gain 
+	 * @param kI Feedback integral Gain
+	 * @param kD Feedback derivative Gain
+	 */
 	public void setGains(double kV, double kA, double kP, double kI, double kD){
 		this.kV = kV;
 		this.kA = kA;
@@ -28,10 +42,16 @@ public class TrajectoryFollower{
 		this.kD = kD;
 	}
 
+	/**
+	 * @param dt the period of the control loop
+	 */
 	public void setLoopTime(double dt){
 		this.dt = dt;
 	}
 
+	/**
+	 * Rests the PID controller and the current segment of the follower
+	 */
 	public void resetController(){
 		sumError = 0;
 		changeError = 0;
@@ -40,37 +60,59 @@ public class TrajectoryFollower{
 		curr_segment = 0;
 	}
 	
-	private double calcFeedForward(double curr_vel, double curr_accel){
-		return kV*curr_vel + kA*curr_accel;
+	/**
+	 * @param currVel the velocity at the current segment
+	 * @param currAccel the acceleration at the current segment
+	 * @return the calculated feedfoward output
+	 */
+	private double calcFeedForward(double currVel, double currAccel){
+		return kV*currVel + kA*currAccel;
 	}	
 
-	private double calcFeedBack(double setpoint_pos, double curr_pos, double curr_vel){
-		error = setpoint_pos-curr_pos;
-		SmartDashboard.putNumber("error", error);
+	/**
+	 * @param setpointPos the theoretical position we should be at at the current segment
+	 * @param currPos the actual position we are at at the current segment
+	 * @param setpointVel the current velocity we should be at
+	 * @return the calculated feedback adjustment output
+	 */
+	private double calcFeedBack(double setpointPos, double currPos, double setpointVel){
+		//normal pid error
+		error = setpointPos-currPos;
+		//integral of error
 		sumError+=error;
-		changeError = (error-prevError)/dt - curr_vel;
+		//derivative of error: the change in error over time minus the velocity we should be at
+		changeError = (error-prevError)/dt - setpointVel;
+		//update previous error
 		prevError = error;
+		//calculate the pid output
 		PID = kP*error + kI*sumError + kD*changeError;
 		return PID;
 	}
-	
+
+	/**
+	 * @return true when the current segment has reached the final segment in the trajectory
+	 */
 	public boolean isFinished(){
 		return (curr_segment >= traj.getLength());
 	}
-
-	public double calcMotorOutput(double currentTrajPos){
+	
+	/**
+	 * @param currPos the current position we are at
+	 * @return the motor ouptut with the feedforward and the feedback
+	 */
+	public double update(double currPos){
+		//only update we are not finished yet
 		if (!isFinished()){  
 			Segment s = traj.getCurrentSegment(curr_segment);
-			System.out.println("pos " + s.getPos());
-			SmartDashboard.putNumber("PROFILE TIME", s.getTime());
-			SmartDashboard.putNumber("Theoretical Vel", s.getVel());
+			//calculate ff value
 			feedForwardValue = calcFeedForward(s.getVel(), s.getAccel());
-			SmartDashboard.putNumber("FF VALUE", feedForwardValue);
-			SmartDashboard.putNumber("Current THeoretcial POs", s.getPos());
-			SmartDashboard.putNumber("CURRENT ENCODER POS", currentTrajPos);
-			feedBackValue = calcFeedBack(s.getPos(), currentTrajPos, s.getVel());
+			//calculate fb value
+			feedBackValue = calcFeedBack(s.getPos(), currPos, s.getVel());
+			//output = ff + fb
 			output = feedForwardValue + feedBackValue;
+			//increment current segment 
 			curr_segment++;
+			//filter the output to be within bounds
 			if (output>1) output = 1;
 			if (output<-1) output = -1;
 			return output;

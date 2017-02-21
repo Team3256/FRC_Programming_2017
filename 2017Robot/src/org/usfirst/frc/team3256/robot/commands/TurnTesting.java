@@ -11,7 +11,7 @@ public class TurnTesting extends CommandGroup {
 
     public TurnTesting() {
         for(int i=0;i<1;i++){
-        	addSequential(new PIDTurn(20,true));
+        	addSequential(new PIDTurn(90,true));
         }
     }
 }
