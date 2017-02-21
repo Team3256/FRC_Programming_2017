@@ -19,7 +19,7 @@ public class TurnInPlaceController {
 	public TurnInPlaceController(){
 		trajectoryGenerator = new TrajectoryGenerator();
 		trajectoryFollower = new TrajectoryFollower();
-		trajectoryGenerator.setConfig(Constants.MAX_VEL_TURN_LOW_GEAR_DEG, Constants.MAX_ACCEL_TURN_LOW_GEAR_DEG2, Constants.CONTROL_LOOP_DT);
+		trajectoryGenerator.setConfig(Constants.MAX_VEL_TURN_LOW_GEAR_DEG_SEC, Constants.MAX_ACCEL_TURN_LOW_GEAR_DEG_SEC2, Constants.CONTROL_LOOP_DT);
 	}
 	
 	/**

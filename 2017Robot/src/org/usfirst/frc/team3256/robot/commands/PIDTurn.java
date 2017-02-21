@@ -18,7 +18,11 @@ public class PIDTurn extends Command {
 	private double setpoint;
 	private boolean turnRight;
 	
-    public PIDTurn(double setpoint, final boolean turnRight) {
+	/**
+	 * @param setpoint desired angle
+	 * @param turnRight desired direction
+	 */
+	public PIDTurn(double setpoint, final boolean turnRight) {
         requires(drive);
         pid = new PIDController(Constants.KP_PID_TURN, Constants.KI_PID_TURN, Constants.KD_PID_TURN);
         pid.setMinMaxOutput(0.2, 0.75);
@@ -53,7 +57,9 @@ public class PIDTurn extends Command {
         return pid.isFinished();
     }
 
-    // Called once after isFinished returns true
+    /**
+     * Stops the turn once it is finished
+     */
     protected void end() {
     	drive.tankDrive(0, 0, false);
     	notifier.stop();

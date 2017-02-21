@@ -19,13 +19,19 @@ public class DriveToDistance extends Command {
 	private double setpoint;
 	private boolean goForward;
 	
+	/**
+	 * @param setpoint desired distance
+	 * @param goForward desired direction
+	 */
     public DriveToDistance(double setpoint, boolean goForward) {
         requires(drive);
         this.setpoint = setpoint;
         this.goForward = goForward;
     }
 
-    // Called just before this Command runs the first time
+    /**
+     * Initializes the drivetrain and this command
+     */
     protected void initialize() {
     	drive.resetEncoders();
     	drive.resetGyro();        
@@ -59,7 +65,9 @@ public class DriveToDistance extends Command {
         return controller.isFinished() || Math.abs(setpoint-drive.getAveragePosition()) <= 1;
     }
 
-    // Called once after isFinished returns true
+    /**
+     * Stops the drive after it is finished
+     */
     protected void end() {
     	drive.tankDrive(0, 0, false);
     	notifier.stop();
