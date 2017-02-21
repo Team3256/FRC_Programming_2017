@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class TurnToAngle extends Command {
+public class PIDTurn extends Command {
 
 	private DriveTrain drive = DriveTrain.getInstance();
 	private Notifier notifier;
@@ -18,11 +18,11 @@ public class TurnToAngle extends Command {
 	private double setpoint;
 	private boolean turnRight;
 	
-    public TurnToAngle(double setpoint, final boolean turnRight) {
+    public PIDTurn(double setpoint, final boolean turnRight) {
         requires(drive);
-        pid = new PIDController(Constants.KP_TURN, Constants.KI_TURN, Constants.KD_TURN);
-        pid.setMinMaxOutput(0.2, 0.7);
-        pid.setTolerance(0.25);
+        pid = new PIDController(Constants.KP_PID_TURN, Constants.KI_PID_TURN, Constants.KD_PID_TURN);
+        pid.setMinMaxOutput(0.2, 0.75);
+        pid.setTolerance(0.1);
     	this.setpoint = setpoint;
     	this.turnRight = turnRight;
     }

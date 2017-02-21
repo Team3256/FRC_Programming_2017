@@ -42,7 +42,6 @@ public class TrajectoryGenerator{
 		int size = (int)(total_time/dt);
 		traj = new Trajectory(size);
 		double curr_time = 0;
-		System.out.printf("Total Dist: %f   Total Time: %f, Accel Time: %f   Time at end of Cruise: %f\n",end_pos, total_time,accel_time,(accel_time+cruise_time));
 		for(int i=0;i<size;i++){
 			double curr_pos, curr_vel, curr_accel;
 			if (curr_time<accel_time){

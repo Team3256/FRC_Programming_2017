@@ -46,4 +46,5 @@ public class TurnInPlaceController {
 		output = trajectoryFollower.calcMotorOutput(Math.abs(drive.getAngle()));
 		return output;
 	}
+	
 }

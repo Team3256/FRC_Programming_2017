@@ -11,7 +11,7 @@ public class TrajectoryFollower{
 	private Trajectory traj;
 	private int curr_segment;
 	private double output, feedForwardValue, feedBackValue;
-		
+
 	public TrajectoryFollower(){
 
 	}
@@ -55,11 +55,10 @@ public class TrajectoryFollower{
 	}
 	
 	public boolean isFinished(){
-		return curr_segment >= traj.getLength();
+		return (curr_segment >= traj.getLength());
 	}
 
 	public double calcMotorOutput(double currentTrajPos){
-		SmartDashboard.putNumber("TRAJECTORY LENGTH", traj.getLength());
 		if (!isFinished()){  
 			Segment s = traj.getCurrentSegment(curr_segment);
 			System.out.println("pos " + s.getPos());
@@ -78,5 +77,5 @@ public class TrajectoryFollower{
 		}
 		return 0;
 	}
-	
+
 }

@@ -159,7 +159,7 @@ public class DriveTrain extends Subsystem implements Log {
 		encoderLeft.reset();
 		encoderRight.reset();
 	}
-	
+
 	/**
 	 * Calibrates the ADXRS453 Gyro on the Spartan Board
 	 */

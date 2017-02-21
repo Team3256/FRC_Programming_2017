@@ -37,8 +37,6 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void robotInit() {
 		driveTrain = DriveTrain.getInstance();
-		driveTrain.calibrateGyro();
-		driveTrain.resetGyro();
 		driveTrain.resetEncoders();
 		driveTrain.shiftUp(true);
 		manipulator = Manipulator.getInstance();
@@ -61,7 +59,6 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void disabledInit() {
-		
 	}
 
 	@Override
