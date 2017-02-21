@@ -31,7 +31,7 @@ public class TrajectoryGenerator{
 	 * @param startVel The starting velocity of the trajectory, usually 0
 	 * @param endVel The ending velocity of the trajectory, usually 0
 	 * @param setpoint The setpoint or ending position of the trajectory
-	 * @return
+	 * @return the generated trajectory
 	 */
 	public Trajectory generateTraj(double startVel, double endVel, double setpoint){
 		//Trajectory to store the generated trajectory
