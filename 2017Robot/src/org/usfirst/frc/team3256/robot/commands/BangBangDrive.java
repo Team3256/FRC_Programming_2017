@@ -21,7 +21,7 @@ public class BangBangDrive extends Command {
         this.output = output;
         this.goForward = goForward;
         bangBangController = new BangBangController(setpoint, output);
-        bangBangController.setTolerance(2);
+        bangBangController.setTolerance(0.5);
     }
 
     // Called just before this Command runs the first time

@@ -18,17 +18,17 @@ public class DeployGear extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	
+    	setTimeout(2);
+    	manipulator.setHumanLoadingState(HumanPlayerLoadingState.GEAR_DEPLOY);
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	manipulator.setHumanLoadingState(HumanPlayerLoadingState.GEAR_DEPLOY);
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return true;
+        return isTimedOut();
     }
 
     // Called once after isFinished returns true

@@ -50,6 +50,7 @@ public class Manipulator extends Subsystem implements Log {
 		outerMotor = new VictorSP(Constants.OUTER_MOTOR_ROLLER);
 		ballPivot = new DoubleSolenoid(Constants.BALL_PIVOT_A, Constants.BALL_PIVOT_B);
 		humanIntakePivot = new DoubleSolenoid(Constants.GEAR_PIVOT_A, Constants.GEAR_PIVOT_B);
+		gearDeployer = new DoubleSolenoid(Constants.GEAR_DEPLOY_A, Constants.GEAR_DEPLOY_B);
 	}
 
 	/**
@@ -78,11 +79,11 @@ public class Manipulator extends Subsystem implements Log {
 			loadingState = HumanPlayerLoadingState.GEAR_INTAKE;
 			// TODO: tune direction
 			humanIntakePivot.set(DoubleSolenoid.Value.kForward);
+			gearDeployer.set(DoubleSolenoid.Value.kReverse);
 			break;
 		case GEAR_DEPLOY:
 			loadingState = HumanPlayerLoadingState.GEAR_DEPLOY;
 			// TODO: tune direction
-			humanIntakePivot.set(DoubleSolenoid.Value.kForward);
 			gearDeployer.set(DoubleSolenoid.Value.kForward);
 			break;
 		case BALLS_INTAKE:

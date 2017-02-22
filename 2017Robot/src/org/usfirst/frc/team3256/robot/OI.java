@@ -1,6 +1,7 @@
 package org.usfirst.frc.team3256.robot;
 
 import org.usfirst.frc.team3256.lib.Log;
+import org.usfirst.frc.team3256.robot.commands.DeployGear;
 import org.usfirst.frc.team3256.robot.commands.GroundIntakeBalls;
 import org.usfirst.frc.team3256.robot.commands.HumanPlayerBallsIntake;
 import org.usfirst.frc.team3256.robot.commands.HumanPlayerGearIntake;
@@ -34,7 +35,7 @@ public class OI implements Log{
 	public static Button leftBumper1 = new JoystickButton(driver, 5);
 	public static Button rightBumper1 = new JoystickButton(driver, 6);
 	public static Trigger rightTrigger1 = new JoystickTrigger(driver,3);
-	public static Trigger leftTrigger1 = new JoystickTrigger(driver,6);
+	public static Trigger leftTrigger1 = new JoystickTrigger(driver,2);
 	
 	//Controller 2
     public static Button buttonA2 = new JoystickButton(manipulator, 1);
@@ -44,10 +45,11 @@ public class OI implements Log{
     public static Button leftBumper2 = new JoystickButton(manipulator, 5);
     public static Button rightBumper2 = new JoystickButton(manipulator, 6);
 	public static Trigger rightTrigger2 = new JoystickTrigger(manipulator,3);
-	public static Trigger leftTrigger2 = new JoystickTrigger(manipulator,6);
+	public static Trigger leftTrigger2 = new JoystickTrigger(manipulator,2);
 	
     public OI() {
     	//TESTED ON HARDWARE
+    	/*
     	buttonA2.whileHeld(new GroundIntakeBalls());
     	buttonA2.whenInactive(new StopRollers());
     	buttonY2.whileHeld(new ShootBalls());
@@ -56,6 +58,8 @@ public class OI implements Log{
     	rightTrigger2.whenInactive(new StopHang());
     	leftBumper2.whileHeld(new HumanPlayerBallsIntake());
     	leftBumper2.whenReleased(new HumanPlayerGearIntake());
+    	*/
+    	buttonX1.whenPressed(new DeployGear());
     }
 
 	@Override

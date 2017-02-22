@@ -2,11 +2,13 @@
 package org.usfirst.frc.team3256.robot;
 
 import org.usfirst.frc.team3256.lib.Logger;
+import org.usfirst.frc.team3256.robot.automodes.RedGearCenterAuto;
 import org.usfirst.frc.team3256.robot.commands.DriveTesting;
 import org.usfirst.frc.team3256.robot.commands.TurnTesting;
 import org.usfirst.frc.team3256.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team3256.robot.subsystems.Hanger;
 import org.usfirst.frc.team3256.robot.subsystems.Manipulator;
+import org.usfirst.frc.team3256.robot.subsystems.Manipulator.HumanPlayerLoadingState;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -40,6 +42,7 @@ public class Robot extends IterativeRobot {
 		driveTrain.resetEncoders();
 		driveTrain.shiftUp(true);
 		manipulator = Manipulator.getInstance();
+		manipulator.setHumanLoadingState(HumanPlayerLoadingState.GEAR_INTAKE);
 		hanger = Hanger.getInstance();
 		compressor = new Compressor(0);
 		compressor.setClosedLoopControl(true);
@@ -79,7 +82,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-		new TurnTesting().start();
+		new RedGearCenterAuto().start();
 	}
 
 	/**

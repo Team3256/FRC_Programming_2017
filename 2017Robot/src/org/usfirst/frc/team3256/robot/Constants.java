@@ -27,12 +27,14 @@ public class Constants {
 	public static final int DRIVE_SHIFTER_B = 7; //3
 	public static final int BALL_PIVOT_A = 2; //2
 	public static final int BALL_PIVOT_B = 0; //0
-	public static final int GEAR_PIVOT_A = 1; //1
-	public static final int GEAR_PIVOT_B = 5; //5
+	public static final int GEAR_PIVOT_A = 4; //1
+	public static final int GEAR_PIVOT_B = 6; //5
+	public static final int GEAR_DEPLOY_A = 5;
+	public static final int GEAR_DEPLOY_B = 1;
 
 	//Encoder ports on the Spartan Board 
-	public static final int ENCODER_LEFT_A = 15; //13
-	public static final int ENCODER_LEFT_B = 14; //12
+	public static final int ENCODER_LEFT_A = 11; //13
+	public static final int ENCODER_LEFT_B = 10; //12
 	public static final int ENCODER_RIGHT_A = 13; //11
 	public static final int ENCODER_RIGHT_B = 12; //10
 	
