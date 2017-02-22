@@ -69,9 +69,9 @@ public class Constants {
 	public static final double KD_PID_TURN = 0.01;
 	
 	//Drive Motion Profile Gains - HIGH GEAR
-	public static final double KV_DISTANCE = 1.0/MAX_VEL_HIGH_GEAR_IN_SEC;
-	public static final double KA_DISTANCE = 0.004;
-	public static final double KP_DISTANCE = 0.17;
+	public static final double KV_DISTANCE = 1.0/115.0;
+	public static final double KA_DISTANCE = 0.004; //0.004;
+	public static final double KP_DISTANCE = 0.005; //0.17;
 	public static final double KI_DISTANCE = 0.0;
 	public static final double KD_DISTANCE = 0.0;
 	public static final double KP_STRAIGHT = 0.02;

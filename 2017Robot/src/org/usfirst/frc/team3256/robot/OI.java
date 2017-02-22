@@ -54,12 +54,12 @@ public class OI implements Log{
     	buttonA2.whenInactive(new StopRollers());
     	buttonY2.whileHeld(new ShootBalls());
     	buttonY2.whenInactive(new StopRollers());
-    	rightTrigger2.toggleWhenActive(new RunHang());
-    	rightTrigger2.whenInactive(new StopHang());
     	leftBumper2.whileHeld(new HumanPlayerBallsIntake());
     	leftBumper2.whenReleased(new HumanPlayerGearIntake());
     	*/
     	buttonX1.whenPressed(new DeployGear());
+    	rightTrigger2.toggleWhenActive(new RunHang());
+    	rightTrigger2.whenInactive(new StopHang());
     }
 
 	@Override

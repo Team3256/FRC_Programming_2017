@@ -103,11 +103,11 @@ public class Trajectory {
 		return ret;
 	}
 	
-	/**
+	
 	public static void main(String args[]){
 		TrajectoryGenerator generator = new TrajectoryGenerator();
-		generator.setConfig(Constants.MAX_VEL_HIGH_GEAR_IN, Constants.MAX_ACCEL_HIGH_GEAR_IN2, Constants.CONTROL_LOOP_DT);
+		generator.setConfig(Constants.MAX_VEL_HIGH_GEAR_IN_SEC, Constants.MAX_ACCEL_HIGH_GEAR_IN_SEC2, Constants.CONTROL_LOOP_DT);
 		Trajectory traj = generator.generateTraj(0, 0, 60);
 		System.out.println(traj);
-	}*/
+	}
 }

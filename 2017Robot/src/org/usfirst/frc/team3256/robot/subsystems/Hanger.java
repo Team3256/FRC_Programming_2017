@@ -61,7 +61,6 @@ public class Hanger extends Subsystem implements Log {
 		switch(wantedState) {
 			case WINCH_UP:
 				hangerState = HangerState.WINCH_UP;
-				//TODO: tune
 				hanger1.set(Constants.WINCH_HANGER_POWER);
 				hanger2.set(Constants.WINCH_HANGER_POWER);
 				break;

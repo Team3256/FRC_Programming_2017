@@ -42,6 +42,7 @@ public class TrajectoryGenerator{
 		double endDistOffset = (0.5*endVel*endVel)/maxAccel;
 		//CruiseVel - the maximum velocity of the trajectory
 		double cruiseVel = Math.min(maxVel, Math.sqrt(maxAccel*setpoint-startDistOffset-endDistOffset));
+		System.out.println(cruiseVel);
 		//Acceleration and DeAcceleration time
 		//v = at -> t = v/a;
 		double accel_time = (cruiseVel-startVel)/maxAccel;
