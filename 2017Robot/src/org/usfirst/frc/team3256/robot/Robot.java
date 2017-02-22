@@ -98,6 +98,8 @@ public class Robot extends IterativeRobot {
 	public void teleopInit() {
 		driveTrain.resetEncoders();
 		driveTrain.resetGyro();
+		driveTrain.shiftUp(true);
+		manipulator.setHumanLoadingState(HumanPlayerLoadingState.GEAR_INTAKE);
 	}
 
 	/**

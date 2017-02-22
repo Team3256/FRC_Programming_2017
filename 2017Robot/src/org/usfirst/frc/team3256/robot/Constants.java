@@ -7,8 +7,7 @@ public class Constants {
 	//PWM Motor Controller ports
 	public static final int LEFT_DRIVE = 9; //0
 	public static final int RIGHT_DRIVE = 8; //1
-	public static final int HANGER_1 = 6; //6
-	public static final int HANGER_2 = 7; //7
+	public static final int HANGER = 7; //6
 	public static final int INNER_MOTOR_ROLLER = 4; //4
 	public static final int OUTER_MOTOR_ROLLER = 5; //5
 	
@@ -23,14 +22,14 @@ public class Constants {
 	public static final int PDP_OUTER_MOTOR_ROLLER = 7; //7
 
 	//PCM Solenoid ports
-	public static final int DRIVE_SHIFTER_A = 3; //4
-	public static final int DRIVE_SHIFTER_B = 7; //3
-	public static final int BALL_PIVOT_A = 2; //2
+	public static final int DRIVE_SHIFTER_A = 6; //3
+	public static final int DRIVE_SHIFTER_B = 3; //7
+	public static final int BALL_PIVOT_A = 7; //2
 	public static final int BALL_PIVOT_B = 0; //0
-	public static final int GEAR_PIVOT_A = 4; //1
-	public static final int GEAR_PIVOT_B = 6; //5
-	public static final int GEAR_DEPLOY_A = 5;
-	public static final int GEAR_DEPLOY_B = 1;
+	public static final int GEAR_PIVOT_A = 1; //1
+	public static final int GEAR_PIVOT_B = 4; //5
+	public static final int GEAR_DEPLOY_A = 2;
+	public static final int GEAR_DEPLOY_B = 5;
 
 	//Encoder ports on the Spartan Board 
 	public static final int ENCODER_LEFT_A = 11; //13
@@ -58,7 +57,7 @@ public class Constants {
 	//Preset Values
 	public static final double GROUND_INTAKE_POWER = 0.5;
 	public static final double SHOOT_BALLS_POWER = -0.5;
-	public static final double WINCH_HANGER_POWER = 0.5;
+	public static final double WINCH_HANGER_POWER = 1.0;
 	
 	//Period for all control loops
 	public static final double CONTROL_LOOP_DT = 0.02;

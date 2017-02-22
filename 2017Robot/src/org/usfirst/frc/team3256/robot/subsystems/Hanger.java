@@ -1,6 +1,7 @@
 package org.usfirst.frc.team3256.robot.subsystems;
 
 import org.usfirst.frc.team3256.lib.Log;
+import org.usfirst.frc.team3256.lib.PDP;
 import org.usfirst.frc.team3256.robot.Constants;
 
 import edu.wpi.first.wpilibj.VictorSP;
@@ -15,8 +16,7 @@ public class Hanger extends Subsystem implements Log {
 	//Singleton instance of the Hanger Subsystem
 	private static Hanger instance;
 	
-	private VictorSP hanger1;
-	private VictorSP hanger2;
+	private VictorSP hanger;
 	
 	/**
 	 * holds the different states of the hanger 
@@ -35,8 +35,8 @@ public class Hanger extends Subsystem implements Log {
 	 */
 	private Hanger() {
 		//VictorSP for the two hanger motors
-		hanger1 = new VictorSP(Constants.HANGER_1);
-		hanger2 = new VictorSP(Constants.HANGER_2);
+		hanger = new VictorSP(Constants.HANGER);
+		hanger.setInverted(true);
 	}
 
 	/**
@@ -61,28 +61,23 @@ public class Hanger extends Subsystem implements Log {
 		switch(wantedState) {
 			case WINCH_UP:
 				hangerState = HangerState.WINCH_UP;
-				hanger1.set(Constants.WINCH_HANGER_POWER);
-				hanger2.set(Constants.WINCH_HANGER_POWER);
+				hanger.set(Constants.WINCH_HANGER_POWER);
 				break;
 			case WINCH_STOP:
 				hangerState = HangerState.WINCH_STOP;
 				//TODO: tune
-				hanger1.set(0);
-				hanger2.set(0);
+				hanger.set(0);
 				break;
 			default:
-				hanger1.set(0);
-				hanger2.set(0);
+				hanger.set(0);
 		}
 	}
 
 	@Override
 	public void logToDashboard() {
 		SmartDashboard.putString("HangerState", "" + hangerState);
-		SmartDashboard.putNumber("HangerMotor1: PWM-" + hanger1.getChannel() + " ", 
-				hanger1.get());
-		SmartDashboard.putNumber("HangerMotor2: PWM-" + hanger2.getChannel() + " ", 
-				hanger2.get());
+		SmartDashboard.putNumber("Hanger PDP 15", PDP.getInstance().getCurrent(15));
+		SmartDashboard.putNumber("Hanger PDP 4", PDP.getInstance().getCurrent(4));
 	}
 }
 

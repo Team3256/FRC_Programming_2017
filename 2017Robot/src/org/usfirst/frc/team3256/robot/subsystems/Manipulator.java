@@ -77,24 +77,21 @@ public class Manipulator extends Subsystem implements Log {
 		switch (wantedState) {
 		case GEAR_INTAKE:
 			loadingState = HumanPlayerLoadingState.GEAR_INTAKE;
-			// TODO: tune direction
-			humanIntakePivot.set(DoubleSolenoid.Value.kForward);
-			gearDeployer.set(DoubleSolenoid.Value.kReverse);
+			gearDeployer.set(DoubleSolenoid.Value.kForward);
+			humanIntakePivot.set(DoubleSolenoid.Value.kReverse);
 			break;
 		case GEAR_DEPLOY:
 			loadingState = HumanPlayerLoadingState.GEAR_DEPLOY;
-			// TODO: tune direction
-			gearDeployer.set(DoubleSolenoid.Value.kForward);
+			gearDeployer.set(DoubleSolenoid.Value.kReverse);
 			break;
 		case BALLS_INTAKE:
 			loadingState = HumanPlayerLoadingState.BALLS_INTAKE;
-			// TODO: tune direction
-			humanIntakePivot.set(DoubleSolenoid.Value.kReverse);
+			humanIntakePivot.set(DoubleSolenoid.Value.kForward);
 			break;
 		default:
 			humanIntakePivot.set(DoubleSolenoid.Value.kOff);
+			gearDeployer.set(DoubleSolenoid.Value.kOff);
 			break;
-
 		}
 
 	}
