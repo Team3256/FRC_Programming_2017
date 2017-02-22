@@ -22,14 +22,14 @@ public class Constants {
 	public static final int PDP_OUTER_MOTOR_ROLLER = 7; //7
 
 	//PCM Solenoid ports
-	public static final int DRIVE_SHIFTER_A = 6; //3
-	public static final int DRIVE_SHIFTER_B = 3; //7
-	public static final int BALL_PIVOT_A = 7; //2
+	public static final int DRIVE_SHIFTER_A = 3; //6
+	public static final int DRIVE_SHIFTER_B = 7; //3
+	public static final int BALL_PIVOT_A = 2; //
 	public static final int BALL_PIVOT_B = 0; //0
-	public static final int GEAR_PIVOT_A = 1; //1
-	public static final int GEAR_PIVOT_B = 4; //5
-	public static final int GEAR_DEPLOY_A = 2;
-	public static final int GEAR_DEPLOY_B = 5;
+	public static final int GEAR_PIVOT_A = 4; //1
+	public static final int GEAR_PIVOT_B = 6; //4
+	public static final int GEAR_DEPLOY_A = 1; //2
+	public static final int GEAR_DEPLOY_B = 5; //5
 
 	//Encoder ports on the Spartan Board 
 	public static final int ENCODER_LEFT_A = 11; //13
