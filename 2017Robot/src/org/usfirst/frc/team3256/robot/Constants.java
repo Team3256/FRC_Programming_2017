@@ -22,13 +22,13 @@ public class Constants {
 	public static final int PDP_OUTER_MOTOR_ROLLER = 7; //7
 
 	//PCM Solenoid ports
-	public static final int DRIVE_SHIFTER_A = 3; //6
-	public static final int DRIVE_SHIFTER_B = 7; //3
-	public static final int BALL_PIVOT_A = 2; //
+	public static final int DRIVE_SHIFTER_A = 6; //3
+	public static final int DRIVE_SHIFTER_B = 3; //7
+	public static final int BALL_PIVOT_A = 7; //7
 	public static final int BALL_PIVOT_B = 0; //0
-	public static final int GEAR_PIVOT_A = 4; //1
-	public static final int GEAR_PIVOT_B = 6; //4
-	public static final int GEAR_DEPLOY_A = 1; //2
+	public static final int GEAR_PIVOT_A = 1; //4
+	public static final int GEAR_PIVOT_B = 4; //6
+	public static final int GEAR_DEPLOY_A = 2; //1
 	public static final int GEAR_DEPLOY_B = 5; //5
 
 	//Encoder ports on the Spartan Board 
@@ -44,7 +44,7 @@ public class Constants {
 
 //------------------------------Physical Robot Constants------------------------------
 	
-	public static final double MAX_VEL_HIGH_GEAR_IN_SEC = 15.0 * 12.0; // 18.94 theoretical ft/s
+	public static final double MAX_VEL_HIGH_GEAR_IN_SEC = 9.0 * 12.0; // 18.94 theoretical ft/s
 	public static final double MAX_ACCEL_HIGH_GEAR_IN_SEC2 = 20; 
 	public static final double MAX_VEL_TURN_LOW_GEAR_DEG_SEC = 75.0;
 	public static final double MAX_ACCEL_TURN_LOW_GEAR_DEG_SEC2 = 75.0;
@@ -68,9 +68,9 @@ public class Constants {
 	public static final double KD_PID_TURN = 0.01;
 	
 	//Drive Motion Profile Gains - HIGH GEAR
-	public static final double KV_DISTANCE = 1.0/115.0;
-	public static final double KA_DISTANCE = 0.004; //0.004;
-	public static final double KP_DISTANCE = 0.005; //0.17;
+	public static final double KV_DISTANCE = 1.0/MAX_VEL_HIGH_GEAR_IN_SEC;
+	public static final double KA_DISTANCE = 0.0; //0.004;
+	public static final double KP_DISTANCE = 0.0; //0.17;
 	public static final double KI_DISTANCE = 0.0;
 	public static final double KD_DISTANCE = 0.0;
 	public static final double KP_STRAIGHT = 0.02;

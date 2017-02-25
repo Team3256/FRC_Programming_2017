@@ -55,8 +55,8 @@ public class OI implements Log{
     	buttonY2.whileHeld(new ShootBalls());
     	buttonY2.whenInactive(new StopRollers());
     	*/
-    	leftBumper1.whileHeld(new HumanPlayerGearIntake());
-    	leftBumper1.whenReleased(new HumanPlayerBallsIntake());
+    	buttonY1.whenPressed(new HumanPlayerGearIntake());
+    	buttonA1.whenPressed(new HumanPlayerBallsIntake());
     	buttonX1.whenPressed(new DeployGear());
     	rightTrigger1.toggleWhenActive(new RunHang());
     	rightTrigger1.whenInactive(new StopHang());

@@ -26,7 +26,7 @@ public class Manipulator extends Subsystem implements Log {
 	 * The states of the human player intake
 	 */
 	public enum HumanPlayerLoadingState {
-		GEAR_INTAKE, GEAR_DEPLOY, BALLS_INTAKE;
+		GEAR_INTAKE, GEAR_DEPLOY, GEAR_RETRACT, BALLS_INTAKE;
 	}
 
 	/**
@@ -83,6 +83,10 @@ public class Manipulator extends Subsystem implements Log {
 		case GEAR_DEPLOY:
 			loadingState = HumanPlayerLoadingState.GEAR_DEPLOY;
 			gearDeployer.set(DoubleSolenoid.Value.kReverse);
+			break;
+		case GEAR_RETRACT:
+			loadingState = HumanPlayerLoadingState.GEAR_RETRACT;
+			gearDeployer.set(DoubleSolenoid.Value.kForward);
 			break;
 		case BALLS_INTAKE:
 			loadingState = HumanPlayerLoadingState.BALLS_INTAKE;
