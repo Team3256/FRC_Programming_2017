@@ -2,6 +2,8 @@ package org.usfirst.frc.team3256.lib;
 
 import org.usfirst.frc.team3256.lib.Trajectory.Segment;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 /**
  * A class to generate a trajectory, given the maximum acceleration, 
  * maximum velocity, and the control loop period.
@@ -42,7 +44,7 @@ public class TrajectoryGenerator{
 		double endDistOffset = (0.5*endVel*endVel)/maxAccel;
 		//CruiseVel - the maximum velocity of the trajectory
 		double cruiseVel = Math.min(maxVel, Math.sqrt(maxAccel*setpoint-startDistOffset-endDistOffset));
-		System.out.println(cruiseVel);
+		SmartDashboard.putNumber("CRUISE VEL", cruiseVel);
 		//Acceleration and DeAcceleration time
 		//v = at -> t = v/a;
 		double accel_time = (cruiseVel-startVel)/maxAccel;

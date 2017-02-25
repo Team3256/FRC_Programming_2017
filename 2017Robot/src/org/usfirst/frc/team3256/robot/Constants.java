@@ -43,11 +43,12 @@ public class Constants {
 	public static final double XBOX_DEADBAND_VALUE = 0.25;
 
 //------------------------------Physical Robot Constants------------------------------
-	
-	public static final double MAX_VEL_HIGH_GEAR_IN_SEC = 9.0 * 12.0; // 18.94 theoretical ft/s
-	public static final double MAX_ACCEL_HIGH_GEAR_IN_SEC2 = 20; 
-	public static final double MAX_VEL_TURN_LOW_GEAR_DEG_SEC = 75.0;
-	public static final double MAX_ACCEL_TURN_LOW_GEAR_DEG_SEC2 = 75.0;
+
+	public static final double ROBOT_TRACK = 40.0;
+	public static final double MAX_VEL_HIGH_GEAR_IN_SEC = 10.0 * 12.0; // 18.94 theoretical ft/s
+	public static final double MAX_ACCEL_HIGH_GEAR_IN_SEC2 = 9.0 * 12.0; 
+	public static final double MAX_VEL_TURN_LOW_GEAR_DEG_SEC = MAX_VEL_HIGH_GEAR_IN_SEC/ROBOT_TRACK; //v = rw
+	public static final double MAX_ACCEL_TURN_LOW_GEAR_DEG_SEC2 = MAX_ACCEL_HIGH_GEAR_IN_SEC2/ROBOT_TRACK; //a = r(alpha)
 	public static final int GRAYHILL_TICKS_PER_ROT = 256;
 	public static final double WHEEL_DIAMETER = 4.09; //inches -- theoretical 4", includes tread
 	public static final double INCHES_PER_TICK = WHEEL_DIAMETER*Math.PI/GRAYHILL_TICKS_PER_ROT;
@@ -69,11 +70,11 @@ public class Constants {
 	
 	//Drive Motion Profile Gains - HIGH GEAR
 	public static final double KV_DISTANCE = 1.0/MAX_VEL_HIGH_GEAR_IN_SEC;
-	public static final double KA_DISTANCE = 0.0; //0.004;
-	public static final double KP_DISTANCE = 0.0; //0.17;
+	public static final double KA_DISTANCE = 0.0;//0.004;
+	public static final double KP_DISTANCE = 0.3;//0.17;
 	public static final double KI_DISTANCE = 0.0;
 	public static final double KD_DISTANCE = 0.0;
-	public static final double KP_STRAIGHT = 0.02;
+	public static final double KP_STRAIGHT = 0.03;
 	public static final double KI_STRAIGHT = 0.0;
 	public static final double KD_STRAIGHT = 0.0;
 	

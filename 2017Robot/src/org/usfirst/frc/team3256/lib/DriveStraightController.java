@@ -63,7 +63,7 @@ public class DriveStraightController {
 	 */
 	public DrivePWM update(){
 		//follower output for distance
-		output = trajectoryFollower.update(Math.abs(drive.getLeftPosition()));
+		output = trajectoryFollower.update(Math.abs(drive.getAveragePosition()));
 		//pid output for driving straight
 		headingAdjustment = headingController.update(drive.getAngle() * (reversed ? -1 : 1));
 		//adjust values for the left and right sides of the drivetrain
