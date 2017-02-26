@@ -51,8 +51,9 @@ public class Robot extends IterativeRobot {
 		logger.addLog(driveTrain);
 		logger.addLog(manipulator);
 		logger.addLog(hanger);
-		logger.addLog(operatorInterface);
 		logger.start();
+		System.out.println(Constants.MAX_VEL_TURN_LOW_GEAR_DEG_SEC);
+		System.out.println(Constants.MAX_ACCEL_TURN_LOW_GEAR_DEG_SEC2);
 	}
 
 	/**
@@ -83,7 +84,7 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void autonomousInit() {
-		new DriveTesting().start();
+		new TurnTesting().start();
 	}
 
 	/**

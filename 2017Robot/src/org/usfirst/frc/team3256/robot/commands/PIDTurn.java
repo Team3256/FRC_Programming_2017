@@ -25,8 +25,8 @@ public class PIDTurn extends Command {
 	public PIDTurn(double setpoint, final boolean turnRight) {
         requires(drive);
         pid = new PIDController(Constants.KP_PID_TURN, Constants.KI_PID_TURN, Constants.KD_PID_TURN);
-        pid.setMinMaxOutput(0.2, 0.75);
-        pid.setTolerance(0.1);
+        pid.setMinMaxOutput(0.15, 0.5);
+        pid.setTolerance(0.5);
     	this.setpoint = setpoint;
     	this.turnRight = turnRight;
     }
@@ -34,7 +34,7 @@ public class PIDTurn extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
     	drive.resetGyro();
-    	drive.shiftUp(false);
+    	drive.shiftUp(true);
     	pid.setSetpoint(setpoint);  
         notifier = new Notifier(new Runnable(){
 			@Override

@@ -49,17 +49,17 @@ public class OI implements Log{
 	
     public OI() {
     	//TESTED ON HARDWARE
-    	/*
+    	
     	buttonA2.whileHeld(new GroundIntakeBalls());
     	buttonA2.whenInactive(new StopRollers());
     	buttonY2.whileHeld(new ShootBalls());
     	buttonY2.whenInactive(new StopRollers());
-    	*/
-    	buttonY1.whenPressed(new HumanPlayerGearIntake());
+    	
+    	/*buttonY1.whenPressed(new HumanPlayerGearIntake());
     	buttonA1.whenPressed(new HumanPlayerBallsIntake());
-    	buttonX1.whenPressed(new DeployGear());
-    	rightTrigger1.toggleWhenActive(new RunHang());
-    	rightTrigger1.whenInactive(new StopHang());
+    	buttonX1.whenPressed(new DeployGear());*/
+    	//rightTrigger1.toggleWhenActive(new RunHang());
+    	//rightTrigger1.whenInactive(new StopHang());
     }
 
 	@Override

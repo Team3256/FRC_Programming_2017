@@ -1,6 +1,5 @@
 package org.usfirst.frc.team3256.robot.subsystems;
 
-import org.omg.PortableInterceptor.ObjectIdHelper;
 import org.usfirst.frc.team3256.lib.Log;
 import org.usfirst.frc.team3256.robot.Constants;
 import org.usfirst.frc.team3256.robot.OI;
@@ -112,7 +111,7 @@ public class Manipulator extends Subsystem implements Log {
 			// TODO: tune
 			ballPivot.set(DoubleSolenoid.Value.kForward);
 			innerMotor.set(Constants.GROUND_INTAKE_POWER);
-			outerMotor.set(Constants.GROUND_INTAKE_POWER);
+			outerMotor.set(-Constants.GROUND_INTAKE_POWER);
 			break;
 		case SPIT_BALLS:
 			//if joystick value is not marginal, then the state cannot be spit balls

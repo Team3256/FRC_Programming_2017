@@ -164,6 +164,10 @@ public class DriveTrain extends Subsystem implements Log {
 		encoderRight.reset();
 	}
 
+	public double degreeToInches(double degrees){
+		return degrees/360.0*Constants.ROBOT_CIRCUMFERENCE;
+	}
+	
 	/**
 	 * Calibrates the ADXRS453 Gyro on the Spartan Board
 	 */

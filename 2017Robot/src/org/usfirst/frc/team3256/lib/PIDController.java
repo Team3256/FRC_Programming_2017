@@ -72,6 +72,7 @@ public class PIDController {
 		if (!started) started = true;
 		//Calculate the proportional error
 		error = setpoint-current;
+		SmartDashboard.putNumber("ERROR", error);
 		//Integrate the error only if we are not saturated to prevent integral windup
 		if (kP*Math.abs(error)<maxPower){
 			sumError += error;

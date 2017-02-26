@@ -29,7 +29,8 @@ public class MotionProfiledTurn extends Command {
     protected void initialize() {
         turnController = new TurnInPlaceController();
     	drive.resetGyro();
-    	drive.shiftUp(false);	
+    	drive.resetEncoders();
+    	drive.shiftUp(true);	
     	notifier = new Notifier(new Runnable(){
 			@Override
 			public void run() {
@@ -50,7 +51,7 @@ public class MotionProfiledTurn extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return turnController.isFinished();
+        return turnController.isFinished() || Math.abs(setpoint-drive.getAngle())<= 1;
     }
 
     // Called once after isFinished returns true
