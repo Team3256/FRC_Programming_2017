@@ -9,6 +9,8 @@ import org.usfirst.frc.team3256.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team3256.robot.subsystems.Hanger;
 import org.usfirst.frc.team3256.robot.subsystems.Manipulator;
 import org.usfirst.frc.team3256.robot.subsystems.Manipulator.HumanPlayerLoadingState;
+import org.usfirst.frc.team3256.robot.subsystems.Roller.RollerState;
+import org.usfirst.frc.team3256.robot.subsystems.Roller;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -26,6 +28,7 @@ public class Robot extends IterativeRobot {
 	
 	DriveTrain driveTrain;
 	Manipulator manipulator;
+	Roller roller;
 	Hanger hanger;
 	Compressor compressor;
 	OI operatorInterface;
@@ -43,6 +46,8 @@ public class Robot extends IterativeRobot {
 		driveTrain.shiftUp(true);
 		manipulator = Manipulator.getInstance();
 		manipulator.setHumanLoadingState(HumanPlayerLoadingState.GEAR_INTAKE);
+		roller = Roller.getInstance();
+		roller.setRollerState(RollerState.STOPPED);
 		hanger = Hanger.getInstance();
 		compressor = new Compressor(0);
 		compressor.setClosedLoopControl(true);
@@ -51,6 +56,7 @@ public class Robot extends IterativeRobot {
 		logger.addLog(driveTrain);
 		logger.addLog(manipulator);
 		logger.addLog(hanger);
+		logger.addLog(roller);
 		logger.start();
 		System.out.println(Constants.MAX_VEL_TURN_LOW_GEAR_DEG_SEC);
 		System.out.println(Constants.MAX_ACCEL_TURN_LOW_GEAR_DEG_SEC2);
@@ -101,6 +107,7 @@ public class Robot extends IterativeRobot {
 		driveTrain.resetGyro();
 		driveTrain.shiftUp(true);
 		manipulator.setHumanLoadingState(HumanPlayerLoadingState.GEAR_INTAKE);
+		roller.setRollerState(RollerState.STOPPED);
 	}
 
 	/**

@@ -1,7 +1,7 @@
 package org.usfirst.frc.team3256.robot.commands;
 
-import org.usfirst.frc.team3256.robot.subsystems.Manipulator;
-import org.usfirst.frc.team3256.robot.subsystems.Manipulator.IntakeState;
+import org.usfirst.frc.team3256.robot.subsystems.Roller;
+import org.usfirst.frc.team3256.robot.subsystems.Roller.RollerState;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -10,11 +10,11 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class ShootBalls extends Command {
 
-	Manipulator manipulator = Manipulator.getInstance();
+	Roller roller = Roller.getInstance();
 	
 	//TESTED ON HARDWARE
     public ShootBalls() {
-        requires(manipulator);
+        requires(roller);
     }
 
     // Called just before this Command runs the first time
@@ -24,7 +24,7 @@ public class ShootBalls extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	manipulator.setIntakeState(IntakeState.SPIT_BALLS);
+    	roller.setRollerState(RollerState.SPIT_BALLS);
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -34,7 +34,7 @@ public class ShootBalls extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
-    	manipulator.setIntakeState(IntakeState.LIFT_FOR_DRIVING);
+    	roller.setRollerState(RollerState.STOPPED);
     }
 
     // Called when another command which requires one or more of the same

@@ -1,7 +1,8 @@
 package org.usfirst.frc.team3256.robot.commands;
 
 import org.usfirst.frc.team3256.robot.subsystems.Manipulator;
-import org.usfirst.frc.team3256.robot.subsystems.Manipulator.IntakeState;
+import org.usfirst.frc.team3256.robot.subsystems.Roller;
+import org.usfirst.frc.team3256.robot.subsystems.Roller.RollerState;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
 
@@ -10,17 +11,16 @@ import edu.wpi.first.wpilibj.command.InstantCommand;
  */
 public class StopRollers extends InstantCommand {
 
-	Manipulator manipulator = Manipulator.getInstance();
+	Roller roller = Roller.getInstance();
 	
-	//TESTED ON HARDWARE
     public StopRollers() {
         super();
-        requires(manipulator);
+        requires(roller);
     }
 
     // Called once when the command executes
     protected void initialize() {
-    	manipulator.setIntakeState(IntakeState.LIFT_FOR_DRIVING);
+    	roller.setRollerState(RollerState.STOPPED);
     }
 
 }
