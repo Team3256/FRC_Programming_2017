@@ -5,31 +5,31 @@ public class Constants {
 //------------------------------ELECTRICAL PORTS------------------------------
 	
 	//PWM Motor Controller ports
-	public static final int LEFT_DRIVE = 9; //0
-	public static final int RIGHT_DRIVE = 8; //1
-	public static final int HANGER = 7; //6
-	public static final int INNER_MOTOR_ROLLER = 4; //4
-	public static final int OUTER_MOTOR_ROLLER = 3; //5
+	public static final int LEFT_DRIVE = 9; 
+	public static final int RIGHT_DRIVE = 8; 
+	public static final int HANGER = 7;
+	public static final int INNER_MOTOR_ROLLER = 4;
+	public static final int OUTER_MOTOR_ROLLER = 3; 
 	
 	//PDP Motor ports
-	public static final int PDP_LEFT_FRONT = 1; //0
-	public static final int PDP_RIGHT_FRONT = 2; //1
-	public static final int PDP_LEFT_BACK = 0; //2 
-	public static final int PDP_RIGHT_BACK = 3; //3
-	public static final int PDP_HANGER_1 = 4; //4 
-	public static final int PDP_HANGER_2 = 5; //5
-	public static final int PDP_INNER_MOTOR_ROLLER = 6; //6 
-	public static final int PDP_OUTER_MOTOR_ROLLER = 7; //7
+	public static final int PDP_LEFT_FRONT = 1; 
+	public static final int PDP_RIGHT_FRONT = 2; 
+	public static final int PDP_LEFT_BACK = 0;  
+	public static final int PDP_RIGHT_BACK = 3; 
+	public static final int PDP_HANGER_1 = 4; 
+	public static final int PDP_HANGER_2 = 5;
+	public static final int PDP_INNER_MOTOR_ROLLER = 6;  
+	public static final int PDP_OUTER_MOTOR_ROLLER = 7; 
 
 	//PCM Solenoid ports
-	public static final int DRIVE_SHIFTER_A = 6; //3
-	public static final int DRIVE_SHIFTER_B = 3; //7
-	public static final int BALL_PIVOT_A = 7; //7
-	public static final int BALL_PIVOT_B = 0; //0
-	public static final int GEAR_PIVOT_A = 1; //4
-	public static final int GEAR_PIVOT_B = 4; //6
-	public static final int GEAR_DEPLOY_A = 2; //1
-	public static final int GEAR_DEPLOY_B = 5; //5
+	public static final int DRIVE_SHIFTER_A = 7;
+	public static final int DRIVE_SHIFTER_B = 3;
+	public static final int BALL_PIVOT_A = 6; 
+	public static final int BALL_PIVOT_B = 2; 
+	public static final int GEAR_PIVOT_A = 4; 
+	public static final int GEAR_PIVOT_B = 0;
+	public static final int GEAR_DEPLOY_A = 5; 
+	public static final int GEAR_DEPLOY_B = 1; 
 
 	//Encoder ports on the Spartan Board 
 	public static final int ENCODER_LEFT_A = 11; //13

@@ -11,6 +11,7 @@ import org.usfirst.frc.team3256.robot.commands.StopHang;
 import org.usfirst.frc.team3256.robot.commands.StopRollers;
 import org.usfirst.frc.team3256.robot.triggers.JoystickTrigger;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.Button;
@@ -50,16 +51,17 @@ public class OI implements Log{
     public OI() {
     	//TESTED ON HARDWARE
     	
-    	buttonA2.whileHeld(new GroundIntakeBalls());
-    	buttonA2.whenInactive(new StopRollers());
-    	buttonY2.whileHeld(new ShootBalls());
-    	buttonY2.whenInactive(new StopRollers());
+
+    	buttonX1.whenPressed(new DeployGear());
+    	rightTrigger1.toggleWhenActive(new ShootBalls());
+    	rightTrigger1.whenInactive(new StopRollers());
+    	leftTrigger1.toggleWhenActive(new GroundIntakeBalls());
+    	leftTrigger1.whenInactive(new StopRollers());
     	
-    	/*buttonY1.whenPressed(new HumanPlayerGearIntake());
-    	buttonA1.whenPressed(new HumanPlayerBallsIntake());
-    	buttonX1.whenPressed(new DeployGear());*/
-    	//rightTrigger1.toggleWhenActive(new RunHang());
-    	//rightTrigger1.whenInactive(new StopHang());
+    	buttonY2.whenPressed(new HumanPlayerGearIntake());
+    	buttonA2.whenPressed(new HumanPlayerBallsIntake());
+    	rightTrigger2.toggleWhenActive(new RunHang());
+    	rightTrigger2.whenInactive(new StopHang());
     }
 
 	@Override
