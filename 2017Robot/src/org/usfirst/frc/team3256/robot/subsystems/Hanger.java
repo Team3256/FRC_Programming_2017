@@ -70,6 +70,7 @@ public class Hanger extends Subsystem implements Log {
 				break;
 			default:
 				hanger.set(0);
+				break;
 		}
 	}
 
