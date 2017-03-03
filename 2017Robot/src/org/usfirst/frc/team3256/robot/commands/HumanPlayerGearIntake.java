@@ -19,7 +19,6 @@ public class HumanPlayerGearIntake extends InstantCommand {
     // Called once when the command executes
     protected void initialize() {
     	manipulator.setHumanLoadingState(HumanPlayerLoadingState.GEAR_INTAKE);
-    	
     }
 
 }

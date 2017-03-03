@@ -49,19 +49,18 @@ public class OI implements Log{
 	public static Trigger leftTrigger2 = new JoystickTrigger(manipulator,2);
 	
     public OI() {
-    	//TESTED ON HARDWARE
-    	
 
-    	buttonX1.whenPressed(new DeployGear());
-    	rightTrigger1.toggleWhenActive(new ShootBalls());
-    	rightTrigger1.whenInactive(new StopRollers());
-    	leftTrigger1.toggleWhenActive(new GroundIntakeBalls());
-    	leftTrigger1.whenInactive(new StopRollers());
+    	leftBumper1.toggleWhenActive(new RunHang());
+    	leftBumper1.whenInactive(new StopHang());
     	
     	buttonY2.whenPressed(new HumanPlayerGearIntake());
     	buttonA2.whenPressed(new HumanPlayerBallsIntake());
-    	rightTrigger2.toggleWhenActive(new RunHang());
-    	rightTrigger2.whenInactive(new StopHang());
+
+    	buttonX2.whenPressed(new DeployGear());
+    	rightTrigger2.toggleWhenActive(new ShootBalls());
+    	rightTrigger2.whenInactive(new StopRollers());
+    	leftTrigger2.toggleWhenActive(new GroundIntakeBalls());
+    	leftTrigger2.whenInactive(new StopRollers());
     }
 
 	@Override

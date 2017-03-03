@@ -36,13 +36,13 @@ public class TeleopDrive extends Command {
     	if (DriverStation.getInstance().isAutonomous()) return;
     	if (wantedMode == TeleopDriveMode.TANK){
     		driveTrain.tankDrive(OI.driver.getY(Hand.kLeft), 
-    				OI.driver.getY(Hand.kRight), OI.leftBumper1.get());
+    				OI.driver.getY(Hand.kRight), OI.rightTrigger1.get());
     	}
     	else{
     		driveTrain.arcadeDrive(OI.driver.getY(Hand.kLeft), 
-    				OI.driver.getX(Hand.kRight), OI.leftBumper1.get());
+    				OI.driver.getX(Hand.kRight), OI.rightTrigger1.get());
     	}
-    	driveTrain.shiftUp(!OI.rightBumper1.get());
+    	driveTrain.shiftUp(!OI.leftTrigger1.get());
     }
 
     // Make this return true when this Command no longer needs to run execute()

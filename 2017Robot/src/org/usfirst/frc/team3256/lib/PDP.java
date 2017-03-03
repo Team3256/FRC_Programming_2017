@@ -1,8 +1,9 @@
 package org.usfirst.frc.team3256.lib;
 
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class PDP {
+public class PDP implements Log{
 
 	private static PDP instance;
 	PowerDistributionPanel pdp;
@@ -30,5 +31,13 @@ public class PDP {
 		return pdp.getTemperature();
 	}
 	
+	public double getVoltage(){
+		return pdp.getVoltage();
+	}
+
+	@Override
+	public void logToDashboard() {
+		SmartDashboard.putNumber("PDP INPUT VOLTAGE", getVoltage());
+	}
 	
 }

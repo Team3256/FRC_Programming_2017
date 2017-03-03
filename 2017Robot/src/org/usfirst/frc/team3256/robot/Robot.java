@@ -2,11 +2,13 @@
 package org.usfirst.frc.team3256.robot;
 
 import org.usfirst.frc.team3256.lib.Logger;
+import org.usfirst.frc.team3256.lib.PDP;
 import org.usfirst.frc.team3256.robot.automodes.RedGearCenterAuto;
 import org.usfirst.frc.team3256.robot.commands.DriveTesting;
 import org.usfirst.frc.team3256.robot.commands.TurnTesting;
 import org.usfirst.frc.team3256.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team3256.robot.subsystems.Hanger;
+import org.usfirst.frc.team3256.robot.subsystems.Hanger.HangerState;
 import org.usfirst.frc.team3256.robot.subsystems.Manipulator;
 import org.usfirst.frc.team3256.robot.subsystems.Manipulator.HumanPlayerLoadingState;
 import org.usfirst.frc.team3256.robot.subsystems.Roller.RollerState;
@@ -45,9 +47,7 @@ public class Robot extends IterativeRobot {
 		driveTrain.resetEncoders();
 		driveTrain.shiftUp(true);
 		manipulator = Manipulator.getInstance();
-		manipulator.setHumanLoadingState(HumanPlayerLoadingState.GEAR_INTAKE);
 		roller = Roller.getInstance();
-		roller.setRollerState(RollerState.STOPPED);
 		hanger = Hanger.getInstance();
 		compressor = new Compressor(0);
 		compressor.setClosedLoopControl(true);
@@ -57,9 +57,8 @@ public class Robot extends IterativeRobot {
 		logger.addLog(manipulator);
 		logger.addLog(hanger);
 		logger.addLog(roller);
+		logger.addLog(PDP.getInstance());
 		logger.start();
-		System.out.println(Constants.MAX_VEL_TURN_LOW_GEAR_DEG_SEC);
-		System.out.println(Constants.MAX_ACCEL_TURN_LOW_GEAR_DEG_SEC2);
 	}
 
 	/**
@@ -106,8 +105,9 @@ public class Robot extends IterativeRobot {
 		driveTrain.resetEncoders();
 		driveTrain.resetGyro();
 		driveTrain.shiftUp(true);
-		manipulator.setHumanLoadingState(HumanPlayerLoadingState.GEAR_INTAKE);
+		manipulator.setHumanLoadingState(HumanPlayerLoadingState.BALLS_INTAKE);
 		roller.setRollerState(RollerState.STOPPED);
+		hanger.setHangerState(HangerState.WINCH_STOP);
 	}
 
 	/**

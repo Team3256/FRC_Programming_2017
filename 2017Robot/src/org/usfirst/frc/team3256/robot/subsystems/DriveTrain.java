@@ -77,9 +77,9 @@ public class DriveTrain extends Subsystem implements Log {
 				"," + Constants.ENCODER_LEFT_B + " ", getLeftPosition());
 		SmartDashboard.putNumber("Right Encoder: MXP- " + Constants.ENCODER_RIGHT_A + 
 				"," + Constants.ENCODER_RIGHT_B + " ", getRightPosition());
-		SmartDashboard.putNumber("Left: PWM-" + leftDrive.getChannel() + " ", 
+		SmartDashboard.putNumber("Left PWM: PWM-" + leftDrive.getChannel() + " ", 
 				leftDrive.get());
-		SmartDashboard.putNumber("Right: PWM-" + rightDrive.getChannel() + " ", 
+		SmartDashboard.putNumber("Right PWM: PWM-" + rightDrive.getChannel() + " ", 
 				rightDrive.get());
 		SmartDashboard.putNumber("Left Front Current: PDP-" + Constants.PDP_LEFT_FRONT + " ", 
 				pdp.getCurrent(Constants.PDP_LEFT_FRONT));
@@ -111,7 +111,7 @@ public class DriveTrain extends Subsystem implements Log {
 	 * @param wantsHighGear - Shifts the robot to high gear if we wantsHighGear is true, otherwise it shifts the robot to low gear
 	 */
 	public void shiftUp(boolean wantsHighGear){
-		shifter.set(wantsHighGear?DoubleSolenoid.Value.kReverse:DoubleSolenoid.Value.kForward);
+		shifter.set(wantsHighGear?DoubleSolenoid.Value.kForward:DoubleSolenoid.Value.kReverse);
 	}
 	
 	/**

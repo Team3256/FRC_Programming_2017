@@ -8,18 +8,18 @@ public class Constants {
 	public static final int LEFT_DRIVE = 9; 
 	public static final int RIGHT_DRIVE = 8; 
 	public static final int HANGER = 7;
-	public static final int INNER_MOTOR_ROLLER = 4;
+	public static final int INNER_MOTOR_ROLLER = 4;	
 	public static final int OUTER_MOTOR_ROLLER = 3; 
 	
 	//PDP Motor ports
-	public static final int PDP_LEFT_FRONT = 1; 
-	public static final int PDP_RIGHT_FRONT = 2; 
-	public static final int PDP_LEFT_BACK = 0;  
-	public static final int PDP_RIGHT_BACK = 3; 
-	public static final int PDP_HANGER_1 = 4; 
-	public static final int PDP_HANGER_2 = 5;
-	public static final int PDP_INNER_MOTOR_ROLLER = 6;  
-	public static final int PDP_OUTER_MOTOR_ROLLER = 7; 
+	public static final int PDP_LEFT_FRONT = 0;  
+	public static final int PDP_LEFT_BACK = 1;
+	public static final int PDP_RIGHT_FRONT = 3;  
+	public static final int PDP_RIGHT_BACK = 2; 
+	public static final int PDP_HANGER_1 = 15; 
+	public static final int PDP_HANGER_2 = 4;
+	public static final int PDP_INNER_MOTOR_ROLLER = 12;  
+	public static final int PDP_OUTER_MOTOR_ROLLER = 11; 
 
 	//PCM Solenoid ports
 	public static final int DRIVE_SHIFTER_A = 7;

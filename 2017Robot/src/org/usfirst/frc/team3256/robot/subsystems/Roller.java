@@ -1,6 +1,7 @@
 package org.usfirst.frc.team3256.robot.subsystems;
 
 import org.usfirst.frc.team3256.lib.Log;
+import org.usfirst.frc.team3256.lib.PDP;
 import org.usfirst.frc.team3256.robot.Constants;
 import org.usfirst.frc.team3256.robot.OI;
 
@@ -20,7 +21,7 @@ public class Roller extends Subsystem implements Log{
 	private VictorSP innerMotor;
 	private VictorSP outerMotor;
 	private DoubleSolenoid ballPivot;
-	
+	private PDP pdp;
 
 	/**
 	 * The states of the intake/shooter of the robot
@@ -39,6 +40,7 @@ public class Roller extends Subsystem implements Log{
 		innerMotor = new VictorSP(Constants.INNER_MOTOR_ROLLER);
 		outerMotor = new VictorSP(Constants.OUTER_MOTOR_ROLLER);
 		ballPivot = new DoubleSolenoid(Constants.BALL_PIVOT_A, Constants.BALL_PIVOT_B);
+		pdp = PDP.getInstance();
 	}
 	
 	/**
@@ -51,21 +53,21 @@ public class Roller extends Subsystem implements Log{
 		case GROUND_INTAKE: 
 			rollerState = RollerState.GROUND_INTAKE;
 			// TODO: tune
-			ballPivot.set(DoubleSolenoid.Value.kForward);
+			ballPivot.set(DoubleSolenoid.Value.kReverse);
 			innerMotor.set(Constants.GROUND_INTAKE_POWER);
 			outerMotor.set(-Constants.GROUND_INTAKE_POWER);
 			break;
 		case SPIT_BALLS:
 			rollerState = RollerState.SPIT_BALLS;
 			// TODO: tune
-			ballPivot.set(DoubleSolenoid.Value.kReverse);
+			ballPivot.set(DoubleSolenoid.Value.kForward);
 			innerMotor.set(Constants.SHOOT_BALLS_POWER);
 			outerMotor.set(Constants.SHOOT_BALLS_POWER);
 			break;
 		case STOPPED:
 			rollerState = RollerState.STOPPED;
 			// TODO: tune
-			ballPivot.set(DoubleSolenoid.Value.kForward);
+			ballPivot.set(DoubleSolenoid.Value.kReverse);
 			innerMotor.set(0);
 			outerMotor.set(0);
 			break;
@@ -87,6 +89,8 @@ public class Roller extends Subsystem implements Log{
 		SmartDashboard.putNumber("Inner Motor: PWM-" + innerMotor.getChannel() + " ", innerMotor.get());
 		SmartDashboard.putNumber("Outer Motor: PWM-" + outerMotor.getChannel() + " ", outerMotor.get());
 		SmartDashboard.putString("Ball Pivot: ", "" + ballPivot.get());
+		SmartDashboard.putNumber("Inner Motor PDP", pdp.getCurrent(Constants.PDP_INNER_MOTOR_ROLLER));
+		SmartDashboard.putNumber("Outer Motor PDP", pdp.getCurrent(Constants.PDP_OUTER_MOTOR_ROLLER));
 	}
 }
 
