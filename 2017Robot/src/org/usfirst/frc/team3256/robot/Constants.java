@@ -48,8 +48,8 @@ public class Constants {
 	public static final double ROBOT_CIRCUMFERENCE = Math.PI*ROBOT_TRACK;
 	public static final double MAX_VEL_HIGH_GEAR_IN_SEC = 10.0 * 12.0; // 18.94 theoretical ft/s
 	public static final double MAX_ACCEL_HIGH_GEAR_IN_SEC2 = 9.0 * 12.0; 
-	public static final double MAX_VEL_TURN_LOW_GEAR_DEG_SEC = 150.0; 
-	public static final double MAX_ACCEL_TURN_LOW_GEAR_DEG_SEC2 = 150.0; 
+	public static final double MAX_VEL_TURN_LOW_GEAR_DEG_SEC = 200.0; 
+	public static final double MAX_ACCEL_TURN_LOW_GEAR_DEG_SEC2 = 200.0; 
 	public static final int GRAYHILL_TICKS_PER_ROT = 256;
 	public static final double WHEEL_DIAMETER = 4.09; //inches -- theoretical 4", includes tread
 	public static final double INCHES_PER_TICK = WHEEL_DIAMETER*Math.PI/GRAYHILL_TICKS_PER_ROT;
@@ -65,14 +65,14 @@ public class Constants {
 	public static final double CONTROL_LOOP_DT = 0.02;
 	
 	//Turn PID Gains - LOW GEAR
-	public static final double KP_PID_TURN = 0.05;
-	public static final double KI_PID_TURN = 0.0;
-	public static final double KD_PID_TURN = 0.02;
+	public static final double KP_PID_TURN = 0.075;
+	public static final double KI_PID_TURN = 0.006;
+	public static final double KD_PID_TURN = 0.01;
 	
 	//Drive Motion Profile Gains - HIGH GEAR
 	public static final double KV_DISTANCE = 1.0/MAX_VEL_HIGH_GEAR_IN_SEC;
 	public static final double KA_DISTANCE = 0.0;
-	public static final double KP_DISTANCE = 0.3;
+	public static final double KP_DISTANCE = 0.32;
 	public static final double KI_DISTANCE = 0.0;
 	public static final double KD_DISTANCE = 0.0;
 	public static final double KP_STRAIGHT = 0.03;
@@ -80,9 +80,9 @@ public class Constants {
 	public static final double KD_STRAIGHT = 0.0;
 	
 	//Turn Motion Profile Gains - HIGH GEAR
-	public static final double KV_TURN = 1.0/MAX_VEL_HIGH_GEAR_IN_SEC;
-	public static final double KA_TURN = 0.007;
-	public static final double KP_TURN = 0.0;
+	public static final double KV_TURN = 1.0/MAX_VEL_TURN_LOW_GEAR_DEG_SEC;
+	public static final double KA_TURN = 0.0;
+	public static final double KP_TURN = 0.001;
 	public static final double KI_TURN = 0.0;
 	public static final double KD_TURN = 0.0;
 }

@@ -1,5 +1,6 @@
 package org.usfirst.frc.team3256.robot.automodes;
 
+import org.usfirst.frc.team3256.lib.DelayedCommand;
 import org.usfirst.frc.team3256.robot.commands.DeployGear;
 import org.usfirst.frc.team3256.robot.commands.DriveToDistance;
 import org.usfirst.frc.team3256.robot.commands.MotionProfiledTurn;
@@ -14,11 +15,15 @@ public class BlueGearCenterAuto extends CommandGroup {
 
 	public BlueGearCenterAuto() {
 		// drive backwards to center gear peg
-		addSequential(new DriveToDistance(62, false));
-		// deploy gear
-		addSequential(new DeployGear());
-		// drive backwards
-		addSequential(new DriveToDistance(27, true));
+		addSequential(new DriveToDistance(69, false));
+
+		//deploy gear
+		addParallel(new DeployGear());
+		
+		//drive forward
+		addSequential(new DelayedCommand(1,new DriveToDistance(60,true)));
+		
+		/*
 		// turn so the roller side faces the boiler
 		addSequential(new MotionProfiledTurn(90, true));
 		// drive to the boiler
@@ -29,5 +34,6 @@ public class BlueGearCenterAuto extends CommandGroup {
 		addSequential(new DriveToDistance(30, true));
 		// shoot balls
 		addSequential(new ShootBalls());
+		*/
 	}
 }

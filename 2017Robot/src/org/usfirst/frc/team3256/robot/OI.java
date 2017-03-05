@@ -50,12 +50,24 @@ public class OI implements Log{
 	
     public OI() {
 
+    	/*Driver:   Arcade Drive -LEFT Y, RIGHT X
+    				Shift Down: Hold Left Trigger
+    				Reverse Front/Back: Hold Right Trigger
+    				Run Hanger: Hold Left Bumper
+    	*/
+   
     	leftBumper1.toggleWhenActive(new RunHang());
     	leftBumper1.whenInactive(new StopHang());
     	
+    	/*Manipulator:	Button Y: Gear HP Intake Mode
+    	 				Button A: Balls HP Intake Mode
+    	 				Button X: Deploy Gear - Automatically retracts after
+    	 				Hold Right Trigger: Spits Balls
+    	 				Hold Left Trigger: Intake Balls
+    	 */
+    	
     	buttonY2.whenPressed(new HumanPlayerGearIntake());
     	buttonA2.whenPressed(new HumanPlayerBallsIntake());
-
     	buttonX2.whenPressed(new DeployGear());
     	rightTrigger2.toggleWhenActive(new ShootBalls());
     	rightTrigger2.whenInactive(new StopRollers());

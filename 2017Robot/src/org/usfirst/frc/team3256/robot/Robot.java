@@ -3,8 +3,10 @@ package org.usfirst.frc.team3256.robot;
 
 import org.usfirst.frc.team3256.lib.Logger;
 import org.usfirst.frc.team3256.lib.PDP;
+import org.usfirst.frc.team3256.robot.automodes.BlueGearCenterAuto;
 import org.usfirst.frc.team3256.robot.automodes.RedGearCenterAuto;
 import org.usfirst.frc.team3256.robot.commands.DriveTesting;
+import org.usfirst.frc.team3256.robot.commands.MotionProfiledTurn;
 import org.usfirst.frc.team3256.robot.commands.TurnTesting;
 import org.usfirst.frc.team3256.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team3256.robot.subsystems.Hanger;
@@ -14,6 +16,7 @@ import org.usfirst.frc.team3256.robot.subsystems.Manipulator.HumanPlayerLoadingS
 import org.usfirst.frc.team3256.robot.subsystems.Roller.RollerState;
 import org.usfirst.frc.team3256.robot.subsystems.Roller;
 
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -59,6 +62,7 @@ public class Robot extends IterativeRobot {
 		logger.addLog(roller);
 		logger.addLog(PDP.getInstance());
 		logger.start();
+		CameraServer.getInstance().startAutomaticCapture();
 	}
 
 	/**
@@ -89,6 +93,7 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void autonomousInit() {
+		manipulator.setHumanLoadingState(HumanPlayerLoadingState.BALLS_INTAKE);
 		new TurnTesting().start();
 	}
 

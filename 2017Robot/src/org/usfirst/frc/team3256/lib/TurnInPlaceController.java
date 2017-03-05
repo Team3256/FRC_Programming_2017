@@ -19,7 +19,7 @@ public class TurnInPlaceController {
 	public TurnInPlaceController(){
 		trajectoryGenerator = new TrajectoryGenerator();
 		trajectoryFollower = new TrajectoryFollower();
-		trajectoryGenerator.setConfig(Constants.MAX_VEL_HIGH_GEAR_IN_SEC, Constants.MAX_ACCEL_HIGH_GEAR_IN_SEC2, Constants.CONTROL_LOOP_DT);
+		trajectoryGenerator.setConfig(Constants.MAX_VEL_TURN_LOW_GEAR_DEG_SEC, Constants.MAX_ACCEL_TURN_LOW_GEAR_DEG_SEC2, Constants.CONTROL_LOOP_DT);
 	}
 	
 	/**
@@ -27,9 +27,8 @@ public class TurnInPlaceController {
 	 */
 	public void setSetpoint(double setpoint){
 		reset();
-		//trajectory = trajectoryGenerator.generateTraj(0, 0, setpoint);
-		trajectory = trajectoryGenerator.generateTraj(0, 0, drive.degreeToInches(setpoint)/2.0);
-		SmartDashboard.putNumber("TURN INCHES SETPOINT" ,drive.degreeToInches(setpoint)/2.0);
+		trajectory = trajectoryGenerator.generateTraj(0, 0, setpoint);
+		SmartDashboard.putNumber("TURN INCHES SETPOINT" , setpoint);
 		trajectoryFollower.setTrajectory(trajectory);
 		trajectoryFollower.setGains(Constants.KV_TURN, Constants.KA_TURN, 
 				Constants.KP_TURN, Constants.KI_TURN, Constants.KD_TURN);
@@ -56,8 +55,7 @@ public class TurnInPlaceController {
 	 * @return output the calculated motor output of the trajectory follower
 	 */
 	public double update(){	
-		//output = trajectoryFollower.update(Math.abs(drive.getAngle()));
-		output = trajectoryFollower.update(Math.abs(drive.getAveragePosition()));
+		output = trajectoryFollower.update(Math.abs(drive.getAngle()));
 		return output;
 	}
 	

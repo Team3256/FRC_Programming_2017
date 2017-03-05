@@ -7,6 +7,7 @@ import org.usfirst.frc.team3256.robot.subsystems.DriveTrain;
 
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
@@ -17,6 +18,7 @@ public class DriveToDistance extends Command {
 	DriveStraightController controller;
 	Notifier notifier;
 	private double setpoint;
+	private double startAngle, endAngle, dAngle;
 	private boolean goForward;
 	
 	/**
@@ -36,6 +38,7 @@ public class DriveToDistance extends Command {
     	drive.resetEncoders();
     	drive.resetGyro();        
     	drive.shiftUp(true);
+    	startAngle = drive.getAngle();
     	controller = new DriveStraightController();
         notifier = new Notifier(new Runnable(){
 			@Override
@@ -69,6 +72,9 @@ public class DriveToDistance extends Command {
      * Stops the drive after it is finished
      */
     protected void end() {
+    	endAngle = drive.getAngle();
+    	dAngle = endAngle-startAngle;
+    	SmartDashboard.putNumber("CHANGE IN GYRO ANGLE", dAngle);
     	drive.tankDrive(0, 0, false);
     	notifier.stop();
     	notifier = null;
