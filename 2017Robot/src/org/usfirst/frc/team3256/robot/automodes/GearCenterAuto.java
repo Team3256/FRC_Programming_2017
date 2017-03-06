@@ -11,9 +11,9 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 /**
  *
  */
-public class BlueGearCenterAuto extends CommandGroup {
+public class GearCenterAuto extends CommandGroup {
 
-	public BlueGearCenterAuto() {
+	public GearCenterAuto() {
 		// drive backwards to center gear peg
 		addSequential(new DriveToDistance(69, false));
 
@@ -22,18 +22,6 @@ public class BlueGearCenterAuto extends CommandGroup {
 		
 		//drive forward
 		addSequential(new DelayedCommand(1,new DriveToDistance(60,true)));
-		
-		/*
-		// turn so the roller side faces the boiler
-		addSequential(new MotionProfiledTurn(90, true));
-		// drive to the boiler
-		addSequential(new DriveToDistance(110, true));
-		// turn 45 degrees to face boiler
-		addSequential(new MotionProfiledTurn(45, false));
-		// drive up to the boiler
-		addSequential(new DriveToDistance(30, true));
-		// shoot balls
-		addSequential(new ShootBalls());
-		*/
+
 	}
 }
