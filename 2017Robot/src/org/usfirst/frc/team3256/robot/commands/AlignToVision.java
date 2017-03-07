@@ -4,12 +4,14 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class AlignToVision extends Command {
+	
 	private PIDTurn wrappedTurn;
 	
 	public AlignToVision() {
 		this.wrappedTurn = new PIDTurn(SmartDashboard.getNumber("angle", 0), SmartDashboard.getBoolean("direction", false));
 	}
 	
+	@Override
 	protected void initialize() {
 		this.wrappedTurn.initialize();
 	}
@@ -19,10 +21,12 @@ public class AlignToVision extends Command {
 		return this.wrappedTurn.isFinished();
 	}
 	
+	@Override
 	protected void end() {
 		this.wrappedTurn.end();
 	}
 	
+	@Override
 	protected void interrupted() {
 		this.wrappedTurn.interrupted();
 	}
