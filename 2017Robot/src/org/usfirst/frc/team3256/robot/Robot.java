@@ -7,6 +7,7 @@ import org.usfirst.frc.team3256.robot.automodes.DoNothingAuto;
 import org.usfirst.frc.team3256.robot.automodes.GearCenterAuto;
 import org.usfirst.frc.team3256.robot.automodes.GearLeftAuto;
 import org.usfirst.frc.team3256.robot.automodes.GearRightAuto;
+import org.usfirst.frc.team3256.robot.commands.AlignToVision;
 import org.usfirst.frc.team3256.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team3256.robot.subsystems.Hanger;
 import org.usfirst.frc.team3256.robot.subsystems.Hanger.HangerState;
@@ -77,8 +78,8 @@ public class Robot extends IterativeRobot {
 		autonomousChooser.addObject("Center Gear", new GearCenterAuto());
 		autonomousChooser.addObject("Left Gear", new GearLeftAuto());
 		autonomousChooser.addObject("Right Gear", new GearRightAuto());
+		autonomousChooser.addObject("TURN SUCKAS", new AlignToVision());
 		SmartDashboard.putData("Autonomous Chooser", autonomousChooser);
-		autonomousCommand = autonomousChooser.getSelected();
 	}
 
 	/**
@@ -111,6 +112,7 @@ public class Robot extends IterativeRobot {
 	public void autonomousInit() {
 		manipulator.setHumanLoadingState(HumanPlayerLoadingState.BALLS_INTAKE);
 		autoStartTime = Timer.getFPGATimestamp();
+		autonomousCommand = autonomousChooser.getSelected();
 		autonomousCommand.start();
 	}
 
