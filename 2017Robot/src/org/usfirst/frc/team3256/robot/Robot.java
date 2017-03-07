@@ -18,6 +18,7 @@ import org.usfirst.frc.team3256.robot.subsystems.Roller.RollerState;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
@@ -41,6 +42,9 @@ public class Robot extends IterativeRobot {
 	OI operatorInterface;
 	Logger logger;
 	SendableChooser<Command> autonomousChooser;
+	Command autonomousCommand;
+	double autoStartTime = 0;
+	double autoEndTime = 0;
 	
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -74,6 +78,7 @@ public class Robot extends IterativeRobot {
 		autonomousChooser.addObject("Left Gear", new GearLeftAuto());
 		autonomousChooser.addObject("Right Gear", new GearRightAuto());
 		SmartDashboard.putData("Autonomous Chooser", autonomousChooser);
+		autonomousCommand = autonomousChooser.getSelected();
 	}
 
 	/**
@@ -105,7 +110,8 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousInit() {
 		manipulator.setHumanLoadingState(HumanPlayerLoadingState.BALLS_INTAKE);
-		autonomousChooser.getSelected().start();
+		autoStartTime = Timer.getFPGATimestamp();
+		autonomousCommand.start();
 	}
 
 	/**
@@ -114,6 +120,10 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousPeriodic() {
 		Scheduler.getInstance().run();
+		if (!autonomousCommand.isRunning()){
+			autoEndTime = Timer.getFPGATimestamp();
+			SmartDashboard.putNumber("AUTONOMOUS ELAPSED TIME", autoEndTime-autoStartTime);
+		}
 	}
 
 	@Override
