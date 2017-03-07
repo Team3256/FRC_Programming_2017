@@ -1,10 +1,12 @@
-
 package org.usfirst.frc.team3256.robot;
 
 import org.usfirst.frc.team3256.lib.Logger;
 import org.usfirst.frc.team3256.lib.PDP;
 import org.usfirst.frc.team3256.robot.automodes.BaselineCross;
+import org.usfirst.frc.team3256.robot.automodes.DoNothingAuto;
 import org.usfirst.frc.team3256.robot.automodes.GearCenterAuto;
+import org.usfirst.frc.team3256.robot.automodes.GearLeftAuto;
+import org.usfirst.frc.team3256.robot.automodes.GearRightAuto;
 import org.usfirst.frc.team3256.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team3256.robot.subsystems.Hanger;
 import org.usfirst.frc.team3256.robot.subsystems.Hanger.HangerState;
@@ -66,8 +68,11 @@ public class Robot extends IterativeRobot {
 		CameraServer.getInstance().startAutomaticCapture();
 		
 		autonomousChooser = new SendableChooser<>();
-		autonomousChooser.addDefault("Nothing", new BaselineCross());
+		autonomousChooser.addDefault("Do Nothing Auto", new DoNothingAuto());
+		autonomousChooser.addObject("Cross Baseline Only", new BaselineCross());
 		autonomousChooser.addObject("Center Gear", new GearCenterAuto());
+		autonomousChooser.addObject("Left Gear", new GearLeftAuto());
+		autonomousChooser.addObject("Right Gear", new GearRightAuto());
 		SmartDashboard.putData("Autonomous Chooser", autonomousChooser);
 	}
 

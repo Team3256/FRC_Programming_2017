@@ -4,6 +4,7 @@ import org.usfirst.frc.team3256.lib.DelayedCommand;
 import org.usfirst.frc.team3256.robot.commands.AlignToVision;
 import org.usfirst.frc.team3256.robot.commands.DeployGear;
 import org.usfirst.frc.team3256.robot.commands.DriveToDistance;
+import org.usfirst.frc.team3256.robot.commands.HumanPlayerBallsIntake;
 import org.usfirst.frc.team3256.robot.commands.PIDTurn;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
@@ -16,6 +17,7 @@ public class GearRightAuto extends CommandGroup {
 		addSequential(new PIDTurn(60, false)); //turn towards gear
 		addSequential(new WaitCommand(0.5));
 		addSequential(new DriveToDistance(46, false)); //drive towards gear
+		addSequential(new HumanPlayerBallsIntake()); //ensure the camera is pointed down towards the vision targets
 		addSequential(new WaitCommand(0.5));
 		addSequential(new AlignToVision()); //ensure proper alignment
 		addSequential(new WaitCommand(0.5));
