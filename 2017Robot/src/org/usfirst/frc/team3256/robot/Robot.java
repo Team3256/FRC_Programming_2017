@@ -7,6 +7,8 @@ import org.usfirst.frc.team3256.robot.automodes.DoNothingAuto;
 import org.usfirst.frc.team3256.robot.automodes.GearCenterAuto;
 import org.usfirst.frc.team3256.robot.automodes.GearLeftAuto;
 import org.usfirst.frc.team3256.robot.automodes.GearRightAuto;
+import org.usfirst.frc.team3256.robot.automodes.HopperAutoBlue;
+import org.usfirst.frc.team3256.robot.automodes.HopperAutoRed;
 import org.usfirst.frc.team3256.robot.commands.AlignToVision;
 import org.usfirst.frc.team3256.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team3256.robot.subsystems.Hanger;
@@ -79,6 +81,8 @@ public class Robot extends IterativeRobot {
 		autonomousChooser.addObject("Left Gear", new GearLeftAuto());
 		autonomousChooser.addObject("Right Gear", new GearRightAuto());
 		autonomousChooser.addObject("TURN SUCKAS", new AlignToVision());
+		autonomousChooser.addObject("Hopper Blue", new HopperAutoBlue());
+		autonomousChooser.addObject("Hopper Red", new HopperAutoRed());
 		SmartDashboard.putData("Autonomous Chooser", autonomousChooser);
 	}
 

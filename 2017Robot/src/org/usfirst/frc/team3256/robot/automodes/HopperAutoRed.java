@@ -12,6 +12,6 @@ public class HopperAutoRed extends CommandGroup{
 		addSequential(new WaitCommand(0.5));
 		addSequential(new PIDTurn(90, true)); //turn towards hopper
 		addSequential(new WaitCommand(0.5));
-		addSequential(new DriveToDistance(30, true)); //trigger hopper
+		addSequential(new DriveToDistance(30, false)); //trigger hopper
 	}
 }
