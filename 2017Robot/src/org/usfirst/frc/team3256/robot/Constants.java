@@ -28,8 +28,8 @@ public class Constants {
 	public static final int BALL_PIVOT_B = 2; 
 	public static final int GEAR_PIVOT_A = 4; 
 	public static final int GEAR_PIVOT_B = 0;
-	public static final int GEAR_DEPLOY_A = 5; 
-	public static final int GEAR_DEPLOY_B = 1; 
+	public static final int GEAR_DEPLOY_A = 1; //5 
+	public static final int GEAR_DEPLOY_B = 5; //1
 
 	//Encoder ports on the Spartan Board 
 	public static final int ENCODER_LEFT_A = 11; //13
@@ -59,7 +59,7 @@ public class Constants {
 	//Preset Values
 	public static final double GROUND_INTAKE_POWER = 1;
 	public static final double SHOOT_BALLS_POWER = -1;
-	public static final double WINCH_HANGER_POWER = 1.0;
+	public static final double WINCH_HANGER_POWER = -1.0;
 	
 	//Period for all control loops
 	public static final double CONTROL_LOOP_DT = 0.02;
@@ -72,7 +72,7 @@ public class Constants {
 	//Drive Motion Profile Gains - HIGH GEAR
 	public static final double KV_DISTANCE = 1.0/MAX_VEL_HIGH_GEAR_IN_SEC;
 	public static final double KA_DISTANCE = 0.0;
-	public static final double KP_DISTANCE = 0.32;
+	public static final double KP_DISTANCE = 0.32; //0.32
 	public static final double KI_DISTANCE = 0.0;
 	public static final double KD_DISTANCE = 0.0;
 	public static final double KP_STRAIGHT = 0.03;

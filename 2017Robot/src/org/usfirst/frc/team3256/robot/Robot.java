@@ -10,6 +10,7 @@ import org.usfirst.frc.team3256.robot.automodes.GearRightAuto;
 import org.usfirst.frc.team3256.robot.automodes.HopperAutoBlue;
 import org.usfirst.frc.team3256.robot.automodes.HopperAutoRed;
 import org.usfirst.frc.team3256.robot.commands.AlignToVision;
+import org.usfirst.frc.team3256.robot.commands.DriveTesting;
 import org.usfirst.frc.team3256.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team3256.robot.subsystems.Hanger;
 import org.usfirst.frc.team3256.robot.subsystems.Hanger.HangerState;
@@ -72,7 +73,7 @@ public class Robot extends IterativeRobot {
 		logger.addLog(roller);
 		logger.addLog(PDP.getInstance());
 		logger.start();
-		CameraServer.getInstance().startAutomaticCapture();
+		//CameraServer.getInstance().startAutomaticCapture();
 		
 		autonomousChooser = new SendableChooser<>();
 		autonomousChooser.addDefault("Do Nothing Auto", new DoNothingAuto());
@@ -83,6 +84,7 @@ public class Robot extends IterativeRobot {
 		autonomousChooser.addObject("TURN SUCKAS", new AlignToVision());
 		autonomousChooser.addObject("Hopper Blue", new HopperAutoBlue());
 		autonomousChooser.addObject("Hopper Red", new HopperAutoRed());
+		autonomousChooser.addObject("TEST MOVE STRAIGHT", new DriveTesting());
 		SmartDashboard.putData("Autonomous Chooser", autonomousChooser);
 	}
 

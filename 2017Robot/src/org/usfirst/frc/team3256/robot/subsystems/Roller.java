@@ -67,7 +67,7 @@ public class Roller extends Subsystem implements Log{
 		case STOPPED:
 			rollerState = RollerState.STOPPED;
 			// TODO: tune
-			ballPivot.set(DoubleSolenoid.Value.kReverse);
+			ballPivot.set(DoubleSolenoid.Value.kForward);
 			innerMotor.set(0);
 			outerMotor.set(0);
 			break;
