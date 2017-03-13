@@ -1,6 +1,7 @@
 package org.usfirst.frc.team3256.robot;
 
 import org.usfirst.frc.team3256.lib.Log;
+import org.usfirst.frc.team3256.robot.commands.AttachVelcro;
 import org.usfirst.frc.team3256.robot.commands.DeployGear;
 import org.usfirst.frc.team3256.robot.commands.GroundIntakeBalls;
 import org.usfirst.frc.team3256.robot.commands.HumanPlayerBallsIntake;
@@ -58,6 +59,8 @@ public class OI implements Log{
    
     	leftBumper1.toggleWhenActive(new RunHang());
     	leftBumper1.whenInactive(new StopHang());
+    	rightBumper1.toggleWhenActive(new AttachVelcro());
+    	rightBumper1.whenInactive(new StopHang());
     	
     	/*Manipulator:	Button Y: Gear HP Intake Mode
     	 				Button A: Balls HP Intake Mode

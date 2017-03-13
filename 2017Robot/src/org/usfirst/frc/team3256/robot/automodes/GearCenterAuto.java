@@ -15,7 +15,7 @@ public class GearCenterAuto extends CommandGroup {
 
 	public GearCenterAuto() {
 		// drive backwards to center gear peg
-		addSequential(new DriveToDistance(69, false));
+		addSequential(new DriveToDistance(77, false));
 
 		//deploy gear
 		addParallel(new DeployGear());
