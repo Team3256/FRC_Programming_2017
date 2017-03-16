@@ -26,7 +26,7 @@ public class AttachVelcro extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	hanger.setHangerState(HangerState.VELCRO);
+    	hanger.setHangerState(HangerState.ATTACH_TO_VELCRO);
     	roller.setRollerState(RollerState.STOPPED);
     }
 

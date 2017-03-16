@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.usfirst.frc.team3256.robot.Constants;
+
 
 public class Logger {
 
@@ -20,7 +22,7 @@ public class Logger {
 	}
 	
 	public void start(){
-		timer.schedule(new UpdaterTask(), 0, 20);
+		timer.schedule(new UpdaterTask(), 0, (int)(Constants.SLOW_LOOP_DT*1000));
 	}
 	
 	public void stop(){

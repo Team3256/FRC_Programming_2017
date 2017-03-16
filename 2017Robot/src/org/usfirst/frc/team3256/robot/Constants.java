@@ -60,9 +60,11 @@ public class Constants {
 	public static final double GROUND_INTAKE_POWER = 1;
 	public static final double SHOOT_BALLS_POWER = -1;
 	public static final double WINCH_HANGER_POWER = -1.0;
+	public static final double WINCH_ATTACH_TO_VELCRO_POWER = -0.3;
 	
 	//Period for all control loops
 	public static final double CONTROL_LOOP_DT = 0.02;
+	public static final double SLOW_LOOP_DT = 0.05;
 	
 	//Turn PID Gains - LOW GEAR
 	public static final double KP_PID_TURN = 0.075;

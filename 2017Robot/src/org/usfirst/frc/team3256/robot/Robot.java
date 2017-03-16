@@ -1,5 +1,6 @@
 package org.usfirst.frc.team3256.robot;
 
+import org.usfirst.frc.team3256.lib.GyroCalibrator;
 import org.usfirst.frc.team3256.lib.Logger;
 import org.usfirst.frc.team3256.lib.PDP;
 import org.usfirst.frc.team3256.robot.automodes.BaselineCross;
@@ -11,7 +12,6 @@ import org.usfirst.frc.team3256.robot.automodes.GearLeftAuto;
 import org.usfirst.frc.team3256.robot.automodes.GearRightAuto;
 import org.usfirst.frc.team3256.robot.automodes.HopperAutoBlue;
 import org.usfirst.frc.team3256.robot.automodes.HopperAutoRed;
-import org.usfirst.frc.team3256.robot.commands.AlignToVision;
 import org.usfirst.frc.team3256.robot.commands.DriveTesting;
 import org.usfirst.frc.team3256.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team3256.robot.subsystems.Hanger;
@@ -47,6 +47,7 @@ public class Robot extends IterativeRobot {
 	Compressor compressor;
 	OI operatorInterface;
 	Logger logger;
+	GyroCalibrator gyroCalibrator;
 	SendableChooser<Command> autonomousChooser;
 	Command autonomousCommand;
 	double autoStartTime = 0;
@@ -62,6 +63,7 @@ public class Robot extends IterativeRobot {
 		driveTrain = DriveTrain.getInstance();
 		driveTrain.resetEncoders();
 		driveTrain.shiftUp(true);
+		driveTrain.calibrateGyro();
 		manipulator = Manipulator.getInstance();
 		roller = Roller.getInstance();
 		hanger = Hanger.getInstance();
@@ -75,6 +77,7 @@ public class Robot extends IterativeRobot {
 		logger.addLog(roller);
 		logger.addLog(PDP.getInstance());
 		logger.start();
+		gyroCalibrator = new GyroCalibrator();
 		//CameraServer.getInstance().startAutomaticCapture();
 		
 		autonomousChooser = new SendableChooser<>();
@@ -99,6 +102,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void disabledInit() {
+		gyroCalibrator.start();
 	}
 
 	@Override
@@ -120,6 +124,7 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void autonomousInit() {
+		gyroCalibrator.stop();
 		manipulator.setHumanLoadingState(HumanPlayerLoadingState.BALLS_INTAKE);
 		autoStartTime = Timer.getFPGATimestamp();
 		autonomousCommand = autonomousChooser.getSelected();
@@ -140,6 +145,7 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void teleopInit() {
+		gyroCalibrator.stop();
 		driveTrain.resetEncoders();
 		driveTrain.resetGyro();
 		driveTrain.shiftUp(true);

@@ -1,13 +1,14 @@
 package org.usfirst.frc.team3256.robot.subsystems;
 
+import org.usfirst.frc.team3256.lib.ADXRS453_Gyro;
 import org.usfirst.frc.team3256.lib.Log;
 import org.usfirst.frc.team3256.lib.PDP;
 import org.usfirst.frc.team3256.robot.Constants;
 import org.usfirst.frc.team3256.robot.commands.TeleopDrive;
 import org.usfirst.frc.team3256.robot.commands.TeleopDrive.TeleopDriveMode;
 
-import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -22,7 +23,7 @@ public class DriveTrain extends Subsystem implements Log {
 	private VictorSP rightDrive;
 	private Encoder encoderLeft;
 	private Encoder encoderRight;
-	private ADXRS450_Gyro gyro;
+	private ADXRS453_Gyro gyro;
 	private DoubleSolenoid shifter;
 	PDP pdp = PDP.getInstance();
 	
@@ -47,7 +48,7 @@ public class DriveTrain extends Subsystem implements Log {
 		encoderLeft.setReverseDirection(false);
 		encoderRight.setReverseDirection(true);
 		//Gyro for the drivetrain
-		gyro = new ADXRS450_Gyro();
+		gyro = new ADXRS453_Gyro();
 		//Shifter to shift between high and low gear
 		shifter = new DoubleSolenoid(Constants.DRIVE_SHIFTER_A,Constants.DRIVE_SHIFTER_B);
 	}
@@ -71,8 +72,14 @@ public class DriveTrain extends Subsystem implements Log {
 	 */
 	@Override
 	public void logToDashboard(){
-		SmartDashboard.putNumber("Gyro Angle - SPI 0 ", getAngle());
-		SmartDashboard.putNumber("GYRO RATE", getAngularVelocity());
+		if (!DriverStation.getInstance().isDisabled()){
+			SmartDashboard.putNumber("Gyro Angle - SPI 0 ", getAngle());
+			SmartDashboard.putNumber("GYRO RATE", getAngularVelocity());
+			SmartDashboard.putBoolean("GYRO IS CALIBRATING", false);
+		}
+		else{
+			SmartDashboard.putBoolean("GYRO IS CALIBRATING", true);
+		}
 		SmartDashboard.putNumber("Left Encoder: MXP- " + Constants.ENCODER_LEFT_A +
 				"," + Constants.ENCODER_LEFT_B + " ", getLeftPosition());
 		SmartDashboard.putNumber("Right Encoder: MXP- " + Constants.ENCODER_RIGHT_A + 
@@ -166,6 +173,10 @@ public class DriveTrain extends Subsystem implements Log {
 
 	public double degreeToInches(double degrees){
 		return degrees/360.0*Constants.ROBOT_CIRCUMFERENCE;
+	}
+	
+	public ADXRS453_Gyro getGyro(){
+		return gyro;
 	}
 	
 	/**

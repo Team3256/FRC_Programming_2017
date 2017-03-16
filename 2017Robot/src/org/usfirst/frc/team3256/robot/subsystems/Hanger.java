@@ -22,7 +22,7 @@ public class Hanger extends Subsystem implements Log {
 	 * holds the different states of the hanger 
 	 */
 	public enum HangerState {
-		VELCRO,
+		ATTACH_TO_VELCRO,
 		WINCH_UP,
 		WINCH_STOP;
 	}
@@ -60,9 +60,9 @@ public class Hanger extends Subsystem implements Log {
 	 */
 	public void setHangerState(HangerState wantedState) {
 		switch(wantedState) {
-			case VELCRO:
-				hangerState = HangerState.VELCRO;
-				hanger.set(-0.3);
+			case ATTACH_TO_VELCRO:
+				hangerState = HangerState.ATTACH_TO_VELCRO;
+				hanger.set(Constants.WINCH_ATTACH_TO_VELCRO_POWER);
 				break;
 			case WINCH_UP:
 				hangerState = HangerState.WINCH_UP;
