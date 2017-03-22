@@ -16,8 +16,8 @@ public class Constants {
 	public static final int PDP_LEFT_BACK = 1;
 	public static final int PDP_RIGHT_FRONT = 3;  
 	public static final int PDP_RIGHT_BACK = 2; 
-	public static final int PDP_HANGER_1 = 15; 
-	public static final int PDP_HANGER_2 = 4;
+	public static final int PDP_HANGER_1 = 13; 
+	public static final int PDP_HANGER_2 = 14;
 	public static final int PDP_INNER_MOTOR_ROLLER = 12;  
 	public static final int PDP_OUTER_MOTOR_ROLLER = 11; 
 
@@ -68,7 +68,7 @@ public class Constants {
 	
 	//Turn PID Gains - LOW GEAR
 	public static final double KP_PID_TURN = 0.075;
-	public static final double KI_PID_TURN = 0.006;
+	public static final double KI_PID_TURN = 0.007;
 	public static final double KD_PID_TURN = 0.01;
 	
 	//Drive Motion Profile Gains - HIGH GEAR

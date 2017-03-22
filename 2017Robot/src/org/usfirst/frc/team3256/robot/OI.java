@@ -2,8 +2,10 @@ package org.usfirst.frc.team3256.robot;
 
 import org.usfirst.frc.team3256.lib.Log;
 import org.usfirst.frc.team3256.robot.commands.AttachVelcro;
+import org.usfirst.frc.team3256.robot.commands.CloseGear;
 import org.usfirst.frc.team3256.robot.commands.DeployGear;
 import org.usfirst.frc.team3256.robot.commands.GroundIntakeBalls;
+import org.usfirst.frc.team3256.robot.commands.HoldGearDeploy;
 import org.usfirst.frc.team3256.robot.commands.HumanPlayerBallsIntake;
 import org.usfirst.frc.team3256.robot.commands.HumanPlayerGearIntake;
 import org.usfirst.frc.team3256.robot.commands.RunHang;
@@ -57,10 +59,10 @@ public class OI implements Log{
     				Run Hanger: Hold Left Bumper
     	*/
    
-    	leftBumper1.toggleWhenActive(new RunHang());
-    	leftBumper1.whenInactive(new StopHang());
-    	rightBumper1.toggleWhenActive(new AttachVelcro());
-    	rightBumper1.whenInactive(new StopHang());
+    	rightBumper2.toggleWhenActive(new RunHang());
+    	rightBumper2.whenInactive(new StopHang());
+    	leftBumper2.toggleWhenActive(new AttachVelcro());
+    	leftBumper2.whenInactive(new StopHang());
     	
     	/*Manipulator:	Button Y: Gear HP Intake Mode
     	 				Button A: Balls HP Intake Mode
@@ -71,7 +73,9 @@ public class OI implements Log{
     	
     	buttonY2.whenPressed(new HumanPlayerGearIntake());
     	buttonA2.whenPressed(new HumanPlayerBallsIntake());
-    	buttonX2.whenPressed(new DeployGear());
+    	//buttonX2.whenPressed(new DeployGear());
+    	buttonX2.whileHeld(new HoldGearDeploy());
+    	buttonX2.whenReleased(new CloseGear());
     	rightTrigger2.toggleWhenActive(new ShootBalls());
     	rightTrigger2.whenInactive(new StopRollers());
     	leftTrigger2.toggleWhenActive(new GroundIntakeBalls());
