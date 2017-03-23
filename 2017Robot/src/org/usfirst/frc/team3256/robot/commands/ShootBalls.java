@@ -15,6 +15,7 @@ public class ShootBalls extends Command {
 	//TESTED ON HARDWARE
     public ShootBalls() {
         requires(roller);
+        setTimeout(3);
     }
 
     // Called just before this Command runs the first time

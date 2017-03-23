@@ -6,8 +6,6 @@ import org.usfirst.frc.team3256.lib.PDP;
 import org.usfirst.frc.team3256.robot.automodes.BaselineCross;
 import org.usfirst.frc.team3256.robot.automodes.DoNothingAuto;
 import org.usfirst.frc.team3256.robot.automodes.GearCenterAuto;
-import org.usfirst.frc.team3256.robot.automodes.GearCenterLeftAuto;
-import org.usfirst.frc.team3256.robot.automodes.GearCenterRightAuto;
 import org.usfirst.frc.team3256.robot.automodes.GearLeftAuto;
 import org.usfirst.frc.team3256.robot.automodes.GearRightAuto;
 import org.usfirst.frc.team3256.robot.automodes.HopperAutoBlue;
@@ -21,7 +19,6 @@ import org.usfirst.frc.team3256.robot.subsystems.Manipulator.HumanPlayerLoadingS
 import org.usfirst.frc.team3256.robot.subsystems.Roller;
 import org.usfirst.frc.team3256.robot.subsystems.Roller.RollerState;
 
-import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Timer;
@@ -84,10 +81,10 @@ public class Robot extends IterativeRobot {
 		autonomousChooser.addDefault("Do Nothing Auto", new DoNothingAuto());
 		autonomousChooser.addObject("Cross Baseline Only", new BaselineCross());
 		autonomousChooser.addObject("Center Gear", new GearCenterAuto());
-		autonomousChooser.addObject("Center Gear w/ Left (Red) Movement", new GearCenterLeftAuto());
-		autonomousChooser.addObject("Center Gear w/ Right (Blue) Movement", new GearCenterRightAuto());
-		autonomousChooser.addObject("Left Gear", new GearLeftAuto());
-		autonomousChooser.addObject("Right Gear", new GearRightAuto());
+		autonomousChooser.addObject("Left-Side Gear", new GearLeftAuto(false));
+		autonomousChooser.addObject("Left-Side Gear w/ Blue Hopper", new GearLeftAuto(true));
+		autonomousChooser.addObject("Right-Side Gear", new GearRightAuto(false));
+		autonomousChooser.addObject("Right-Side Gear w/ Red Hopper", new GearRightAuto(true));
 		//autonomousChooser.addObject("TURN SUCKAS", new AlignToVision());
 		autonomousChooser.addObject("Hopper Blue", new HopperAutoBlue());
 		autonomousChooser.addObject("Hopper Red", new HopperAutoRed());

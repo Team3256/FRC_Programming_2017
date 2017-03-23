@@ -6,6 +6,7 @@ import org.usfirst.frc.team3256.robot.commands.DeployGear;
 import org.usfirst.frc.team3256.robot.commands.DriveToDistance;
 import org.usfirst.frc.team3256.robot.commands.HumanPlayerBallsIntake;
 import org.usfirst.frc.team3256.robot.commands.PIDTurn;
+import org.usfirst.frc.team3256.robot.commands.ShootBalls;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.WaitCommand;
@@ -15,7 +16,7 @@ import edu.wpi.first.wpilibj.command.WaitCommand;
  */
 public class GearLeftAuto extends CommandGroup {
 
-    public GearLeftAuto() {
+    public GearLeftAuto(boolean boiler) {
     	addSequential(new DriveToDistance(67, false)); //initial drive forward
 		addSequential(new WaitCommand(0.5));
 		addSequential(new PIDTurn(60, true)); //turn towards gear
@@ -27,6 +28,11 @@ public class GearLeftAuto extends CommandGroup {
 		addSequential(new WaitCommand(0.5));
 		addSequential(new DriveToDistance(17, false)); //final drive towards gear
 		addParallel(new DeployGear());
-		addSequential(new DelayedCommand(1, new DriveToDistance(20, true))); //drive backwards 
+		addSequential(new DelayedCommand(1, new DriveToDistance(20, true))); //drive backwards to boiler
+		if (boiler) {
+			addSequential(new PIDTurn(25, false)); //turn towards boiler
+			addSequential(new DriveToDistance(50, true)); //drive to boiler
+			addSequential(new ShootBalls()); //shoot balls into boiler
+		}
     }
 }
