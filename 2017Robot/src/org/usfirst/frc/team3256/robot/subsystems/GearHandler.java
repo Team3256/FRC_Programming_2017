@@ -79,6 +79,10 @@ public class GearHandler extends Subsystem {
 		}
 	}
 	
+	public GearHandlerState getState(){
+		return gearHandlerState;
+	}
+	
 	public void setState(GearHandlerState wantedState){
 		switch (wantedState){
 			case INTAKE:
@@ -106,6 +110,7 @@ public class GearHandler extends Subsystem {
 	private boolean releasedGear(){
 		return Timer.getFPGATimestamp()-startDeployTime > 2.0 && startedDeploy;
 	}
+	
     public void initDefaultCommand() {
     	
     }

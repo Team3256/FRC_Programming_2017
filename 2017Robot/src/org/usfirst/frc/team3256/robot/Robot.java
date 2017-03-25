@@ -19,6 +19,7 @@ import org.usfirst.frc.team3256.robot.subsystems.Hanger.HangerState;
 import org.usfirst.frc.team3256.robot.subsystems.Manipulator;
 import org.usfirst.frc.team3256.robot.subsystems.Manipulator.HumanPlayerLoadingState;
 import org.usfirst.frc.team3256.robot.subsystems.Roller;
+import org.usfirst.frc.team3256.robot.subsystems.GearHandler.GearHandlerState;
 import org.usfirst.frc.team3256.robot.subsystems.Roller.RollerState;
 
 import edu.wpi.first.wpilibj.Compressor;
@@ -172,4 +173,5 @@ public class Robot extends IterativeRobot {
 	public void testPeriodic() {
 		LiveWindow.run();
 	}
+	
 }
