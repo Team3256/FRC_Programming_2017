@@ -8,6 +8,7 @@ import org.usfirst.frc.team3256.robot.commands.GroundIntakeBalls;
 import org.usfirst.frc.team3256.robot.commands.HoldGearDeploy;
 import org.usfirst.frc.team3256.robot.commands.HumanPlayerBallsIntake;
 import org.usfirst.frc.team3256.robot.commands.HumanPlayerGearIntake;
+import org.usfirst.frc.team3256.robot.commands.IntakeGear;
 import org.usfirst.frc.team3256.robot.commands.RunHang;
 import org.usfirst.frc.team3256.robot.commands.ShootBalls;
 import org.usfirst.frc.team3256.robot.commands.StopHang;
@@ -80,6 +81,8 @@ public class OI implements Log{
     	rightTrigger2.whenInactive(new StopRollers());
     	leftTrigger2.toggleWhenActive(new GroundIntakeBalls());
     	leftTrigger2.whenInactive(new StopRollers());
+    	
+    	buttonX1.whileHeld(new IntakeGear());
     }
 
 	@Override

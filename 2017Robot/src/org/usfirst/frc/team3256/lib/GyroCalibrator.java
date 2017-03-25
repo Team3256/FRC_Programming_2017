@@ -20,10 +20,8 @@ public class GyroCalibrator {
 			@Override
 			public void run() {
 				double currentTime = Timer.getFPGATimestamp();
-				SmartDashboard.putBoolean("Calibrating?", gyro.m_isCalibrating);
 				if (currentTime-prevTime > ADXRS453_Gyro.kCalibrationSampleTime){
 					gyro.endCalibrate();
-					SmartDashboard.putNumber("GYRO RECALIBRATED", Timer.getFPGATimestamp());
 					prevTime = currentTime;
 					gyro.startCalibrate();
 				}

@@ -11,6 +11,8 @@ public class Constants {
 	public static final int INNER_MOTOR_ROLLER = 4;	
 	public static final int OUTER_MOTOR_ROLLER = 3; 
 	
+	public static final int GEAR_ROLLER = 0;
+	
 	//PDP Motor ports
 	public static final int PDP_LEFT_FRONT = 0;  
 	public static final int PDP_LEFT_BACK = 1;
@@ -20,6 +22,9 @@ public class Constants {
 	public static final int PDP_HANGER_2 = 14;
 	public static final int PDP_INNER_MOTOR_ROLLER = 12;  
 	public static final int PDP_OUTER_MOTOR_ROLLER = 11; 
+	
+	public static final int PDP_GEAR_ROLLER_1 = 7;
+	public static final int PDP_GEAR_ROLLER_2 = 8;
 
 	//PCM Solenoid ports
 	public static final int DRIVE_SHIFTER_A = 7;
@@ -31,6 +36,9 @@ public class Constants {
 	public static final int GEAR_DEPLOY_A = 1; //5 
 	public static final int GEAR_DEPLOY_B = 5; //1
 
+	//Relay Solenoid Ports
+	public static final int GEAR_INTAKE_POPPER = 0;
+	
 	//Encoder ports on the Spartan Board 
 	public static final int ENCODER_LEFT_A = 11; //13
 	public static final int ENCODER_LEFT_B = 10; //12
