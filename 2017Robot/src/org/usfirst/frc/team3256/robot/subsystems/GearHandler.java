@@ -4,6 +4,7 @@ import org.usfirst.frc.team3256.lib.PDP;
 import org.usfirst.frc.team3256.robot.Constants;
 
 import edu.wpi.first.wpilibj.Relay;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Relay.Value;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -11,16 +12,18 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 /**
  *
  */
-public class GearIntake extends Subsystem {
+public class GearHandler extends Subsystem {
 
-	private static GearIntake instance;
+	private static GearHandler instance;
 	private VictorSP roller;
 	private Relay popper;
 	private PDP pdp;
-	private GearIntakeState gearIntakeState;
+	private GearHandlerState gearHandlerState;
 	private final int intakeCurrentThreshhold = 30;
+	private double startDeployTime = 0.0;
+	private boolean startedDeploy = false;
 	
-	public enum GearIntakeState{
+	public enum GearHandlerState{
 		INTAKE,
 		FLIP_UP,
 		DEPLOY,
@@ -28,39 +31,46 @@ public class GearIntake extends Subsystem {
 		STOP;
 	}
 	
-	public static GearIntake getInstance(){
-		return instance == null ? instance = new GearIntake() : instance;
+	public static GearHandler getInstance(){
+		return instance == null ? instance = new GearHandler() : instance;
 	}
 
-	private GearIntake(){
+	private GearHandler(){
 		pdp = PDP.getInstance();
 		roller = new VictorSP(Constants.GEAR_ROLLER);
 		popper = new Relay(Constants.GEAR_INTAKE_POPPER);
-		gearIntakeState = GearIntakeState.STOP;
+		gearHandlerState = GearHandlerState.STOP;
 		popper.set(Value.kForward);
 	}
 	
 	public void update(){
-		switch (gearIntakeState){
+		switch (gearHandlerState){
 			case INTAKE:
+				if (hasGear()) 
+					setState(GearHandlerState.FLIP_UP);
 				roller.set(1);
 				popper.set(Value.kReverse);
-				if (hasGear()) 
-					setState(GearIntakeState.FLIP_UP);
 				break;
 			case FLIP_UP:
 				popper.set(Value.kForward);
-				setState(GearIntakeState.STOP);
+				setState(GearHandlerState.STOP);
 				break;
 			case DEPLOY:
+				startDeployTime = Timer.getFPGATimestamp();
+				startedDeploy = true;
 				popper.set(Value.kReverse);
-				roller.set(-0.5);
+				setState(GearHandlerState.EXHAUST);
 				break;
 			case EXHAUST:
+				if (releasedGear()){
+					setState(GearHandlerState.STOP);
+				}
 				roller.set(-1.0);
 				break;
 			case STOP:
+				startedDeploy = false;
 				roller.set(0);
+				popper.set(Value.kForward);
 				break;
 			default:
 				roller.set(0);
@@ -69,31 +79,33 @@ public class GearIntake extends Subsystem {
 		}
 	}
 	
-	public void setState(GearIntakeState wantedState){
+	public void setState(GearHandlerState wantedState){
 		switch (wantedState){
 			case INTAKE:
-				gearIntakeState = GearIntakeState.INTAKE;
+				gearHandlerState = GearHandlerState.INTAKE;
 				break;
 			case FLIP_UP:
-				gearIntakeState = GearIntakeState.FLIP_UP;
+				gearHandlerState = GearHandlerState.FLIP_UP;
 				break;
 			case DEPLOY:
-				gearIntakeState = GearIntakeState.DEPLOY;
+				gearHandlerState = GearHandlerState.DEPLOY;
 				break;
 			case EXHAUST:
-				gearIntakeState = GearIntakeState.EXHAUST;
+				gearHandlerState = GearHandlerState.EXHAUST;
 				break;
 			case STOP:
-				gearIntakeState = GearIntakeState.STOP;
+				gearHandlerState = GearHandlerState.STOP;
 				break;
 		}
 	}
 	
 	private boolean hasGear(){
-		return pdp.getCurrent(Constants.PDP_GEAR_ROLLER_1) > intakeCurrentThreshhold || 
-				pdp.getCurrent(Constants.PDP_GEAR_ROLLER_2)> intakeCurrentThreshhold;
+		return pdp.getCurrent(Constants.PDP_GEAR_ROLLER) > intakeCurrentThreshhold;
 	}
 	
+	private boolean releasedGear(){
+		return Timer.getFPGATimestamp()-startDeployTime > 2.0 && startedDeploy;
+	}
     public void initDefaultCommand() {
     	
     }

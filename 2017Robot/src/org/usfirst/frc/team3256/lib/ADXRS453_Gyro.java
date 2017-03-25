@@ -79,7 +79,7 @@ public class ADXRS453_Gyro extends GyroBase implements Gyro, PIDSource, LiveWind
     if ((readRegister(kPIDRegister) & 0xff00) != 0x5200) {
       m_spi.free();
       m_spi = null;
-      DriverStation.reportError("could not find ADXRS450 gyro on SPI port " + port.value,
+      DriverStation.reportError("could not find ADXRS453 gyro on SPI port " + port.value,
           false);
       return;
     }
@@ -90,7 +90,7 @@ public class ADXRS453_Gyro extends GyroBase implements Gyro, PIDSource, LiveWind
     calibrate();
 
     HAL.report(tResourceType.kResourceType_ADXRS450, port.value);
-    LiveWindow.addSensor("ADXRS450_Gyro", port.value, this);
+    LiveWindow.addSensor("ADXRS453_Gyro", port.value, this);
   }
 
   @Override

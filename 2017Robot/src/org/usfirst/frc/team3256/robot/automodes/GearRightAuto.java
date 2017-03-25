@@ -17,12 +17,7 @@ public class GearRightAuto extends CommandGroup {
 		addSequential(new WaitCommand(0.5));
 		addSequential(new PIDTurn(60, false)); //turn towards gear
 		addSequential(new WaitCommand(0.5));
-		addSequential(new DriveToDistance(46, false)); //drive towards gear
-		addSequential(new HumanPlayerBallsIntake()); //ensure the camera is pointed down towards the vision targets
-		addSequential(new WaitCommand(0.5));
-		//addSequential(new AlignToVision()); //ensure proper alignment
-		addSequential(new WaitCommand(0.5));
-		addSequential(new DriveToDistance(17, false)); //final drive towards gear
+		addSequential(new DriveToDistance(65, false)); //drive towards gear
 		addParallel(new DeployGear());
 		addSequential(new DelayedCommand(1, new DriveToDistance(20, true))); //drive backwards
 		if (boiler) {

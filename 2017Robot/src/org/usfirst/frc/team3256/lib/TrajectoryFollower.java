@@ -79,13 +79,13 @@ public class TrajectoryFollower{
 		//normal pid error
 		error = setpointPos-currPos;
 		//integral of error
-		sumError+=error;
+		sumError+=error*dt;
 		//derivative of error: the change in error over time minus the velocity we should be at
 		changeError = (error-prevError)/dt - setpointVel;
-		//update previous error
-		prevError = error;
 		//calculate the pid output
 		PID = kP*error + kI*sumError + kD*changeError;
+		//update previous error
+		prevError = error;
 		return PID;
 	}
 
@@ -108,7 +108,7 @@ public class TrajectoryFollower{
 			feedForwardValue = calcFeedForward(s.getVel(), s.getAccel());
 			//calculate fb value
 			feedBackValue = calcFeedBack(s.getPos(), currPos, s.getVel());
-			System.out.println("FB VALUE------------" + feedBackValue);
+			System.out.println("FF VALUE------------" + feedForwardValue);
 			//output = ff + fb
 			output = feedForwardValue + feedBackValue;
 			//increment current segment 

@@ -81,8 +81,7 @@ public class OI implements Log{
     	rightTrigger2.whenInactive(new StopRollers());
     	leftTrigger2.toggleWhenActive(new GroundIntakeBalls());
     	leftTrigger2.whenInactive(new StopRollers());
-    	
-    	buttonX1.whileHeld(new IntakeGear());
+
     }
 
 	@Override

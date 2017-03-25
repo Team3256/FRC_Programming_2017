@@ -11,8 +11,9 @@ import org.usfirst.frc.team3256.robot.automodes.GearRightAuto;
 import org.usfirst.frc.team3256.robot.automodes.HopperAutoBlue;
 import org.usfirst.frc.team3256.robot.automodes.HopperAutoRed;
 import org.usfirst.frc.team3256.robot.commands.DriveTesting;
+import org.usfirst.frc.team3256.robot.commands.TurnTesting;
 import org.usfirst.frc.team3256.robot.subsystems.DriveTrain;
-import org.usfirst.frc.team3256.robot.subsystems.GearIntake;
+import org.usfirst.frc.team3256.robot.subsystems.GearHandler;
 import org.usfirst.frc.team3256.robot.subsystems.Hanger;
 import org.usfirst.frc.team3256.robot.subsystems.Hanger.HangerState;
 import org.usfirst.frc.team3256.robot.subsystems.Manipulator;
@@ -39,7 +40,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends IterativeRobot {
 	
 	DriveTrain driveTrain;
-	GearIntake gearIntake;
+	GearHandler gearHandler;
 	Manipulator manipulator;
 	Roller roller;
 	Hanger hanger;
@@ -63,10 +64,10 @@ public class Robot extends IterativeRobot {
 		driveTrain.resetEncoders();
 		driveTrain.shiftUp(true);
 		driveTrain.calibrateGyro();
-		gearIntake = GearIntake.getInstance();
 		manipulator = Manipulator.getInstance();
 		roller = Roller.getInstance();
 		hanger = Hanger.getInstance();
+		gearHandler = GearHandler.getInstance();
 		compressor = new Compressor(0);
 		compressor.setClosedLoopControl(true);
 		operatorInterface = new OI();
@@ -91,6 +92,7 @@ public class Robot extends IterativeRobot {
 		//autonomousChooser.addObject("TURN SUCKAS", new AlignToVision());
 		autonomousChooser.addObject("Hopper Blue", new HopperAutoBlue());
 		autonomousChooser.addObject("Hopper Red", new HopperAutoRed());
+		autonomousChooser.addObject("TEST TURN", new TurnTesting());
 		autonomousChooser.addObject("TEST MOVE STRAIGHT", new DriveTesting());
 		SmartDashboard.putData("Autonomous Chooser", autonomousChooser);
 	}
@@ -160,7 +162,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
-		gearIntake.update();
+		gearHandler.update();
 	}
 
 	/**

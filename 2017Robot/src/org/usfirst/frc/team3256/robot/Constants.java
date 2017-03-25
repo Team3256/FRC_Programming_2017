@@ -23,8 +23,7 @@ public class Constants {
 	public static final int PDP_INNER_MOTOR_ROLLER = 12;  
 	public static final int PDP_OUTER_MOTOR_ROLLER = 11; 
 	
-	public static final int PDP_GEAR_ROLLER_1 = 7;
-	public static final int PDP_GEAR_ROLLER_2 = 8;
+	public static final int PDP_GEAR_ROLLER = 7;
 
 	//PCM Solenoid ports
 	public static final int DRIVE_SHIFTER_A = 7;
@@ -56,8 +55,8 @@ public class Constants {
 	public static final double ROBOT_CIRCUMFERENCE = Math.PI*ROBOT_TRACK;
 	public static final double MAX_VEL_HIGH_GEAR_IN_SEC = 10.0 * 12.0; // 18.94 theoretical ft/s
 	public static final double MAX_ACCEL_HIGH_GEAR_IN_SEC2 = 9.0 * 12.0; 
-	public static final double MAX_VEL_TURN_LOW_GEAR_DEG_SEC = 200.0; 
-	public static final double MAX_ACCEL_TURN_LOW_GEAR_DEG_SEC2 = 200.0; 
+	public static final double MAX_VEL_TURN_LOW_GEAR_DEG_SEC = 800.0; 
+	public static final double MAX_ACCEL_TURN_LOW_GEAR_DEG_SEC2 = 700.0; 
 	public static final int GRAYHILL_TICKS_PER_ROT = 256;
 	public static final double WHEEL_DIAMETER = 4.09; //inches -- theoretical 4", includes tread
 	public static final double INCHES_PER_TICK = WHEEL_DIAMETER*Math.PI/GRAYHILL_TICKS_PER_ROT;
@@ -76,8 +75,8 @@ public class Constants {
 	
 	//Turn PID Gains - LOW GEAR
 	public static final double KP_PID_TURN = 0.075;
-	public static final double KI_PID_TURN = 0.007;
-	public static final double KD_PID_TURN = 0.01;
+	public static final double KI_PID_TURN = 0.006;
+	public static final double KD_PID_TURN = 0.012;
 	
 	//Drive Motion Profile Gains - HIGH GEAR
 	public static final double KV_DISTANCE = 1.0/MAX_VEL_HIGH_GEAR_IN_SEC;
@@ -92,7 +91,7 @@ public class Constants {
 	//Turn Motion Profile Gains - HIGH GEAR
 	public static final double KV_TURN = 1.0/MAX_VEL_TURN_LOW_GEAR_DEG_SEC;
 	public static final double KA_TURN = 0.0;
-	public static final double KP_TURN = 0.001;
+	public static final double KP_TURN = 0.0;
 	public static final double KI_TURN = 0.0;
 	public static final double KD_TURN = 0.0;
 }
