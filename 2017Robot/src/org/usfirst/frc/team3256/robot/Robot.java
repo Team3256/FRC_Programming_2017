@@ -41,7 +41,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends IterativeRobot {
 	
 	DriveTrain driveTrain;
-	GearHandler gearHandler;
+	//GearHandler gearHandler;
 	Manipulator manipulator;
 	Roller roller;
 	Hanger hanger;
@@ -68,7 +68,7 @@ public class Robot extends IterativeRobot {
 		manipulator = Manipulator.getInstance();
 		roller = Roller.getInstance();
 		hanger = Hanger.getInstance();
-		gearHandler = GearHandler.getInstance();
+		//gearHandler = GearHandler.getInstance();
 		compressor = new Compressor(0);
 		compressor.setClosedLoopControl(true);
 		operatorInterface = new OI();
@@ -128,7 +128,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousInit() {
 		gyroCalibrator.stop();
-		manipulator.setHumanLoadingState(HumanPlayerLoadingState.BALLS_INTAKE);
+		manipulator.setHumanLoadingState(HumanPlayerLoadingState.GEAR_INTAKE);
 		autoStartTime = Timer.getFPGATimestamp();
 		autonomousCommand = autonomousChooser.getSelected();
 		autonomousCommand.start();
@@ -152,7 +152,7 @@ public class Robot extends IterativeRobot {
 		driveTrain.resetEncoders();
 		driveTrain.resetGyro();
 		driveTrain.shiftUp(true);
-		manipulator.setHumanLoadingState(HumanPlayerLoadingState.BALLS_INTAKE);
+		manipulator.setHumanLoadingState(HumanPlayerLoadingState.GEAR_INTAKE);
 		roller.setRollerState(RollerState.STOPPED);
 		hanger.setHangerState(HangerState.WINCH_STOP);
 	}
@@ -163,7 +163,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
-		gearHandler.update();
+		//gearHandler.update();
 	}
 
 	/**

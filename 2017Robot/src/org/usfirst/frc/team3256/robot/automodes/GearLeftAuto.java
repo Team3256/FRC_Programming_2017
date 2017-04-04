@@ -26,7 +26,7 @@ public class GearLeftAuto extends CommandGroup {
 		addSequential(new DelayedCommand(1, new DriveToDistance(20, true))); //drive backwards to boiler
 		if (boiler) {
 			addSequential(new PIDTurn(25, false)); //turn towards boiler
-			addSequential(new DriveToDistance(50, true)); //drive to boiler
+			addSequential(new DriveToDistance(70, true)); //drive to boiler
 			addSequential(new ShootBalls()); //shoot balls into boiler
 		}
     }

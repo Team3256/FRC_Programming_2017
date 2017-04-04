@@ -60,10 +60,10 @@ public class OI implements Log{
     				Run Hanger: Hold Left Bumper
     	*/
    
-    	rightBumper2.toggleWhenActive(new RunHang());
-    	rightBumper2.whenInactive(new StopHang());
-    	leftBumper2.toggleWhenActive(new AttachVelcro());
-    	leftBumper2.whenInactive(new StopHang());
+    	rightBumper1.toggleWhenActive(new RunHang());
+    	rightBumper1.whenInactive(new StopHang());
+    	leftBumper1.toggleWhenActive(new AttachVelcro());
+    	leftBumper1.whenInactive(new StopHang());
     	
     	/*Manipulator:	Button Y: Gear HP Intake Mode
     	 				Button A: Balls HP Intake Mode

@@ -21,7 +21,7 @@ public class GearCenterAuto extends CommandGroup {
 		addParallel(new DeployGear());
 		
 		//drive forward
-		addSequential(new DelayedCommand(1,new DriveToDistance(60,true)));
+		addSequential(new DelayedCommand(.2,new DriveToDistance(60,true)));
 
 	}
 }

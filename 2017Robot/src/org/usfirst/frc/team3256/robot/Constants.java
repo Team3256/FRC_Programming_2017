@@ -10,6 +10,7 @@ public class Constants {
 	public static final int HANGER = 7;
 	public static final int INNER_MOTOR_ROLLER = 4;	
 	public static final int OUTER_MOTOR_ROLLER = 3; 
+	public static final int GEAR_INTAKE_FLIPPER = -1; // TODO: set actual motor port 
 	
 	public static final int GEAR_ROLLER = 0;
 	
@@ -43,6 +44,8 @@ public class Constants {
 	public static final int ENCODER_LEFT_B = 10; //12
 	public static final int ENCODER_RIGHT_A = 13; //11
 	public static final int ENCODER_RIGHT_B = 12; //10
+	public static final int ENCODER_GEAR_INTAKE_A = -1; // TODO: set to actual encoder port
+	public static final int ENCODER_GEAR_INTAKE_B = -2; // TODO: set to actual encoder port
 	
 	// Joystick ports and deadband
 	public static final int DRIVER_CONTROLLER = 0;
@@ -66,8 +69,8 @@ public class Constants {
 	//Preset Values
 	public static final double GROUND_INTAKE_POWER = 1;
 	public static final double SHOOT_BALLS_POWER = -1;
-	public static final double WINCH_HANGER_POWER = -1.0;
-	public static final double WINCH_ATTACH_TO_VELCRO_POWER = -0.3;
+	public static final double WINCH_HANGER_POWER = 1.0;
+	public static final double WINCH_ATTACH_TO_VELCRO_POWER = 0.3;
 	
 	//Period for all control loops
 	public static final double CONTROL_LOOP_DT = 0.02;
@@ -75,8 +78,9 @@ public class Constants {
 	
 	//Turn PID Gains - LOW GEAR
 	public static final double KP_PID_TURN = 0.075;
-	public static final double KI_PID_TURN = 0.006;
+	public static final double KI_PID_TURN = 0.0045; //0.006
 	public static final double KD_PID_TURN = 0.012;
+	
 	
 	//Drive Motion Profile Gains - HIGH GEAR
 	public static final double KV_DISTANCE = 1.0/MAX_VEL_HIGH_GEAR_IN_SEC;
@@ -94,4 +98,7 @@ public class Constants {
 	public static final double KP_TURN = 0.0;
 	public static final double KI_TURN = 0.0;
 	public static final double KD_TURN = 0.0;
+	
+	// Used in encoder math
+	public static final double GEAR_HANDLER_TICKS_TO_ANGLE = 1; //TODO: set to actual value
 }
