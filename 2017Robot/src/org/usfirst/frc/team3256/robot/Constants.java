@@ -8,11 +8,12 @@ public class Constants {
 	public static final int LEFT_DRIVE = 9; 
 	public static final int RIGHT_DRIVE = 8; 
 	public static final int HANGER = 7;
-	public static final int INNER_MOTOR_ROLLER = 4;	
-	public static final int OUTER_MOTOR_ROLLER = 3; 
-	public static final int GEAR_INTAKE_FLIPPER = -1; // TODO: set actual motor port 
-	
-	public static final int GEAR_ROLLER = 0;
+	public static final int FUEL_INNER_ROLLER = 4;	
+	public static final int FUEL_OUTER_ROLLER = 3; 
+	//These next two are the same as the fuel motors since the fuel intake and the
+	// gear intake are intended to be interchangeable
+	public static final int GEAR_INTAKE_FLIPPER = 4; 
+	public static final int GEAR_INTAKE_ROLLER = 3;
 	
 	//PDP Motor ports
 	public static final int PDP_LEFT_FRONT = 0;  
@@ -23,9 +24,9 @@ public class Constants {
 	public static final int PDP_HANGER_2 = 14;
 	public static final int PDP_INNER_MOTOR_ROLLER = 12;  
 	public static final int PDP_OUTER_MOTOR_ROLLER = 11; 
+	public static final int PDP_GEAR_FLIPPER = 12;
+	public static final int PDP_GEAR_ROLLER = 11;
 	
-	public static final int PDP_GEAR_ROLLER = 7;
-
 	//PCM Solenoid ports
 	public static final int DRIVE_SHIFTER_A = 7;
 	public static final int DRIVE_SHIFTER_B = 3;
@@ -35,9 +36,6 @@ public class Constants {
 	public static final int GEAR_PIVOT_B = 0;
 	public static final int GEAR_DEPLOY_A = 1; //5 
 	public static final int GEAR_DEPLOY_B = 5; //1
-
-	//Relay Solenoid Ports
-	public static final int GEAR_INTAKE_POPPER = 0;
 	
 	//Encoder ports on the Spartan Board 
 	public static final int ENCODER_LEFT_A = 11; //13

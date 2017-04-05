@@ -1,6 +1,7 @@
 package org.usfirst.frc.team3256.robot.subsystems;
 
 import org.usfirst.frc.team3256.lib.ADXRS453_Gyro;
+import org.usfirst.frc.team3256.lib.Log;
 import org.usfirst.frc.team3256.lib.PDP;
 import org.usfirst.frc.team3256.robot.Constants;
 import org.usfirst.frc.team3256.lib.PIDController;
@@ -11,11 +12,14 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Relay.Value;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+// NOTE: This code depends on the VersaPlanetary Integrated Encoder
 
 /**
  *
  */
-public class GearHandler extends Subsystem {
+public class GearHandler extends Subsystem implements Log {
 
 	private static GearHandler instance;
 	private VictorSP roller;
@@ -41,7 +45,7 @@ public class GearHandler extends Subsystem {
 
 	private GearHandler(){
 		pdp = PDP.getInstance();
-		roller = new VictorSP(Constants.GEAR_ROLLER);
+		roller = new VictorSP(Constants.GEAR_INTAKE_ROLLER);
 		flipper = new VictorSP(Constants.GEAR_INTAKE_FLIPPER);
 		flipperEncoder = new Encoder(Constants.ENCODER_GEAR_INTAKE_A, Constants.ENCODER_GEAR_INTAKE_B);
 		flipperEncoder.setDistancePerPulse(Constants.INCHES_PER_TICK);
@@ -52,8 +56,9 @@ public class GearHandler extends Subsystem {
 	
 	public void update(){
 		switch (gearHandlerState){
+			// TODO: set the polarity of all of the motor output commands (i.e. whether 1.0 is positive or negative)
 			case INTAKE:
-				if (getHandlerAngle() > 0) {
+				if (getHandlerAngle() > 5) {
 					flipper.set(1.0);
 				}
 				else {
@@ -62,16 +67,17 @@ public class GearHandler extends Subsystem {
 				
 				roller.set(1.0);
 				
-				if (hasGear())
-					setState(GearHandlerState.FLIP_UP);
 				break;
 			case FLIP_UP:
-				if (getHandlerAngle() >= 90) { // TODO: 90 is a placeholder value right now
+				if (getHandlerAngle() >= 85) { // TODO: 85 deg is a placeholder value right now
 					setState(GearHandlerState.STOP);
 				}
 				else {
 					flipper.set(-1.0);
 				}
+				
+				roller.set(0.0);
+				
 				break;
 			case STOP:
 				roller.set(0);
@@ -138,12 +144,21 @@ public class GearHandler extends Subsystem {
 		}
 	}
 	
-	private boolean hasGear(){
-		return pdp.getCurrent(Constants.PDP_GEAR_ROLLER) > intakeCurrentThreshhold;
-	}
+//	private boolean hasGear(){
+//		return pdp.getCurrent(Constants.PDP_GEAR_ROLLER) > intakeCurrentThreshhold;
+//	}
 	
 	public void initDefaultCommand() {
     	
     }
+
+	@Override
+	public void logToDashboard() {
+		SmartDashboard.putString("Gear Intake State", "" + gearHandlerState);
+		//SmartDashboard.putString("Has gear?", "" + hasGear());
+		SmartDashboard.putString("Roller current", "" + pdp.getCurrent(Constants.PDP_GEAR_ROLLER));
+		SmartDashboard.putString("Flipper current", "" + pdp.getCurrent(Constants.PDP_GEAR_FLIPPER));
+		SmartDashboard.putString("Angle of intake", "" + getHandlerAngle());
+	}
 }
 

@@ -1,8 +1,14 @@
 package org.usfirst.frc.team3256.robot.test;
 
-public class GearTest {
+import java.util.Scanner;
 
-	private static GearTest instance;
+import org.usfirst.frc.team3256.robot.commands.GearHandlerDeploy;
+import org.usfirst.frc.team3256.robot.commands.GearHandlerDown;
+import org.usfirst.frc.team3256.robot.commands.GearHandlerUp;
+
+public class GearIntakeTest {
+
+	private static GearIntakeTest instance;
 	private GearHandlerState gearHandlerState;
 	private final int intakeCurrentThreshhold = 30;
 	private double simulatedCurrent = 0.0;
@@ -18,11 +24,11 @@ public class GearTest {
 		STOP;
 	}
 	
-	public static GearTest getInstance(){
-		return instance == null ? instance = new GearTest() : instance;
+	public static GearIntakeTest getInstance(){
+		return instance == null ? instance = new GearIntakeTest() : instance;
 	}
 
-	private GearTest(){
+	private GearIntakeTest(){
 		gearHandlerState = GearHandlerState.STOP;
 	}
 	
@@ -102,37 +108,34 @@ public class GearTest {
 		return startDeployTime;
 	}
 	
-    public static void main(String[] args){
-    	GearTest test = GearTest.getInstance();
+	/*
+    public static void main(String[] args) {
+    	GearIntakeTest test = GearIntakeTest.getInstance();
 		System.out.println("TESTING INTAKE SEQUENCE");
-		test.setState(GearHandlerState.INTAKE);
-    	while(time < 5.0){
-    		//simulate intaked gear at time = 2 seconds
-    		if (time > 2 && time < 2.1){
-    			test.setCurrent(50);
-    		}
-    		//otherwise the current is very small if we don't have a gear
-    		else test.setCurrent(10);
-    		System.out.println(test.getState() + "\t Current Time: " + time);
-    		test.update();
-    		//running at 50 hz
-    		time += 0.02;
-    	}
-    	System.out.println("\n\nTESTING DEPLOY GEAR SEQUENCE");
-    	test.setState(GearHandlerState.DEPLOY);
-    	time = 0;
-    	while(time < 5.0){
-    		//simulate intaked gear at time = 2 seconds
-    		if (time > 2 && time < 2.1){
-    			test.setCurrent(50);
-    		}
-    		//otherwise the current is very small if we don't have a gear
-    		else test.setCurrent(10);
-    		System.out.println(test.getState() + "\t Current Time: " + time);
-    		test.update();
-    		//running at 50 hz
-    		time += 0.02;
-    	}
-    }
+		System.out.println("a = exit, s = down, w = up, d = deploy");
+		Scanner in = new Scanner(System.in);
+		String input;
+		while (!(input = in.nextLine()).equals("a")) {
+			switch (input) {
+				case "s": {
+					new GearHandlerDown().start();
+					System.out.println("Down");
+					break;
+				}
+				case "w": {
+					new GearHandlerUp().start();
+					System.out.println("Up");
+					break;
+				}
+				case "d": {
+					new GearHandlerDeploy().start();
+					System.out.println("Deploy");
+					break;
+				}
+			}
+		}
+		in.close();
+	}
+	*/
 }
 

@@ -37,8 +37,8 @@ public class Roller extends Subsystem implements Log{
 	}
 	
 	private Roller(){
-		innerMotor = new VictorSP(Constants.INNER_MOTOR_ROLLER);
-		outerMotor = new VictorSP(Constants.OUTER_MOTOR_ROLLER);
+		innerMotor = new VictorSP(Constants.FUEL_INNER_ROLLER);
+		outerMotor = new VictorSP(Constants.FUEL_OUTER_ROLLER);
 		ballPivot = new DoubleSolenoid(Constants.BALL_PIVOT_A, Constants.BALL_PIVOT_B);
 		pdp = PDP.getInstance();
 	}

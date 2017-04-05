@@ -16,11 +16,13 @@ import org.usfirst.frc.team3256.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team3256.robot.subsystems.GearHandler;
 import org.usfirst.frc.team3256.robot.subsystems.Hanger;
 import org.usfirst.frc.team3256.robot.subsystems.Hanger.HangerState;
+import org.usfirst.frc.team3256.robot.subsystems.IntakeType;
 import org.usfirst.frc.team3256.robot.subsystems.Manipulator;
 import org.usfirst.frc.team3256.robot.subsystems.Manipulator.HumanPlayerLoadingState;
 import org.usfirst.frc.team3256.robot.subsystems.Roller;
 import org.usfirst.frc.team3256.robot.subsystems.GearHandler.GearHandlerState;
 import org.usfirst.frc.team3256.robot.subsystems.Roller.RollerState;
+import org.usfirst.frc.team3256.robot.test.GearIntakeTest;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -41,15 +43,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends IterativeRobot {
 	
 	DriveTrain driveTrain;
-	//GearHandler gearHandler;
 	Manipulator manipulator;
 	Roller roller;
+	GearHandler gearHandler;
 	Hanger hanger;
 	Compressor compressor;
 	OI operatorInterface;
 	Logger logger;
 	GyroCalibrator gyroCalibrator;
 	SendableChooser<Command> autonomousChooser;
+	SendableChooser<IntakeType> intakeChooser;
 	Command autonomousCommand;
 	double autoStartTime = 0;
 	double autoEndTime = 0;
@@ -66,9 +69,7 @@ public class Robot extends IterativeRobot {
 		driveTrain.shiftUp(true);
 		driveTrain.calibrateGyro();
 		manipulator = Manipulator.getInstance();
-		roller = Roller.getInstance();
 		hanger = Hanger.getInstance();
-		//gearHandler = GearHandler.getInstance();
 		compressor = new Compressor(0);
 		compressor.setClosedLoopControl(true);
 		operatorInterface = new OI();
@@ -76,7 +77,6 @@ public class Robot extends IterativeRobot {
 		logger.addLog(driveTrain);
 		logger.addLog(manipulator);
 		logger.addLog(hanger);
-		logger.addLog(roller);
 		logger.addLog(PDP.getInstance());
 		logger.start();
 		gyroCalibrator = new GyroCalibrator();
@@ -96,6 +96,11 @@ public class Robot extends IterativeRobot {
 		autonomousChooser.addObject("TEST TURN", new TurnTesting());
 		autonomousChooser.addObject("TEST MOVE STRAIGHT", new DriveTesting());
 		SmartDashboard.putData("Autonomous Chooser", autonomousChooser);
+	
+		intakeChooser = new SendableChooser<>();
+		intakeChooser.addDefault("Gear intake", IntakeType.GEAR);
+		intakeChooser.addObject("Fuel intake", IntakeType.FUEL);
+		SmartDashboard.putData("Intake Chooser", intakeChooser);
 	}
 
 	/**
@@ -153,7 +158,18 @@ public class Robot extends IterativeRobot {
 		driveTrain.resetGyro();
 		driveTrain.shiftUp(true);
 		manipulator.setHumanLoadingState(HumanPlayerLoadingState.GEAR_INTAKE);
-		roller.setRollerState(RollerState.STOPPED);
+		IntakeType intakeType = intakeChooser.getSelected();
+		operatorInterface.setIntakeType(intakeType);
+		if (intakeType == IntakeType.GEAR) {
+			gearHandler = GearHandler.getInstance();
+			gearHandler.setState(GearHandlerState.STOP);
+			logger.addLog(gearHandler);
+		}
+		else if (intakeType == IntakeType.FUEL) {
+			roller = Roller.getInstance();
+			roller.setRollerState(RollerState.STOPPED);
+			logger.addLog(roller);
+		}
 		hanger.setHangerState(HangerState.WINCH_STOP);
 	}
 
