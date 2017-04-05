@@ -8,11 +8,11 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class DeployGear extends Command {
+public class DeployBackGear extends Command {
 
 	Manipulator manipulator = Manipulator.getInstance();
 	
-    public DeployGear() {
+    public DeployBackGear() {
        requires(manipulator);
     }
 

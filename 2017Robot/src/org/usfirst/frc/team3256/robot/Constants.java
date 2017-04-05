@@ -10,9 +10,8 @@ public class Constants {
 	public static final int HANGER = 7;
 	public static final int INNER_MOTOR_ROLLER = 4;	
 	public static final int OUTER_MOTOR_ROLLER = 3; 
-	public static final int GEAR_INTAKE_FLIPPER = -1; // TODO: set actual motor port 
-	
-	public static final int GEAR_ROLLER = 0;
+	public static final int GEAR_INTAKE_PIVOT = 1; // TODO: set actual motor port 
+	public static final int GEAR_ROLLER = 0; //TODO: set actual motor port
 	
 	//PDP Motor ports
 	public static final int PDP_LEFT_FRONT = 0;  
@@ -44,8 +43,8 @@ public class Constants {
 	public static final int ENCODER_LEFT_B = 10; //12
 	public static final int ENCODER_RIGHT_A = 13; //11
 	public static final int ENCODER_RIGHT_B = 12; //10
-	public static final int ENCODER_GEAR_INTAKE_A = -1; // TODO: set to actual encoder port
-	public static final int ENCODER_GEAR_INTAKE_B = -2; // TODO: set to actual encoder port
+	public static final int ENCODER_GEAR_PIVOT_A = 1; // TODO: set to actual encoder port
+	public static final int ENCODER_GEAR_PIVOT_B = 2; // TODO: set to actual encoder port
 	
 	// Joystick ports and deadband
 	public static final int DRIVER_CONTROLLER = 0;
@@ -63,6 +62,8 @@ public class Constants {
 	public static final int GRAYHILL_TICKS_PER_ROT = 256;
 	public static final double WHEEL_DIAMETER = 4.09; //inches -- theoretical 4", includes tread
 	public static final double INCHES_PER_TICK = WHEEL_DIAMETER*Math.PI/GRAYHILL_TICKS_PER_ROT;
+	public static final double GEAR_HANDLER_TICKS_TO_ANGLE = 1.0; //TODO: set to actual value
+	public static boolean useGearIntakeSubsystem;
 	
 //------------------------------SOFTWARE CONSTANTS------------------------------
 
@@ -99,6 +100,8 @@ public class Constants {
 	public static final double KI_TURN = 0.0;
 	public static final double KD_TURN = 0.0;
 	
-	// Used in encoder math
-	public static final double GEAR_HANDLER_TICKS_TO_ANGLE = 1; //TODO: set to actual value
+	//Gear Handler pivot PID Gains
+	public static final double KP_PIVOT = 1.0;
+	public static final double KI_PIVOT = 0.0;
+	public static final double KD_PIVOT = 0.0;
 }

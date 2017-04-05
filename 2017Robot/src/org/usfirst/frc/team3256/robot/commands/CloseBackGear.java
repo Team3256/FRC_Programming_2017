@@ -8,18 +8,18 @@ import edu.wpi.first.wpilibj.command.InstantCommand;
 /**
  *
  */
-public class HoldGearDeploy extends InstantCommand {
+public class CloseBackGear extends InstantCommand {
 
 	Manipulator manipulator = Manipulator.getInstance();
 	
-    public HoldGearDeploy() {
+    public CloseBackGear() {
         super();
         requires(manipulator);
     }
 
     // Called once when the command executes
     protected void initialize() {
-    	manipulator.setHumanLoadingState(HumanPlayerLoadingState.GEAR_DEPLOY);
+    	manipulator.setHumanLoadingState(HumanPlayerLoadingState.GEAR_RETRACT);
     }
 
 }

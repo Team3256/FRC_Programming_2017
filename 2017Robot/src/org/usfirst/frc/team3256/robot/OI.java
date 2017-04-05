@@ -2,10 +2,10 @@ package org.usfirst.frc.team3256.robot;
 
 import org.usfirst.frc.team3256.lib.Log;
 import org.usfirst.frc.team3256.robot.commands.AttachVelcro;
-import org.usfirst.frc.team3256.robot.commands.CloseGear;
-import org.usfirst.frc.team3256.robot.commands.DeployGear;
+import org.usfirst.frc.team3256.robot.commands.CloseBackGear;
+import org.usfirst.frc.team3256.robot.commands.DeployBackGear;
 import org.usfirst.frc.team3256.robot.commands.GroundIntakeBalls;
-import org.usfirst.frc.team3256.robot.commands.HoldGearDeploy;
+import org.usfirst.frc.team3256.robot.commands.HoldBackGearDeploy;
 import org.usfirst.frc.team3256.robot.commands.HumanPlayerBallsIntake;
 import org.usfirst.frc.team3256.robot.commands.HumanPlayerGearIntake;
 import org.usfirst.frc.team3256.robot.commands.IntakeGear;
@@ -15,7 +15,6 @@ import org.usfirst.frc.team3256.robot.commands.StopHang;
 import org.usfirst.frc.team3256.robot.commands.StopRollers;
 import org.usfirst.frc.team3256.robot.triggers.JoystickTrigger;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.Button;
@@ -75,12 +74,18 @@ public class OI implements Log{
     	buttonY2.whenPressed(new HumanPlayerGearIntake());
     	buttonA2.whenPressed(new HumanPlayerBallsIntake());
     	//buttonX2.whenPressed(new DeployGear());
-    	buttonX2.whileHeld(new HoldGearDeploy());
-    	buttonX2.whenReleased(new CloseGear());
-    	rightTrigger2.toggleWhenActive(new ShootBalls());
-    	rightTrigger2.whenInactive(new StopRollers());
-    	leftTrigger2.toggleWhenActive(new GroundIntakeBalls());
-    	leftTrigger2.whenInactive(new StopRollers());
+    	buttonX2.whileHeld(new HoldBackGearDeploy());
+    	buttonX2.whenReleased(new CloseBackGear());
+    	if (Constants.useGearIntakeSubsystem){
+    		
+    	}
+    	else{
+    		System.out.println("HELLOOOOOOOOOOOOOOOOOOOOOO\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+    		rightTrigger2.toggleWhenActive(new ShootBalls());
+        	rightTrigger2.whenInactive(new StopRollers());
+        	leftTrigger2.toggleWhenActive(new GroundIntakeBalls());
+        	leftTrigger2.whenInactive(new StopRollers());
+    	}
 
     }
 
