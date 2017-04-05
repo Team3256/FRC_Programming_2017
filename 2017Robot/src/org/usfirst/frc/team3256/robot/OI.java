@@ -4,6 +4,7 @@ import org.usfirst.frc.team3256.lib.Log;
 import org.usfirst.frc.team3256.robot.commands.AttachVelcro;
 import org.usfirst.frc.team3256.robot.commands.CloseBackGear;
 import org.usfirst.frc.team3256.robot.commands.DeployBackGear;
+import org.usfirst.frc.team3256.robot.commands.DeployFrontGear;
 import org.usfirst.frc.team3256.robot.commands.GroundIntakeBalls;
 import org.usfirst.frc.team3256.robot.commands.HoldBackGearDeploy;
 import org.usfirst.frc.team3256.robot.commands.HumanPlayerBallsIntake;
@@ -11,8 +12,10 @@ import org.usfirst.frc.team3256.robot.commands.HumanPlayerGearIntake;
 import org.usfirst.frc.team3256.robot.commands.IntakeGear;
 import org.usfirst.frc.team3256.robot.commands.RunHang;
 import org.usfirst.frc.team3256.robot.commands.ShootBalls;
+import org.usfirst.frc.team3256.robot.commands.StopGearIntake;
 import org.usfirst.frc.team3256.robot.commands.StopHang;
 import org.usfirst.frc.team3256.robot.commands.StopRollers;
+import org.usfirst.frc.team3256.robot.triggers.DualButton;
 import org.usfirst.frc.team3256.robot.triggers.JoystickTrigger;
 
 import edu.wpi.first.wpilibj.GenericHID.Hand;
@@ -46,6 +49,7 @@ public class OI implements Log{
     public static Button buttonB2 = new JoystickButton(manipulator, 2);
     public static Button buttonX2 = new JoystickButton(manipulator, 3);
     public static Button buttonY2 = new JoystickButton(manipulator, 4);
+    public static Button buttonXB2 = new DualButton(manipulator, 2, 3);
     public static Button leftBumper2 = new JoystickButton(manipulator, 5);
     public static Button rightBumper2 = new JoystickButton(manipulator, 6);
 	public static Trigger rightTrigger2 = new JoystickTrigger(manipulator,3);
@@ -77,10 +81,12 @@ public class OI implements Log{
     	buttonX2.whileHeld(new HoldBackGearDeploy());
     	buttonX2.whenReleased(new CloseBackGear());
     	if (Constants.useGearIntakeSubsystem){
-    		
+    		leftTrigger2.toggleWhenActive(new IntakeGear());
+    		leftTrigger2.whenInactive(new StopGearIntake());
+    		buttonB2.whenPressed(new DeployFrontGear());
+
     	}
     	else{
-    		System.out.println("HELLOOOOOOOOOOOOOOOOOOOOOO\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
     		rightTrigger2.toggleWhenActive(new ShootBalls());
         	rightTrigger2.whenInactive(new StopRollers());
         	leftTrigger2.toggleWhenActive(new GroundIntakeBalls());

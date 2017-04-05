@@ -24,6 +24,7 @@ public class GearHandler extends Subsystem {
 	private final int intakeCurrentThreshhold = 30;
 	private double startDeployTime = 0.0;
 	private boolean currentlyDeploying = false;
+	private boolean currentlyHasGear = false;
 	//in case something fatal happens so disable this subsystem
 	private boolean eStopped = false;
 	
@@ -54,9 +55,13 @@ public class GearHandler extends Subsystem {
 	public void update(){
 		if (eStopped) return;
 		pivot.set(pivotController.update(getHandlerAngle()));
+		if (currentlyHasGear && gearHandlerState == GearHandlerState.INTAKE){
+			gearHandlerState = GearHandlerState.STOW;
+		}
 		switch (gearHandlerState){
 			case INTAKE:
-				if (hasGear())
+				if (intakedGear())
+					currentlyHasGear = true;
 					setState(GearHandlerState.STOW);
 				pivotController.setSetpoint(90.0); //horizontal
 				roller.set(1.0);
@@ -78,6 +83,7 @@ public class GearHandler extends Subsystem {
 					setState(GearHandlerState.STOW);
 					currentlyDeploying = false;
 				}
+				currentlyHasGear = false;
 				break;
 			case ESTOP:
 				eStopped = true;
@@ -116,7 +122,7 @@ public class GearHandler extends Subsystem {
 		}
 	}
 	
-	private boolean hasGear(){
+	private boolean intakedGear(){
 		return pdp.getCurrent(Constants.PDP_GEAR_ROLLER) > intakeCurrentThreshhold;
 	}
 	
