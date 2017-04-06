@@ -10,7 +10,7 @@ public class Constants {
 	public static final int HANGER = 7;
 	public static final int INNER_MOTOR_ROLLER = 4;	
 	public static final int OUTER_MOTOR_ROLLER = 3; 
-	public static final int GEAR_ROLLER = 3;
+	public static final int GEAR_ROLLER = 0;
 	
 	// CAN Ports (for CAN Talons)
 	public static final int GEAR_INTAKE_PIVOT = 4; // TODO: set actual CAN port 
@@ -24,8 +24,8 @@ public class Constants {
 	public static final int PDP_HANGER_2 = 14;
 	public static final int PDP_INNER_MOTOR_ROLLER = 12;  
 	public static final int PDP_OUTER_MOTOR_ROLLER = 11; 
-	public static final int PDP_GEAR_FLIPPER = 12;
-	public static final int PDP_GEAR_ROLLER = 11;
+	public static final int PDP_GEAR_FLIPPER = 9;
+	public static final int PDP_GEAR_ROLLER = 8;
 	
 	//PCM Solenoid ports
 	public static final int DRIVE_SHIFTER_A = 7;

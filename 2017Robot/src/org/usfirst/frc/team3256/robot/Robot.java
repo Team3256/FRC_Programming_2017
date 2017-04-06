@@ -19,17 +19,15 @@ import org.usfirst.frc.team3256.robot.subsystems.Hanger.HangerState;
 import org.usfirst.frc.team3256.robot.subsystems.Manipulator;
 import org.usfirst.frc.team3256.robot.subsystems.Manipulator.HumanPlayerLoadingState;
 import org.usfirst.frc.team3256.robot.subsystems.Roller;
-import org.usfirst.frc.team3256.robot.subsystems.GearHandler.GearHandlerState;
-import org.usfirst.frc.team3256.robot.subsystems.Roller.RollerState;
-import org.usfirst.frc.team3256.robot.test.GearIntakeTest;
 
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -88,7 +86,8 @@ public class Robot extends IterativeRobot {
 			}
 		});
 		gyroCalibrator = new GyroCalibrator();
-		//CameraServer.getInstance().startAutomaticCapture();
+		UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+		camera.setResolution(480, 360);
 		
 		autonomousChooser = new SendableChooser<>();
 		autonomousChooser.addDefault("Do Nothing Auto", new DoNothingAuto());
