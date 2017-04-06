@@ -10,8 +10,10 @@ public class Constants {
 	public static final int HANGER = 7;
 	public static final int INNER_MOTOR_ROLLER = 4;	
 	public static final int OUTER_MOTOR_ROLLER = 3; 
-	public static final int GEAR_INTAKE_PIVOT = 4; // TODO: set actual motor port 
-	public static final int GEAR_ROLLER = 3; //TODO: set actual motor port
+	public static final int GEAR_ROLLER = 3;
+	
+	// CAN Ports (for CAN Talons)
+	public static final int GEAR_INTAKE_PIVOT = 4; // TODO: set actual CAN port 
 	
 	//PDP Motor ports
 	public static final int PDP_LEFT_FRONT = 0;  

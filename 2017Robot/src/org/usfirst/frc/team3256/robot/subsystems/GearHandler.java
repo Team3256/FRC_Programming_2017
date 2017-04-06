@@ -6,6 +6,9 @@ import org.usfirst.frc.team3256.lib.PDP;
 import org.usfirst.frc.team3256.lib.PIDController;
 import org.usfirst.frc.team3256.robot.Constants;
 
+import com.ctre.CANTalon;
+import com.ctre.CANTalon.TalonControlMode;
+
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.VictorSP;
@@ -21,10 +24,9 @@ public class GearHandler extends Subsystem implements Log {
 
 	private static GearHandler instance;
 	private VictorSP roller;
-	private VictorSP pivot;
-	private Encoder pivotEncoder;
+	private CANTalon pivot;
 	private PDP pdp;
-	private PIDController pivotController;
+	//private PIDController pivotController;
 	private GearHandlerState gearHandlerState;
 	private final int intakeCurrentThreshhold = 30;
 	private double startDeployTime = 0.0;
@@ -48,18 +50,15 @@ public class GearHandler extends Subsystem implements Log {
 	private GearHandler(){
 		pdp = PDP.getInstance();
 		roller = new VictorSP(Constants.GEAR_ROLLER);
-		pivot = new VictorSP(Constants.GEAR_INTAKE_PIVOT);
-		pivotEncoder = new Encoder(Constants.ENCODER_GEAR_PIVOT_A, Constants.ENCODER_GEAR_PIVOT_B);
-		pivotEncoder.reset();
-		pivotController = new PIDController(Constants.KP_PIVOT, Constants.KI_PIVOT, Constants.KD_PIVOT);
-		pivotController.setTolerance(1);
-		pivotController.setMinMaxOutput(0.2, 0.75);
+		pivot = new CANTalon(Constants.GEAR_INTAKE_PIVOT);
+		pivot.setPID(Constants.KP_PIVOT, Constants.KI_PIVOT, Constants.KD_PIVOT);
+		pivot.changeControlMode(TalonControlMode.Position);
+		//pivot.setAllowableClosedLoopErr(1);
 		gearHandlerState = GearHandlerState.STOW;
 	}
 	
 	public void update(){
 		if (eStopped) return;
-		pivot.set(pivotController.update(getHandlerAngle()));
 		if (currentlyHasGear && gearHandlerState == GearHandlerState.INTAKE){
 			gearHandlerState = GearHandlerState.STOW;
 		}
@@ -69,18 +68,18 @@ public class GearHandler extends Subsystem implements Log {
 				if (intakedGear())
 					currentlyHasGear = true;
 					setState(GearHandlerState.STOW);
-				pivotController.setSetpoint(90.0); //horizontal
+				pivot.set(90.0); //horizontal
 				roller.set(1.0);
 				break;
 			case STOW:
-				pivotController.setSetpoint(0.0); //vertical
+				pivot.set(0.0); //vertical
 				roller.set(0);
 				currentlyDeploying = false;
 				break;
 			case PIVOT_FOR_DEPLOY:
 				startDeployTime = Timer.getFPGATimestamp();
 				currentlyDeploying = true;
-				pivotController.setSetpoint(20.0); //small angle to tilt on peg
+				pivot.set(20.0);; //small angle to tilt on peg
 				setState(GearHandlerState.EXHAUST);
 				break;
 			case EXHAUST:
@@ -98,7 +97,7 @@ public class GearHandler extends Subsystem implements Log {
 	}
 
 	private double getHandlerAngle() {
-		return pivotEncoder.get() * Constants.GEAR_HANDLER_TICKS_TO_ANGLE;
+		return pivot.getEncPosition() * Constants.GEAR_HANDLER_TICKS_TO_ANGLE;
 	}
 
 	public GearHandlerState getState(){
