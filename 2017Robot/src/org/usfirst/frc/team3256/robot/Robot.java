@@ -158,6 +158,7 @@ public class Robot extends IterativeRobot {
 		driveTrain.resetGyro();
 		driveTrain.shiftUp(true);
 		manipulator.setHumanLoadingState(HumanPlayerLoadingState.GEAR_INTAKE);
+		/*
 		IntakeType intakeType = intakeChooser.getSelected();
 		operatorInterface.setIntakeType(intakeType);
 		if (intakeType == IntakeType.GEAR) {
@@ -170,6 +171,7 @@ public class Robot extends IterativeRobot {
 			roller.setRollerState(RollerState.STOPPED);
 			logger.addLog(roller);
 		}
+		*/
 		hanger.setHangerState(HangerState.WINCH_STOP);
 	}
 
