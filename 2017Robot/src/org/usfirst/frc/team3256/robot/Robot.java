@@ -26,9 +26,11 @@ import org.usfirst.frc.team3256.robot.test.GearIntakeTest;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -43,16 +45,17 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends IterativeRobot {
 	
 	DriveTrain driveTrain;
+	GearHandler gearHandler;
 	Manipulator manipulator;
 	Roller roller;
-	GearHandler gearHandler;
 	Hanger hanger;
 	Compressor compressor;
 	OI operatorInterface;
 	Logger logger;
 	GyroCalibrator gyroCalibrator;
+	Notifier gearHandlerLoop;
 	SendableChooser<Command> autonomousChooser;
-	SendableChooser<IntakeType> intakeChooser;
+	SendableChooser<Boolean> subsystemChooser;
 	Command autonomousCommand;
 	double autoStartTime = 0;
 	double autoEndTime = 0;
@@ -70,15 +73,21 @@ public class Robot extends IterativeRobot {
 		driveTrain.calibrateGyro();
 		manipulator = Manipulator.getInstance();
 		hanger = Hanger.getInstance();
+		gearHandler = GearHandler.getInstance();
 		compressor = new Compressor(0);
 		compressor.setClosedLoopControl(true);
-		operatorInterface = new OI();
 		logger = new Logger();
 		logger.addLog(driveTrain);
 		logger.addLog(manipulator);
 		logger.addLog(hanger);
 		logger.addLog(PDP.getInstance());
 		logger.start();
+		gearHandlerLoop = new Notifier(new Runnable(){
+			@Override
+			public void run() {
+				gearHandler.update();
+			}
+		});
 		gyroCalibrator = new GyroCalibrator();
 		//CameraServer.getInstance().startAutomaticCapture();
 		
@@ -96,11 +105,10 @@ public class Robot extends IterativeRobot {
 		autonomousChooser.addObject("TEST TURN", new TurnTesting());
 		autonomousChooser.addObject("TEST MOVE STRAIGHT", new DriveTesting());
 		SmartDashboard.putData("Autonomous Chooser", autonomousChooser);
-	
-		intakeChooser = new SendableChooser<>();
-		intakeChooser.addDefault("Gear intake", IntakeType.GEAR);
-		intakeChooser.addObject("Fuel intake", IntakeType.FUEL);
-		SmartDashboard.putData("Intake Chooser", intakeChooser);
+		subsystemChooser = new SendableChooser<>();
+		subsystemChooser.addObject("GROUND GEAR INTAKE", true);
+		subsystemChooser.addObject("BALL SUBSYSTEM", false);
+		SmartDashboard.putData("Subsystem Chooser", subsystemChooser);
 	}
 
 	/**
@@ -110,6 +118,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void disabledInit() {
+		gearHandlerLoop.stop();
 		gyroCalibrator.start();
 	}
 
@@ -132,6 +141,11 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void autonomousInit() {
+		Constants.useGearIntakeSubsystem = subsystemChooser.getSelected();
+		if (Constants.useGearIntakeSubsystem){
+			gearHandlerLoop.startPeriodic(Constants.CONTROL_LOOP_DT);
+		}
+		operatorInterface = new OI();
 		gyroCalibrator.stop();
 		manipulator.setHumanLoadingState(HumanPlayerLoadingState.GEAR_INTAKE);
 		autoStartTime = Timer.getFPGATimestamp();
@@ -153,6 +167,11 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void teleopInit() {
+		Constants.useGearIntakeSubsystem = subsystemChooser.getSelected();
+		if (Constants.useGearIntakeSubsystem){
+			gearHandlerLoop.startPeriodic(Constants.CONTROL_LOOP_DT);
+		}
+		operatorInterface = new OI();
 		gyroCalibrator.stop();
 		driveTrain.resetEncoders();
 		driveTrain.resetGyro();
@@ -181,7 +200,6 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
-		//gearHandler.update();
 	}
 
 	/**

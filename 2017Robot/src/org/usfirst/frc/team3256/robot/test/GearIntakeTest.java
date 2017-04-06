@@ -2,9 +2,6 @@ package org.usfirst.frc.team3256.robot.test;
 
 import java.util.Scanner;
 
-import org.usfirst.frc.team3256.robot.commands.GearHandlerDeploy;
-import org.usfirst.frc.team3256.robot.commands.GearHandlerDown;
-import org.usfirst.frc.team3256.robot.commands.GearHandlerUp;
 
 public class GearIntakeTest {
 

@@ -2,24 +2,23 @@ package org.usfirst.frc.team3256.robot;
 
 import org.usfirst.frc.team3256.lib.Log;
 import org.usfirst.frc.team3256.robot.commands.AttachVelcro;
-import org.usfirst.frc.team3256.robot.commands.CloseGear;
-import org.usfirst.frc.team3256.robot.commands.DeployGear;
-import org.usfirst.frc.team3256.robot.commands.GearHandlerDeploy;
-import org.usfirst.frc.team3256.robot.commands.GearHandlerDown;
-import org.usfirst.frc.team3256.robot.commands.GearHandlerUp;
+
+import org.usfirst.frc.team3256.robot.commands.CloseBackGear;
+import org.usfirst.frc.team3256.robot.commands.DeployBackGear;
+import org.usfirst.frc.team3256.robot.commands.DeployFrontGear;
 import org.usfirst.frc.team3256.robot.commands.GroundIntakeBalls;
-import org.usfirst.frc.team3256.robot.commands.HoldGearDeploy;
+import org.usfirst.frc.team3256.robot.commands.HoldBackGearDeploy;
 import org.usfirst.frc.team3256.robot.commands.HumanPlayerBallsIntake;
 import org.usfirst.frc.team3256.robot.commands.HumanPlayerGearIntake;
 import org.usfirst.frc.team3256.robot.commands.IntakeGear;
 import org.usfirst.frc.team3256.robot.commands.RunHang;
 import org.usfirst.frc.team3256.robot.commands.ShootBalls;
+import org.usfirst.frc.team3256.robot.commands.StopGearIntake;
 import org.usfirst.frc.team3256.robot.commands.StopHang;
 import org.usfirst.frc.team3256.robot.commands.StopRollers;
-import org.usfirst.frc.team3256.robot.subsystems.IntakeType;
+import org.usfirst.frc.team3256.robot.triggers.DualButton;
 import org.usfirst.frc.team3256.robot.triggers.JoystickTrigger;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.Button;
@@ -51,6 +50,7 @@ public class OI implements Log{
     public static Button buttonB2 = new JoystickButton(manipulator, 2);
     public static Button buttonX2 = new JoystickButton(manipulator, 3);
     public static Button buttonY2 = new JoystickButton(manipulator, 4);
+    public static Button buttonXB2 = new DualButton(manipulator, 2, 3);
     public static Button leftBumper2 = new JoystickButton(manipulator, 5);
     public static Button rightBumper2 = new JoystickButton(manipulator, 6);
 	public static Trigger rightTrigger2 = new JoystickTrigger(manipulator,3);
@@ -79,19 +79,16 @@ public class OI implements Log{
     	buttonY2.whenPressed(new HumanPlayerGearIntake());
     	buttonA2.whenPressed(new HumanPlayerBallsIntake());
     	//buttonX2.whenPressed(new DeployGear());
-    	buttonX2.whileHeld(new HoldGearDeploy());
-    	buttonX2.whenReleased(new CloseGear());
-    }
-    
-    public void setIntakeType(IntakeType intakeType) {
-    	if (intakeType == IntakeType.GEAR) {
-    		leftTrigger2.toggleWhenActive(new GearHandlerDown());
-    		leftTrigger2.whenInactive(new GearHandlerUp());
-    		rightTrigger2.toggleWhenActive(new GearHandlerDeploy());
-    		// TODO: should I set a whenInactive() for this one?
+    	buttonX2.whileHeld(new HoldBackGearDeploy());
+    	buttonX2.whenReleased(new CloseBackGear());
+    	if (Constants.useGearIntakeSubsystem){
+    		leftTrigger2.toggleWhenActive(new IntakeGear());
+    		leftTrigger2.whenInactive(new StopGearIntake());
+    		buttonB2.whenPressed(new DeployFrontGear());
+
     	}
-    	else if (intakeType == IntakeType.FUEL) {
-        	rightTrigger2.toggleWhenActive(new ShootBalls());
+    	else{
+    		rightTrigger2.toggleWhenActive(new ShootBalls());
         	rightTrigger2.whenInactive(new StopRollers());
         	leftTrigger2.toggleWhenActive(new GroundIntakeBalls());
         	leftTrigger2.whenInactive(new StopRollers());

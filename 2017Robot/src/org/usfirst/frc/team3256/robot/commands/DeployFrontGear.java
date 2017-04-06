@@ -19,7 +19,7 @@ public class DeployFrontGear extends InstantCommand {
 
     // Called once when the command executes
     protected void initialize() {
-    	gearHandler.setState(GearHandlerState.FLIP_UP);
+    	gearHandler.setState(GearHandlerState.PIVOT_FOR_DEPLOY);
     }
 
 }

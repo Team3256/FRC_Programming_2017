@@ -3,13 +3,11 @@ package org.usfirst.frc.team3256.robot.subsystems;
 import org.usfirst.frc.team3256.lib.ADXRS453_Gyro;
 import org.usfirst.frc.team3256.lib.Log;
 import org.usfirst.frc.team3256.lib.PDP;
-import org.usfirst.frc.team3256.robot.Constants;
 import org.usfirst.frc.team3256.lib.PIDController;
+import org.usfirst.frc.team3256.robot.Constants;
 
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.Relay.Value;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -23,20 +21,24 @@ public class GearHandler extends Subsystem implements Log {
 
 	private static GearHandler instance;
 	private VictorSP roller;
-	private VictorSP flipper;
-	private Encoder flipperEncoder;
+	private VictorSP pivot;
+	private Encoder pivotEncoder;
 	private PDP pdp;
+	private PIDController pivotController;
 	private GearHandlerState gearHandlerState;
 	private final int intakeCurrentThreshhold = 30;
 	private double startDeployTime = 0.0;
 	private boolean currentlyDeploying = false;
+	private boolean currentlyHasGear = false;
+	//in case something fatal happens so disable this subsystem
+	private boolean eStopped = false;
 	
 	public enum GearHandlerState{
 		INTAKE,
-		FLIP_UP,
-		DEPLOY,
+		STOW,
+		PIVOT_FOR_DEPLOY,
 		EXHAUST,
-		STOP;
+		ESTOP;
 	}
 	
 	public static GearHandler getInstance(){
@@ -45,81 +47,64 @@ public class GearHandler extends Subsystem implements Log {
 
 	private GearHandler(){
 		pdp = PDP.getInstance();
-		roller = new VictorSP(Constants.GEAR_INTAKE_ROLLER);
-		flipper = new VictorSP(Constants.GEAR_INTAKE_FLIPPER);
-		flipperEncoder = new Encoder(Constants.ENCODER_GEAR_INTAKE_A, Constants.ENCODER_GEAR_INTAKE_B);
-		flipperEncoder.setDistancePerPulse(Constants.INCHES_PER_TICK);
-		flipperEncoder.setReverseDirection(false);
-		flipperEncoder.reset();
-		gearHandlerState = GearHandlerState.STOP;
+		roller = new VictorSP(Constants.GEAR_ROLLER);
+		pivot = new VictorSP(Constants.GEAR_INTAKE_PIVOT);
+		pivotEncoder = new Encoder(Constants.ENCODER_GEAR_PIVOT_A, Constants.ENCODER_GEAR_PIVOT_B);
+		pivotEncoder.reset();
+		pivotController = new PIDController(Constants.KP_PIVOT, Constants.KI_PIVOT, Constants.KD_PIVOT);
+		pivotController.setTolerance(1);
+		pivotController.setMinMaxOutput(0.2, 0.75);
+		gearHandlerState = GearHandlerState.STOW;
 	}
 	
 	public void update(){
+		if (eStopped) return;
+		pivot.set(pivotController.update(getHandlerAngle()));
+		if (currentlyHasGear && gearHandlerState == GearHandlerState.INTAKE){
+			gearHandlerState = GearHandlerState.STOW;
+		}
 		switch (gearHandlerState){
 			// TODO: set the polarity of all of the motor output commands (i.e. whether 1.0 is positive or negative)
 			case INTAKE:
-				if (getHandlerAngle() > 5) {
-					flipper.set(1.0);
-				}
-				else {
-					flipper.set(0.0);
-				}
-				
+				if (intakedGear())
+					currentlyHasGear = true;
+					setState(GearHandlerState.STOW);
+				pivotController.setSetpoint(90.0); //horizontal
 				roller.set(1.0);
-				
 				break;
-			case FLIP_UP:
-				if (getHandlerAngle() >= 85) { // TODO: 85 deg is a placeholder value right now
-					setState(GearHandlerState.STOP);
-				}
-				else {
-					flipper.set(-1.0);
-				}
-				
-				roller.set(0.0);
-				
-				break;
-			case STOP:
+			case STOW:
+				pivotController.setSetpoint(0.0); //vertical
 				roller.set(0);
-				flipper.set(0);
 				currentlyDeploying = false;
 				break;
-			case DEPLOY:
+			case PIVOT_FOR_DEPLOY:
 				startDeployTime = Timer.getFPGATimestamp();
 				currentlyDeploying = true;
+				pivotController.setSetpoint(20.0); //small angle to tilt on peg
 				setState(GearHandlerState.EXHAUST);
 				break;
 			case EXHAUST:
 				roller.set(-1.0);
-				
 				if (releasedGear()){
-					setState(GearHandlerState.STOP);
+					setState(GearHandlerState.STOW);
 					currentlyDeploying = false;
 				}
+				currentlyHasGear = false;
+				break;
+			case ESTOP:
+				eStopped = true;
 				break;
 		}
 	}
-	
+
 	private double getHandlerAngle() {
-		return flipperEncoder.getDistance() * Constants.GEAR_HANDLER_TICKS_TO_ANGLE;
+		return pivotEncoder.get() * Constants.GEAR_HANDLER_TICKS_TO_ANGLE;
 	}
 
 	public GearHandlerState getState(){
 		return gearHandlerState;
 	}
-	
-	public boolean isDown() {
-		return getHandlerAngle() < 5 && roller.getSpeed() == 1.0;
-	}
-	
-	public boolean isUp() {
-		return getHandlerAngle() > 85 && roller.getSpeed() == 0.0;
-	}
-	
-	public boolean gearDeployFinished() {
-		return !currentlyDeploying;
-	}
-	
+
 	private boolean releasedGear(){
 		return Timer.getFPGATimestamp()-startDeployTime > 2.0 && currentlyDeploying;
 	}
@@ -129,24 +114,23 @@ public class GearHandler extends Subsystem implements Log {
 			case INTAKE:
 				gearHandlerState = GearHandlerState.INTAKE;
 				break;
-			case FLIP_UP:
-				gearHandlerState = GearHandlerState.FLIP_UP;
+			case STOW:
+				gearHandlerState = GearHandlerState.STOW;
 				break;
-			case DEPLOY:
-				gearHandlerState = GearHandlerState.DEPLOY;
+			case PIVOT_FOR_DEPLOY:
+				gearHandlerState = GearHandlerState.PIVOT_FOR_DEPLOY;
 				break;
 			case EXHAUST:
 				gearHandlerState = GearHandlerState.EXHAUST;
 				break;
-			case STOP:
-				gearHandlerState = GearHandlerState.STOP;
-				break;
+			case ESTOP:
+				gearHandlerState = GearHandlerState.ESTOP;
 		}
 	}
 	
-//	private boolean hasGear(){
-//		return pdp.getCurrent(Constants.PDP_GEAR_ROLLER) > intakeCurrentThreshhold;
-//	}
+	private boolean intakedGear(){
+		return pdp.getCurrent(Constants.PDP_GEAR_ROLLER) > intakeCurrentThreshhold;
+	}
 	
 	public void initDefaultCommand() {
     	

@@ -2,7 +2,7 @@ package org.usfirst.frc.team3256.robot.automodes;
 
 import org.usfirst.frc.team3256.lib.DelayedCommand;
 import org.usfirst.frc.team3256.robot.commands.AlignToVision;
-import org.usfirst.frc.team3256.robot.commands.DeployGear;
+import org.usfirst.frc.team3256.robot.commands.DeployBackGear;
 import org.usfirst.frc.team3256.robot.commands.DriveToDistance;
 import org.usfirst.frc.team3256.robot.commands.HumanPlayerBallsIntake;
 import org.usfirst.frc.team3256.robot.commands.PIDTurn;
@@ -22,7 +22,7 @@ public class GearLeftAuto extends CommandGroup {
 		addSequential(new PIDTurn(60, true)); //turn towards gear
 		addSequential(new WaitCommand(0.5));
 		addSequential(new DriveToDistance(65, false)); //drive towards gear
-		addParallel(new DeployGear());
+		addParallel(new DeployBackGear());
 		addSequential(new DelayedCommand(1, new DriveToDistance(20, true))); //drive backwards to boiler
 		if (boiler) {
 			addSequential(new PIDTurn(25, false)); //turn towards boiler
