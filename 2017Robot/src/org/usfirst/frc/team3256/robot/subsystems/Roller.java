@@ -3,11 +3,9 @@ package org.usfirst.frc.team3256.robot.subsystems;
 import org.usfirst.frc.team3256.lib.Log;
 import org.usfirst.frc.team3256.lib.PDP;
 import org.usfirst.frc.team3256.robot.Constants;
-import org.usfirst.frc.team3256.robot.OI;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.VictorSP;
-import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 

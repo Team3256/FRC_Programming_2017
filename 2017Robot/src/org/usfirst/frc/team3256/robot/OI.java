@@ -2,18 +2,17 @@ package org.usfirst.frc.team3256.robot;
 
 import org.usfirst.frc.team3256.lib.Log;
 import org.usfirst.frc.team3256.robot.commands.AttachVelcro;
-
 import org.usfirst.frc.team3256.robot.commands.CloseBackGear;
-import org.usfirst.frc.team3256.robot.commands.DeployBackGear;
 import org.usfirst.frc.team3256.robot.commands.DeployFrontGear;
 import org.usfirst.frc.team3256.robot.commands.GroundIntakeBalls;
 import org.usfirst.frc.team3256.robot.commands.HoldBackGearDeploy;
 import org.usfirst.frc.team3256.robot.commands.HumanPlayerBallsIntake;
 import org.usfirst.frc.team3256.robot.commands.HumanPlayerGearIntake;
-import org.usfirst.frc.team3256.robot.commands.IntakeGear;
+import org.usfirst.frc.team3256.robot.commands.ManualDeployFrontGear;
+import org.usfirst.frc.team3256.robot.commands.StartIntakeGear;
 import org.usfirst.frc.team3256.robot.commands.RunHang;
 import org.usfirst.frc.team3256.robot.commands.ShootBalls;
-import org.usfirst.frc.team3256.robot.commands.StopGearIntake;
+import org.usfirst.frc.team3256.robot.commands.StowGearHandler;
 import org.usfirst.frc.team3256.robot.commands.StopHang;
 import org.usfirst.frc.team3256.robot.commands.StopRollers;
 import org.usfirst.frc.team3256.robot.triggers.DualButton;
@@ -78,14 +77,14 @@ public class OI implements Log{
     	
     	buttonY2.whenPressed(new HumanPlayerGearIntake());
     	buttonA2.whenPressed(new HumanPlayerBallsIntake());
-    	//buttonX2.whenPressed(new DeployGear());
     	buttonX2.whileHeld(new HoldBackGearDeploy());
     	buttonX2.whenReleased(new CloseBackGear());
     	if (Constants.useGearIntakeSubsystem){
-    		leftTrigger2.toggleWhenActive(new IntakeGear());
-    		leftTrigger2.whenInactive(new StopGearIntake());
+    		leftBumper2.whenPressed(new StartIntakeGear());
+    		rightBumper2.whenPressed(new StowGearHandler());
     		buttonB2.whenPressed(new DeployFrontGear());
-
+    		rightTrigger2.toggleWhenActive(new ManualDeployFrontGear());
+    		rightTrigger2.whenInactive(new StowGearHandler());
     	}
     	else{
     		rightTrigger2.toggleWhenActive(new ShootBalls());

@@ -1,6 +1,5 @@
 package org.usfirst.frc.team3256.robot.commands;
 
-import org.usfirst.frc.team3256.robot.subsystems.Manipulator;
 import org.usfirst.frc.team3256.robot.subsystems.Roller;
 import org.usfirst.frc.team3256.robot.subsystems.Roller.RollerState;
 

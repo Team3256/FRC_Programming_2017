@@ -1,8 +1,5 @@
 package org.usfirst.frc.team3256.robot.test;
 
-import java.util.Scanner;
-
-
 public class GearIntakeTest {
 
 	private static GearIntakeTest instance;
