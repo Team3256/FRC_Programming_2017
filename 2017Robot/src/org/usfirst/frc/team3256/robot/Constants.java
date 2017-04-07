@@ -10,7 +10,7 @@ public class Constants {
 	public static final int HANGER = 7;
 	public static final int INNER_MOTOR_ROLLER = 4;	
 	public static final int OUTER_MOTOR_ROLLER = 3; 
-	public static final int GEAR_ROLLER = 3;
+	public static final int GEAR_ROLLER = 1;
 	
 	// CAN IDs
 	public static final int GEAR_INTAKE_PIVOT = 1; // TODO: set actual CAN port 

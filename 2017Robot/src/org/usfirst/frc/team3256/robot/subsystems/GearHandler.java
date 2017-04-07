@@ -37,6 +37,7 @@ public class GearHandler extends Subsystem implements Log {
 	private double manualInput = 0.0;
 	private boolean currentlyDeploying = false;
 	private ControlMode pivotControlMode;
+	private boolean isManuallyPivoting = false;
 	
 	public enum GearHandlerState{
 		//manually updating the up/down pivot motion with a joystick axis
@@ -52,7 +53,9 @@ public class GearHandler extends Subsystem implements Log {
 		//automatically bring down the gear handler to a set position to deploy the gear
 		START_PIVOT_FOR_DEPLOY,
 		//deploy the gear by exhausting the rollers
-		EXHAUST;
+		EXHAUST,
+		// Freeze the gear handler wherever it is (stop all motors)
+		STOPPED;
 	}
 	
 	public static GearHandler getInstance(){
@@ -71,18 +74,33 @@ public class GearHandler extends Subsystem implements Log {
 		pivot.changeControlMode(TalonControlMode.Position);
 		pivot.set(0);
 		gearBumperSwitch = new DigitalInput(Constants.GEAR_BUMPER_SWITCH);
-		gearHandlerState = GearHandlerState.STOW;
+		gearHandlerState = GearHandlerState.STOPPED;
+	}
+	
+	public void setCAN(double outputValue) {
+		pivot.set(outputValue);
 	}
 	
 	public void update(){
+		double timeEnd = Timer.getFPGATimestamp() - (int) Timer.getFPGATimestamp(); //gets decimal portion of time stamp
+		//blinks led every half second
 		if (hasGear()){
-			ledStrip.green();
+			if (timeEnd < 0.5)
+				ledStrip.turnOff();
+			else
+				ledStrip.green();
 		}
-		else ledStrip.blue();
+		else {
+			if (timeEnd < 0.5)
+				ledStrip.turnOff();
+			else
+				ledStrip.blue();				
+		}
 		manualInput = OI.manipulator.getY(Hand.kLeft);
 		if (Math.abs(manualInput) > Constants.XBOX_DEADBAND_VALUE){
 			gearHandlerState = GearHandlerState.MANUAL_PIVOT;
 		}
+		
 		pivotControlMode = pivot.getControlMode();
 		switch (gearHandlerState){
 			case MANUAL_PIVOT:
@@ -140,6 +158,10 @@ public class GearHandler extends Subsystem implements Log {
 					setState(GearHandlerState.START_PIVOT_FOR_STOW);
 					currentlyDeploying = false;
 				}
+				break;
+			case STOPPED:
+				roller.set(0);
+				pivot.set(0);
 				break;
 		}
 	}

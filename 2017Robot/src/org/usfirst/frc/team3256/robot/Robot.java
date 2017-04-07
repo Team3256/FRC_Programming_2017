@@ -24,6 +24,7 @@ import org.usfirst.frc.team3256.robot.subsystems.Roller;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.Timer;
@@ -52,7 +53,6 @@ public class Robot extends IterativeRobot {
 	OI operatorInterface;
 	Logger logger;
 	GyroCalibrator gyroCalibrator;
-	Notifier gearHandlerLoop;
 	SendableChooser<Command> autonomousChooser;
 	SendableChooser<Boolean> subsystemChooser;
 	Command autonomousCommand;
@@ -82,12 +82,6 @@ public class Robot extends IterativeRobot {
 		logger.addLog(hanger);
 		logger.addLog(PDP.getInstance());
 		logger.start();
-		gearHandlerLoop = new Notifier(new Runnable(){
-			@Override
-			public void run() {
-				gearHandler.update();
-			}
-		});
 		gyroCalibrator = new GyroCalibrator();
 		UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
 		camera.setResolution(480, 360);
@@ -112,6 +106,7 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putData("Subsystem Chooser", subsystemChooser);
 	}
 
+	
 	/**
 	 * This function is called once each time the robot enters Disabled mode.
 	 * You can use it to reset any subsystem information you want to clear when
@@ -119,7 +114,6 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void disabledInit() {
-		gearHandlerLoop.stop();
 		gyroCalibrator.start();
 	}
 
@@ -143,9 +137,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousInit() {
 		Constants.useGearIntakeSubsystem = subsystemChooser.getSelected();
-		if (Constants.useGearIntakeSubsystem){
-			gearHandlerLoop.startPeriodic(Constants.CONTROL_LOOP_DT);
-		}
+	
 		operatorInterface = new OI();
 		gyroCalibrator.stop();
 		manipulator.setHumanLoadingState(HumanPlayerLoadingState.GEAR_INTAKE);
@@ -170,9 +162,6 @@ public class Robot extends IterativeRobot {
 	public void teleopInit() {
 		led.set(true, true, true);
 		Constants.useGearIntakeSubsystem = subsystemChooser.getSelected();
-		if (Constants.useGearIntakeSubsystem){
-			gearHandlerLoop.startPeriodic(Constants.CONTROL_LOOP_DT);
-		}
 		operatorInterface = new OI();
 		gyroCalibrator.stop();
 		driveTrain.resetEncoders();
@@ -202,6 +191,8 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
+		double value = OI.manipulator.getY(Hand.kRight);
+		gearHandler.setCAN(value);
 	}
 
 	/**
