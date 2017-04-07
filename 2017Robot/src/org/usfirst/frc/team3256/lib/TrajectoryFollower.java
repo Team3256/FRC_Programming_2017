@@ -2,7 +2,6 @@ package org.usfirst.frc.team3256.lib;
 
 import org.usfirst.frc.team3256.lib.Trajectory.Segment;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Class to follow a trajectory and calculate the motor output 

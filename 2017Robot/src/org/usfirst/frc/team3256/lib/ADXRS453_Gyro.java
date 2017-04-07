@@ -48,7 +48,6 @@ public class ADXRS453_Gyro extends GyroBase implements Gyro, PIDSource, LiveWind
   private static final int kPIDRegister = 0x0C;
   private static final int kSNHighRegister = 0x0E;
   private static final int kSNLowRegister = 0x10;
-
   
   public boolean m_isCalibrating = false;
   private double m_prevCenter = 0.0;

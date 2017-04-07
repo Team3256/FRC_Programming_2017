@@ -1,17 +1,21 @@
 package org.usfirst.frc.team3256.robot.subsystems;
 
-import org.usfirst.frc.team3256.lib.ADXRS453_Gyro;
+import org.usfirst.frc.team3256.lib.LEDStrip;
 import org.usfirst.frc.team3256.lib.Log;
-import org.usfirst.frc.team3256.lib.PDP;
-import org.usfirst.frc.team3256.lib.PIDController;
 import org.usfirst.frc.team3256.robot.Constants;
+import org.usfirst.frc.team3256.robot.OI;
 
 import com.ctre.CANTalon;
+import com.ctre.CANTalon.FeedbackDevice;
+import com.ctre.CANTalon.FeedbackDeviceStatus;
 import com.ctre.CANTalon.TalonControlMode;
 
-import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.VictorSP;
+import edu.wpi.first.wpilibj.CANSpeedController.ControlMode;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -25,22 +29,30 @@ public class GearHandler extends Subsystem implements Log {
 	private static GearHandler instance;
 	private VictorSP roller;
 	private CANTalon pivot;
-	private PDP pdp;
-	//private PIDController pivotController;
+	private LEDStrip ledStrip = LEDStrip.getInstance();
+	private DigitalInput gearBumperSwitch;
 	private GearHandlerState gearHandlerState;
-	private final int intakeCurrentThreshhold = 30;
+	private double startIntakePivotTime = 0.0;
 	private double startDeployTime = 0.0;
+	private double manualInput = 0.0;
 	private boolean currentlyDeploying = false;
-	private boolean currentlyHasGear = false;
-	//in case something fatal happens so disable this subsystem
-	private boolean eStopped = false;
+	private ControlMode pivotControlMode;
 	
 	public enum GearHandlerState{
+		//manually updating the up/down pivot motion with a joystick axis
+		MANUAL_PIVOT,
+		//start pivoting the intake downwards
+		START_PIVOT_FOR_INTAKE,
+		//run intake to intake gear
 		INTAKE,
+		//start pivoting the intake upwards to fit in the robot
+		START_PIVOT_FOR_STOW,
+		//automatically bring up gear handler vertical to stow inside the robot and stop running the intake
 		STOW,
-		PIVOT_FOR_DEPLOY,
-		EXHAUST,
-		ESTOP;
+		//automatically bring down the gear handler to a set position to deploy the gear
+		START_PIVOT_FOR_DEPLOY,
+		//deploy the gear by exhausting the rollers
+		EXHAUST;
 	}
 	
 	public static GearHandler getInstance(){
@@ -48,56 +60,88 @@ public class GearHandler extends Subsystem implements Log {
 	}
 
 	private GearHandler(){
-		pdp = PDP.getInstance();
 		roller = new VictorSP(Constants.GEAR_ROLLER);
 		pivot = new CANTalon(Constants.GEAR_INTAKE_PIVOT);
 		pivot.setPID(Constants.KP_PIVOT, Constants.KI_PIVOT, Constants.KD_PIVOT);
+		pivot.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Absolute);
+		if (pivot.isSensorPresent(FeedbackDevice.CtreMagEncoder_Absolute) != FeedbackDeviceStatus.FeedbackStatusPresent){
+			DriverStation.reportError("Did not detect encoder for gear pivot", true);
+		}
+		pivotControlMode = TalonControlMode.Position;
 		pivot.changeControlMode(TalonControlMode.Position);
-		//pivot.setAllowableClosedLoopErr(1);
+		pivot.set(0);
+		gearBumperSwitch = new DigitalInput(Constants.GEAR_BUMPER_SWITCH);
 		gearHandlerState = GearHandlerState.STOW;
 	}
 	
 	public void update(){
-		if (eStopped) return;
-		if (currentlyHasGear && gearHandlerState == GearHandlerState.INTAKE){
-			gearHandlerState = GearHandlerState.STOW;
+		if (hasGear()){
+			ledStrip.green();
 		}
+		else ledStrip.blue();
+		manualInput = OI.manipulator.getY(Hand.kLeft);
+		if (Math.abs(manualInput) > Constants.XBOX_DEADBAND_VALUE){
+			gearHandlerState = GearHandlerState.MANUAL_PIVOT;
+		}
+		pivotControlMode = pivot.getControlMode();
 		switch (gearHandlerState){
-			// TODO: set the polarity of all of the motor output commands (i.e. whether 1.0 is positive or negative)
-			case INTAKE:
-				if (intakedGear())
-					currentlyHasGear = true;
-					setState(GearHandlerState.STOW);
-				pivot.set(90.0); //horizontal
-				roller.set(1.0);
+			case MANUAL_PIVOT:
+				if (pivotControlMode != TalonControlMode.PercentVbus){
+					pivot.changeControlMode(TalonControlMode.PercentVbus);
+				}
+				if (manualInput > 0){
+					pivot.set(0.5);
+				}
+				else if (manualInput < 0){
+					pivot.set(-0.5);
+				}
+				else pivot.set(0);
 				break;
+			case START_PIVOT_FOR_INTAKE:
+				if (pivotControlMode != TalonControlMode.Position){
+					pivot.changeControlMode(TalonControlMode.Position);
+				}
+				startIntakePivotTime = Timer.getFPGATimestamp();
+				pivot.set(90.0);
+				setState(GearHandlerState.INTAKE);
+				break;
+			case INTAKE:
+				if (onTarget() || Timer.getFPGATimestamp()-startIntakePivotTime>2.0){
+					roller.set(1.0);
+				}
+				if (hasGear())
+					setState(GearHandlerState.STOW);
+				break;
+			case START_PIVOT_FOR_STOW:
+				roller.set(0);
+				if (pivotControlMode != TalonControlMode.Position){
+					pivot.changeControlMode(TalonControlMode.Position);
+				}
+				pivot.set(0.0);
+				setState(GearHandlerState.STOW);
 			case STOW:
-				pivot.set(0.0); //vertical
 				roller.set(0);
 				currentlyDeploying = false;
 				break;
-			case PIVOT_FOR_DEPLOY:
+			case START_PIVOT_FOR_DEPLOY:
+				if (pivotControlMode != TalonControlMode.Position){
+					pivot.changeControlMode(TalonControlMode.Position);
+				}
 				startDeployTime = Timer.getFPGATimestamp();
 				currentlyDeploying = true;
-				pivot.set(20.0);; //small angle to tilt on peg
+				pivot.set(20.0); //small angle to tilt on peg
 				setState(GearHandlerState.EXHAUST);
 				break;
 			case EXHAUST:
-				roller.set(-1.0);
+				if (onTarget() || startDeployTime-Timer.getFPGATimestamp()>2){
+					roller.set(-1.0);
+				}
 				if (releasedGear()){
-					setState(GearHandlerState.STOW);
+					setState(GearHandlerState.START_PIVOT_FOR_STOW);
 					currentlyDeploying = false;
 				}
-				currentlyHasGear = false;
-				break;
-			case ESTOP:
-				eStopped = true;
 				break;
 		}
-	}
-
-	private double getHandlerAngle() {
-		return pivot.getEncPosition() * Constants.GEAR_HANDLER_TICKS_TO_ANGLE;
 	}
 
 	public GearHandlerState getState(){
@@ -105,30 +149,47 @@ public class GearHandler extends Subsystem implements Log {
 	}
 
 	private boolean releasedGear(){
-		return Timer.getFPGATimestamp()-startDeployTime > 2.0 && currentlyDeploying;
+		return Timer.getFPGATimestamp()-startDeployTime > 5.0 && currentlyDeploying && !hasGear();
 	}
 	
 	public void setState(GearHandlerState wantedState){
 		switch (wantedState){
+			case MANUAL_PIVOT:
+				gearHandlerState = GearHandlerState.MANUAL_PIVOT;
+				break;
+			case START_PIVOT_FOR_INTAKE:
+				gearHandlerState = GearHandlerState.START_PIVOT_FOR_INTAKE;
+				break;
 			case INTAKE:
 				gearHandlerState = GearHandlerState.INTAKE;
+				break;
+			case START_PIVOT_FOR_STOW:
+				gearHandlerState = GearHandlerState.START_PIVOT_FOR_STOW;
 				break;
 			case STOW:
 				gearHandlerState = GearHandlerState.STOW;
 				break;
-			case PIVOT_FOR_DEPLOY:
-				gearHandlerState = GearHandlerState.PIVOT_FOR_DEPLOY;
+			case START_PIVOT_FOR_DEPLOY:
+				gearHandlerState = GearHandlerState.START_PIVOT_FOR_DEPLOY;
 				break;
 			case EXHAUST:
 				gearHandlerState = GearHandlerState.EXHAUST;
 				break;
-			case ESTOP:
-				gearHandlerState = GearHandlerState.ESTOP;
 		}
 	}
 	
-	private boolean intakedGear(){
-		return pdp.getCurrent(Constants.PDP_GEAR_ROLLER) > intakeCurrentThreshhold;
+	//TODO: implement actual numbers
+	private boolean onTarget(){
+		return getError() < 1;
+	}
+	
+	//TODO: scale values accordingly
+	private double getError(){
+		return Math.abs(pivot.getSetpoint()-pivot.getEncPosition());
+	}
+	
+	private boolean hasGear(){
+		return gearBumperSwitch.get();
 	}
 	
 	public void initDefaultCommand() {
@@ -138,10 +199,8 @@ public class GearHandler extends Subsystem implements Log {
 	@Override
 	public void logToDashboard() {
 		SmartDashboard.putString("Gear Intake State", "" + gearHandlerState);
-		//SmartDashboard.putString("Has gear?", "" + hasGear());
-		SmartDashboard.putString("Roller current", "" + pdp.getCurrent(Constants.PDP_GEAR_ROLLER));
-		SmartDashboard.putString("Flipper current", "" + pdp.getCurrent(Constants.PDP_GEAR_FLIPPER));
-		SmartDashboard.putString("Angle of intake", "" + getHandlerAngle());
+		SmartDashboard.putString("Gear Handler Pivot Control Mode", "" + pivotControlMode);
+		SmartDashboard.putBoolean("Has gear?",hasGear());
 	}
 }
 

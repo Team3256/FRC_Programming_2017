@@ -1,10 +1,8 @@
 package org.usfirst.frc.team3256.robot.automodes;
 
 import org.usfirst.frc.team3256.lib.DelayedCommand;
-import org.usfirst.frc.team3256.robot.commands.AlignToVision;
 import org.usfirst.frc.team3256.robot.commands.DeployBackGear;
 import org.usfirst.frc.team3256.robot.commands.DriveToDistance;
-import org.usfirst.frc.team3256.robot.commands.HumanPlayerBallsIntake;
 import org.usfirst.frc.team3256.robot.commands.PIDTurn;
 import org.usfirst.frc.team3256.robot.commands.ShootBalls;
 

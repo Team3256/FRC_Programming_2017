@@ -12,8 +12,8 @@ public class Constants {
 	public static final int OUTER_MOTOR_ROLLER = 3; 
 	public static final int GEAR_ROLLER = 0;
 	
-	// CAN Ports (for CAN Talons)
-	public static final int GEAR_INTAKE_PIVOT = 4; // TODO: set actual CAN port 
+	// CAN IDs
+	public static final int GEAR_INTAKE_PIVOT = 1; // TODO: set actual CAN port 
 	
 	//PDP Motor ports
 	public static final int PDP_LEFT_FRONT = 0;  
@@ -42,8 +42,9 @@ public class Constants {
 	public static final int ENCODER_LEFT_B = 10; //12
 	public static final int ENCODER_RIGHT_A = 13; //11
 	public static final int ENCODER_RIGHT_B = 12; //10
-	public static final int ENCODER_GEAR_PIVOT_A = 1; // TODO: set to actual encoder port
-	public static final int ENCODER_GEAR_PIVOT_B = 2; // TODO: set to actual encoder port
+	
+	//Digital Input ports on RoboRio
+	public static final int GEAR_BUMPER_SWITCH = 0;
 	
 	// Joystick ports and deadband
 	public static final int DRIVER_CONTROLLER = 0;
