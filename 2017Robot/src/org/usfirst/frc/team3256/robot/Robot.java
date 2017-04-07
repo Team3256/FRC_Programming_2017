@@ -1,6 +1,7 @@
 package org.usfirst.frc.team3256.robot;
 
 import org.usfirst.frc.team3256.lib.GyroCalibrator;
+import org.usfirst.frc.team3256.lib.LEDStrip;
 import org.usfirst.frc.team3256.lib.Logger;
 import org.usfirst.frc.team3256.lib.PDP;
 import org.usfirst.frc.team3256.robot.automodes.BaselineCross;
@@ -41,6 +42,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Robot extends IterativeRobot {
 	
+	LEDStrip led;
 	DriveTrain driveTrain;
 	GearHandler gearHandler;
 	Manipulator manipulator;
@@ -64,6 +66,7 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void robotInit() {
+		led = LEDStrip.getInstance();
 		driveTrain = DriveTrain.getInstance();
 		driveTrain.resetEncoders();
 		driveTrain.shiftUp(true);
@@ -104,7 +107,7 @@ public class Robot extends IterativeRobot {
 		autonomousChooser.addObject("TEST MOVE STRAIGHT", new DriveTesting());
 		SmartDashboard.putData("Autonomous Chooser", autonomousChooser);
 		subsystemChooser = new SendableChooser<>();
-		subsystemChooser.addObject("GROUND GEAR INTAKE", true);
+		subsystemChooser.addDefault("GROUND GEAR INTAKE", true);
 		subsystemChooser.addObject("BALL SUBSYSTEM", false);
 		SmartDashboard.putData("Subsystem Chooser", subsystemChooser);
 	}
@@ -165,6 +168,7 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void teleopInit() {
+		led.set(true, true, true);
 		Constants.useGearIntakeSubsystem = subsystemChooser.getSelected();
 		if (Constants.useGearIntakeSubsystem){
 			gearHandlerLoop.startPeriodic(Constants.CONTROL_LOOP_DT);

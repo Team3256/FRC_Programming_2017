@@ -1,45 +1,57 @@
 package org.usfirst.frc.team3256.lib;
 
-import edu.wpi.first.wpilibj.PWM;
-import edu.wpi.first.wpilibj.Relay;
-import edu.wpi.first.wpilibj.Relay.Value;
+import edu.wpi.first.wpilibj.Solenoid;
 
 public class LEDStrip {
 	
-	private Relay power;
-	private PWM R;
-	private PWM G;
-	private PWM B;
+	private Solenoid red;
+	private Solenoid green;
+	private Solenoid blue;
 	
-	public LEDStrip(int powerPort, int rPort, int gPort, int bPort){
-		power = new Relay(powerPort);
-		R = new PWM(rPort);
-		G = new PWM(gPort);
-		B = new PWM(bPort);
-		this.setColor(BLUE); 
+	private int pcmID = 1;
+	private int rPort = 0;
+	private int gPort = 1;
+	private int bPort = 2;
+	
+	private static LEDStrip instance;
+	
+	public static LEDStrip getInstance(){
+		return instance == null ? instance = new LEDStrip() : instance;
 	}
 	
-	public static class Color{
-		private int red, green, blue;
-		public Color(int red, int green, int blue){
-			this.red = red;
-			this.blue = blue;
-			this.green = green;
-		}
+	private LEDStrip(){
+		red = new Solenoid(pcmID, rPort);
+		green = new Solenoid(pcmID, gPort);
+		blue = new Solenoid(pcmID, bPort);
 	}
-
-	Color GREEN = new Color(0,255,0);
-	Color BLUE = new Color(0,0,255);
-	Color RED = new Color(255,0,0);
 	
-	public void setColor(Color color){
-		power.set(Value.kOn);
-		R.setRaw(color.red);
-		G.setRaw(color.green);
-		B.setRaw(color.blue);
+	public void red(){
+		red.set(true);
+		green.set(false);
+		blue.set(false);
+	}
+	
+	public void green(){
+		red.set(false);
+		green.set(true);
+		blue.set(false);
+	}
+	
+	public void blue(){
+		red.set(false);
+		green.set(false);
+		blue.set(true);
 	}
 	
 	public void turnOff(){
-		power.set(Value.kOff);
+		red.set(false);
+		green.set(false);
+		blue.set(false);
+	}
+	
+	public void set(boolean r, boolean g, boolean b){
+		red.set(r);
+		green.set(g);
+		blue.set(b);
 	}
 }
