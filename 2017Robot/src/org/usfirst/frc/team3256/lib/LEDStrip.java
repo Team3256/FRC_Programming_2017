@@ -9,9 +9,9 @@ public class LEDStrip {
 	private Solenoid blue;
 	
 	private int pcmID = 1;
-	private int rPort = 0;
-	private int gPort = 1;
-	private int bPort = 2;
+	private int rPort = 5;
+	private int gPort = 6;
+	private int bPort = 7;
 	
 	private static LEDStrip instance;
 	

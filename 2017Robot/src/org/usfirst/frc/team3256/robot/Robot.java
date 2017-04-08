@@ -24,6 +24,8 @@ import org.usfirst.frc.team3256.robot.subsystems.Roller;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Notifier;
@@ -58,6 +60,7 @@ public class Robot extends IterativeRobot {
 	Command autonomousCommand;
 	double autoStartTime = 0;
 	double autoEndTime = 0;
+	private Alliance alliance;
 	
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -115,6 +118,14 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void disabledInit() {
+		alliance = DriverStation.getInstance().getAlliance();
+		if (alliance == Alliance.Red){
+			led.red();
+		}
+		else if (alliance == Alliance.Blue){
+			led.blue();
+		}
+		else led.green();
 		gyroCalibrator.start();
 	}
 
@@ -161,7 +172,6 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void teleopInit() {
-		led.set(true, true, true);
 		Constants.useGearIntakeSubsystem = subsystemChooser.getSelected();
 		operatorInterface = new OI();
 		gyroCalibrator.stop();
@@ -169,20 +179,6 @@ public class Robot extends IterativeRobot {
 		driveTrain.resetGyro();
 		driveTrain.shiftUp(true);
 		manipulator.setHumanLoadingState(HumanPlayerLoadingState.GEAR_INTAKE);
-		/*
-		IntakeType intakeType = intakeChooser.getSelected();
-		operatorInterface.setIntakeType(intakeType);
-		if (intakeType == IntakeType.GEAR) {
-			gearHandler = GearHandler.getInstance();
-			gearHandler.setState(GearHandlerState.STOP);
-			logger.addLog(gearHandler);
-		}
-		else if (intakeType == IntakeType.FUEL) {
-			roller = Roller.getInstance();
-			roller.setRollerState(RollerState.STOPPED);
-			logger.addLog(roller);
-		}
-		*/
 		hanger.setHangerState(HangerState.WINCH_STOP);
 	}
 
@@ -192,8 +188,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
-		double value = OI.manipulator.getY(Hand.kRight);
-		gearHandler.setCAN(value);
+		gearHandler.update();
 	}
 
 	/**

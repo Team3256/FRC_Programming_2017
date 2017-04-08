@@ -8,13 +8,13 @@ import org.usfirst.frc.team3256.robot.OI;
 import com.ctre.CANTalon;
 import com.ctre.CANTalon.FeedbackDevice;
 import com.ctre.CANTalon.FeedbackDeviceStatus;
+import com.ctre.CANTalon.StatusFrameRate;
 import com.ctre.CANTalon.TalonControlMode;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.VictorSP;
-import edu.wpi.first.wpilibj.CANSpeedController.ControlMode;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -37,7 +37,7 @@ public class GearHandler extends Subsystem implements Log {
 	private double manualInput = 0.0;
 	private boolean currentlyDeploying = false;
 	private TalonControlMode pivotControlMode;
-	private int absolutePosition = 0;
+	private int initalAbsoluteEncoderPosition;
 	
 	public enum GearHandlerState{
 		//manually updating the up/down pivot motion with a joystick axis
@@ -65,23 +65,19 @@ public class GearHandler extends Subsystem implements Log {
 	private GearHandler(){
 		roller = new VictorSP(Constants.GEAR_ROLLER);
 		pivot = new CANTalon(Constants.GEAR_INTAKE_PIVOT);
-		pivot.setPID(Constants.KP_PIVOT, Constants.KI_PIVOT, Constants.KD_PIVOT);
-		pivot.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Absolute);
-		if (pivot.isSensorPresent(FeedbackDevice.CtreMagEncoder_Absolute) != FeedbackDeviceStatus.FeedbackStatusPresent){
-			DriverStation.reportError("Did not detect encoder for gear pivot", true);
-		}
-		absolutePosition = pivot.getEncPosition();
-		pivot.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
-		if (pivot.isSensorPresent(FeedbackDevice.CtreMagEncoder_Relative) != FeedbackDeviceStatus.FeedbackStatusPresent){
-			DriverStation.reportError("Did not detect encoder for gear pivot", true);
-		}
-		pivot.setEncPosition(absolutePosition);
 		pivotControlMode = TalonControlMode.Position;
 		pivot.changeControlMode(pivotControlMode);
+		pivot.setStatusFrameRateMs(StatusFrameRate.Feedback, 100);
+		pivot.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Absolute);
+		SmartDashboard.putBoolean("Detects mag encoder?", true);
+		if (pivot.isSensorPresent(FeedbackDevice.CtreMagEncoder_Absolute) != FeedbackDeviceStatus.FeedbackStatusPresent){
+			SmartDashboard.putBoolean("Does not detect mag encoder?", false);
+		}
 		//pivot.setForwardSoftLimit(); TODO: empirically find the actual desired encoder limits and set them
 		pivot.enableForwardSoftLimit(false);
 		//pivot.setReverseSoftLimit(); TODO: empirically find the actual desired encoder limits and set them
 		pivot.enableReverseSoftLimit(false);
+		pivot.setPID(Constants.KP_PIVOT, Constants.KI_PIVOT, Constants.KD_PIVOT);
 		pivot.set(0);
 		gearBumperSwitch = new DigitalInput(Constants.GEAR_BUMPER_SWITCH);
 		gearHandlerState = GearHandlerState.STOPPED;
@@ -98,13 +94,13 @@ public class GearHandler extends Subsystem implements Log {
 		double timeEnd = Timer.getFPGATimestamp() - (int) Timer.getFPGATimestamp(); //gets decimal portion of time stamp
 		//blinks led every half second
 		if (hasGear()){
-			if (timeEnd < 0.5)
+			if (timeEnd < 0.25 || (timeEnd >= 0.5 && timeEnd < 0.75))
 				ledStrip.turnOff();
 			else
 				ledStrip.green();
 		}
 		else {
-			if (timeEnd < 0.5)
+			if (timeEnd < 0.25 || (timeEnd >= 0.5 && timeEnd < 0.75))
 				ledStrip.turnOff();
 			else
 				ledStrip.red();				
@@ -113,7 +109,6 @@ public class GearHandler extends Subsystem implements Log {
 		if (Math.abs(manualInput) > Constants.XBOX_DEADBAND_VALUE){
 			gearHandlerState = GearHandlerState.MANUAL_PIVOT;
 		}
-		
 		pivotControlMode = pivot.getControlMode();
 		switch (gearHandlerState){
 			case MANUAL_PIVOT:
@@ -133,7 +128,7 @@ public class GearHandler extends Subsystem implements Log {
 					pivot.changeControlMode(TalonControlMode.Position);
 				}
 				startIntakePivotTime = Timer.getFPGATimestamp();
-				pivot.set(90.0);
+				pivot.set(9.0);
 				setState(GearHandlerState.INTAKE);
 				break;
 			case INTAKE:
@@ -210,6 +205,9 @@ public class GearHandler extends Subsystem implements Log {
 			case EXHAUST:
 				gearHandlerState = GearHandlerState.EXHAUST;
 				break;
+			case STOPPED:
+				gearHandlerState = GearHandlerState.STOPPED;
+				break;
 		}
 	}
 	
@@ -230,7 +228,11 @@ public class GearHandler extends Subsystem implements Log {
 	public void initDefaultCommand() {
     	
     }
-
+	
+	public double getPosition(){
+		return pivot.getEncPosition();
+	}
+	
 	@Override
 	public void logToDashboard() {
 		SmartDashboard.putString("Gear Intake State", "" + gearHandlerState);

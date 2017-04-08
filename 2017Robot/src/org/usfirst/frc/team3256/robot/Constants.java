@@ -86,7 +86,7 @@ public class Constants {
 	//Drive Motion Profile Gains - HIGH GEAR
 	public static final double KV_DISTANCE = 1.0/MAX_VEL_HIGH_GEAR_IN_SEC;
 	public static final double KA_DISTANCE = 0.0;
-	public static final double KP_DISTANCE = 0.32; //0.32
+	public static final double KP_DISTANCE = 0.32;
 	public static final double KI_DISTANCE = 0.0;
 	public static final double KD_DISTANCE = 0.0;
 	public static final double KP_STRAIGHT = 0.03;
@@ -101,7 +101,7 @@ public class Constants {
 	public static final double KD_TURN = 0.0;
 	
 	//Gear Handler pivot PID Gains
-	public static final double KP_PIVOT = 1.0;
+	public static final double KP_PIVOT = 0.1;
 	public static final double KI_PIVOT = 0.0;
 	public static final double KD_PIVOT = 0.0;
 }
