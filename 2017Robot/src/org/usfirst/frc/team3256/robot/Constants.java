@@ -10,7 +10,7 @@ public class Constants {
 	public static final int HANGER = 7;
 	public static final int INNER_MOTOR_ROLLER = 4;	
 	public static final int OUTER_MOTOR_ROLLER = 3; 
-	public static final int GEAR_ROLLER = 1;
+	public static final int GEAR_ROLLER = 2;
 	
 	// CAN IDs
 	public static final int GEAR_INTAKE_PIVOT = 1;
@@ -100,8 +100,23 @@ public class Constants {
 	public static final double KI_TURN = 0.0;
 	public static final double KD_TURN = 0.0;
 	
-	//Gear Handler pivot PID Gains
-	public static final double KP_PIVOT = 0.1;
-	public static final double KI_PIVOT = 0.0;
-	public static final double KD_PIVOT = 0.0;
+	//Gear Handler pivot position PID Gains
+	public static final double KP_PIVOT_POSITION = 0.1;
+	public static final double KI_PIVOT_POSITION = 0.0;
+	public static final double KD_PIVOT_POSITION = 0.0;
+	public static final double KF_PIVOT_POSITION = 0.0;
+	public static final int IZONE_PIVOT_POSITION = 0;
+	public static final double CLOSED_LOOP_RAMP_RATE_PIVOT_POSITION = 6.0;
+	public static final int PIVOT_TALON_SLOT_POSITION = 0;
+	
+	//motion magic PID
+	public static final double KP_PIVOT_MAGIC = 0.02;
+	public static final double KI_PIVOT_MAGIC = 0.0;
+	public static final double KD_PIVOT_MAGIC = 0.0;
+	public static final double KF_PIVOT_MAGIC = 0.027;
+	public static final int IZONE_PIVOT_MAGIC = 0;
+	public static final double CLOSED_LOOP_RAMP_RATE_PIVOT_MAGIC = 6.0;
+	public static final int PIVOT_TALON_SLOT_MAGIC = 1;
+	public static final double MAGIC_ACCELERATION = 4125.0;
+	public static final double MAGIC_CRUISE_VELOCITY = 4125.0;
 }

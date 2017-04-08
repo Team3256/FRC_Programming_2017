@@ -1,6 +1,10 @@
 package org.usfirst.frc.team3256.lib;
 
+import org.usfirst.frc.team3256.robot.subsystems.GearHandler;
+
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.Timer;
 
 public class LEDStrip {
 	
@@ -53,5 +57,13 @@ public class LEDStrip {
 		red.set(r);
 		green.set(g);
 		blue.set(b);
+	}
+	
+	public void update() {
+		double timeEnd = Timer.getFPGATimestamp() - (int) Timer.getFPGATimestamp(); //gets decimal portion of time stamp
+		boolean properTime = timeEnd < 0.25 || (timeEnd >= 0.5 && timeEnd < 0.75); //blinks led every quarter second
+		this.green.set(GearHandler.getInstance().hasGear() && properTime);
+		this.red.set(!GearHandler.getInstance().hasGear() && properTime);
+		this.blue.set(DriverStation.getInstance().getMatchTime() <= 30 && properTime);
 	}
 }

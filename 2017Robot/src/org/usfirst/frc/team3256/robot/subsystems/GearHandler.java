@@ -37,7 +37,7 @@ public class GearHandler extends Subsystem implements Log {
 	private double manualInput = 0.0;
 	private boolean currentlyDeploying = false;
 	private TalonControlMode pivotControlMode;
-	private int initalAbsoluteEncoderPosition;
+	private int initialAbsoluteEncoderPosition = 0;
 	
 	public enum GearHandlerState{
 		//manually updating the up/down pivot motion with a joystick axis
@@ -65,19 +65,31 @@ public class GearHandler extends Subsystem implements Log {
 	private GearHandler(){
 		roller = new VictorSP(Constants.GEAR_ROLLER);
 		pivot = new CANTalon(Constants.GEAR_INTAKE_PIVOT);
-		pivotControlMode = TalonControlMode.Position;
+		pivotControlMode = TalonControlMode.PercentVbus;
 		pivot.changeControlMode(pivotControlMode);
 		pivot.setStatusFrameRateMs(StatusFrameRate.Feedback, 100);
-		pivot.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Absolute);
+		initialAbsoluteEncoderPosition = pivot.getPulseWidthPosition() & 0xFFF;
+		pivot.setEncPosition(initialAbsoluteEncoderPosition%4096);
+		pivot.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
 		SmartDashboard.putBoolean("Detects mag encoder?", true);
-		if (pivot.isSensorPresent(FeedbackDevice.CtreMagEncoder_Absolute) != FeedbackDeviceStatus.FeedbackStatusPresent){
+		if (pivot.isSensorPresent(FeedbackDevice.CtreMagEncoder_Relative) != FeedbackDeviceStatus.FeedbackStatusPresent){
 			SmartDashboard.putBoolean("Does not detect mag encoder?", false);
 		}
+		pivot.reverseOutput(false);
+		pivot.reverseSensor(false);
+		pivot.setAllowableClosedLoopErr(10);
+		pivot.configPeakOutputVoltage(8, -8);
+		pivot.configNominalOutputVoltage(0, 0);
 		//pivot.setForwardSoftLimit(); TODO: empirically find the actual desired encoder limits and set them
 		pivot.enableForwardSoftLimit(false);
 		//pivot.setReverseSoftLimit(); TODO: empirically find the actual desired encoder limits and set them
 		pivot.enableReverseSoftLimit(false);
-		pivot.setPID(Constants.KP_PIVOT, Constants.KI_PIVOT, Constants.KD_PIVOT);
+		pivot.setPID(Constants.KP_PIVOT_POSITION, Constants.KI_PIVOT_POSITION, Constants.KD_PIVOT_POSITION, Constants.KF_PIVOT_POSITION, 
+				Constants.IZONE_PIVOT_POSITION, Constants.CLOSED_LOOP_RAMP_RATE_PIVOT_POSITION, Constants.PIVOT_TALON_SLOT_POSITION);
+		pivot.setPID(Constants.KP_PIVOT_MAGIC, Constants.KI_PIVOT_MAGIC, Constants.KD_PIVOT_MAGIC, Constants.KF_PIVOT_MAGIC, 
+				Constants.IZONE_PIVOT_MAGIC, Constants.CLOSED_LOOP_RAMP_RATE_PIVOT_MAGIC, Constants.PIVOT_TALON_SLOT_MAGIC);
+		pivot.setMotionMagicAcceleration(Constants.MAGIC_ACCELERATION);
+		pivot.setMotionMagicCruiseVelocity(Constants.MAGIC_CRUISE_VELOCITY);
 		pivot.set(0);
 		gearBumperSwitch = new DigitalInput(Constants.GEAR_BUMPER_SWITCH);
 		gearHandlerState = GearHandlerState.STOPPED;
@@ -90,21 +102,8 @@ public class GearHandler extends Subsystem implements Log {
 		pivot.set(outputValue);
 	}
 	
+	//uses magic profile
 	public void update(){
-		double timeEnd = Timer.getFPGATimestamp() - (int) Timer.getFPGATimestamp(); //gets decimal portion of time stamp
-		//blinks led every half second
-		if (hasGear()){
-			if (timeEnd < 0.25 || (timeEnd >= 0.5 && timeEnd < 0.75))
-				ledStrip.turnOff();
-			else
-				ledStrip.green();
-		}
-		else {
-			if (timeEnd < 0.25 || (timeEnd >= 0.5 && timeEnd < 0.75))
-				ledStrip.turnOff();
-			else
-				ledStrip.red();				
-		}
 		manualInput = OI.manipulator.getY(Hand.kLeft);
 		if (Math.abs(manualInput) > Constants.XBOX_DEADBAND_VALUE){
 			gearHandlerState = GearHandlerState.MANUAL_PIVOT;
@@ -115,33 +114,33 @@ public class GearHandler extends Subsystem implements Log {
 				if (pivotControlMode != TalonControlMode.PercentVbus){
 					pivot.changeControlMode(TalonControlMode.PercentVbus);
 				}
-				if (manualInput > 0){
+				if (manualInput > Constants.XBOX_DEADBAND_VALUE){
 					pivot.set(0.5);
 				}
-				else if (manualInput < 0){
+				else if (manualInput < -Constants.XBOX_DEADBAND_VALUE){
 					pivot.set(-0.5);
 				}
 				else pivot.set(0);
 				break;
 			case START_PIVOT_FOR_INTAKE:
-				if (pivotControlMode != TalonControlMode.Position){
-					pivot.changeControlMode(TalonControlMode.Position);
+				if (pivotControlMode != TalonControlMode.MotionMagic){
+					pivot.changeControlMode(TalonControlMode.MotionMagic);
+					pivot.setProfile(Constants.PIVOT_TALON_SLOT_MAGIC);
 				}
 				startIntakePivotTime = Timer.getFPGATimestamp();
 				pivot.set(9.0);
 				setState(GearHandlerState.INTAKE);
 				break;
 			case INTAKE:
-				if (onTarget() || Timer.getFPGATimestamp()-startIntakePivotTime>2.0){
-					roller.set(1.0);
-				}
+				roller.set(1);
 				if (hasGear())
-					setState(GearHandlerState.STOW);
+					setState(GearHandlerState.START_PIVOT_FOR_STOW);
 				break;
 			case START_PIVOT_FOR_STOW:
 				roller.set(0);
-				if (pivotControlMode != TalonControlMode.Position){
-					pivot.changeControlMode(TalonControlMode.Position);
+				if (pivotControlMode != TalonControlMode.MotionMagic){
+					pivot.changeControlMode(TalonControlMode.MotionMagic);
+					pivot.setProfile(Constants.PIVOT_TALON_SLOT_MAGIC);
 				}
 				pivot.set(0.0);
 				setState(GearHandlerState.STOW);
@@ -150,8 +149,9 @@ public class GearHandler extends Subsystem implements Log {
 				currentlyDeploying = false;
 				break;
 			case START_PIVOT_FOR_DEPLOY:
-				if (pivotControlMode != TalonControlMode.Position){
-					pivot.changeControlMode(TalonControlMode.Position);
+				if (pivotControlMode != TalonControlMode.MotionMagic){
+					pivot.changeControlMode(TalonControlMode.MotionMagic);
+					pivot.setProfile(Constants.PIVOT_TALON_SLOT_MAGIC);
 				}
 				startDeployTime = Timer.getFPGATimestamp();
 				currentlyDeploying = true;
@@ -221,7 +221,7 @@ public class GearHandler extends Subsystem implements Log {
 		return Math.abs(pivot.getSetpoint()-pivot.getEncPosition());
 	}
 	
-	private boolean hasGear(){
+	public boolean hasGear(){
 		return !gearBumperSwitch.get();
 	}
 	

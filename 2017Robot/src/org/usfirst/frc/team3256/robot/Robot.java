@@ -118,14 +118,6 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void disabledInit() {
-		alliance = DriverStation.getInstance().getAlliance();
-		if (alliance == Alliance.Red){
-			led.red();
-		}
-		else if (alliance == Alliance.Blue){
-			led.blue();
-		}
-		else led.green();
 		gyroCalibrator.start();
 	}
 
@@ -189,6 +181,7 @@ public class Robot extends IterativeRobot {
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
 		gearHandler.update();
+		led.update();
 	}
 
 	/**
