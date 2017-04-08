@@ -159,9 +159,7 @@ public class GearHandler extends Subsystem implements Log {
 				setState(GearHandlerState.EXHAUST);
 				break;
 			case EXHAUST:
-				if (onTarget() || startDeployTime-Timer.getFPGATimestamp()>2){
-					roller.set(-1.0);
-				}
+				roller.set(-1.0);
 				if (releasedGear()){
 					setState(GearHandlerState.START_PIVOT_FOR_STOW);
 					currentlyDeploying = false;

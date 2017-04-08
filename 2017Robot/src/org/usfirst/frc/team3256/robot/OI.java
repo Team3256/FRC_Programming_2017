@@ -10,6 +10,7 @@ import org.usfirst.frc.team3256.robot.commands.HumanPlayerBallsIntake;
 import org.usfirst.frc.team3256.robot.commands.HumanPlayerGearIntake;
 import org.usfirst.frc.team3256.robot.commands.ManualDeployFrontGear;
 import org.usfirst.frc.team3256.robot.commands.StartIntakeGear;
+import org.usfirst.frc.team3256.robot.commands.StopFrontGear;
 import org.usfirst.frc.team3256.robot.commands.RunHang;
 import org.usfirst.frc.team3256.robot.commands.ShootBalls;
 import org.usfirst.frc.team3256.robot.commands.StowGearHandler;
@@ -81,10 +82,11 @@ public class OI implements Log{
     	buttonX2.whenReleased(new CloseBackGear());
     	if (Constants.useGearIntakeSubsystem){
     		leftBumper2.whenPressed(new StartIntakeGear());
-    		rightBumper2.whenPressed(new StowGearHandler());
+    		leftBumper2.whenReleased(new StowGearHandler());
     		buttonB2.whenPressed(new DeployFrontGear());
+    		buttonB2.whenReleased(new StowGearHandler());
     		rightTrigger2.toggleWhenActive(new ManualDeployFrontGear());
-    		rightTrigger2.whenInactive(new StowGearHandler());
+    		rightTrigger2.whenInactive(new StopFrontGear());
     	}
     	else{
     		rightTrigger2.toggleWhenActive(new ShootBalls());
