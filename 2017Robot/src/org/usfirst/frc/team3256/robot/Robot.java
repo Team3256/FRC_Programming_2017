@@ -80,6 +80,7 @@ public class Robot extends IterativeRobot {
 		logger.addLog(driveTrain);
 		logger.addLog(manipulator);
 		logger.addLog(hanger);
+		logger.addLog(gearHandler);
 		logger.addLog(PDP.getInstance());
 		logger.start();
 		gyroCalibrator = new GyroCalibrator();

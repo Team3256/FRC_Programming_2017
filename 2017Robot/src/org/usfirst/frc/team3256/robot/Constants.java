@@ -13,7 +13,7 @@ public class Constants {
 	public static final int GEAR_ROLLER = 1;
 	
 	// CAN IDs
-	public static final int GEAR_INTAKE_PIVOT = 1; // TODO: set actual CAN port 
+	public static final int GEAR_INTAKE_PIVOT = 1;
 	
 	//PDP Motor ports
 	public static final int PDP_LEFT_FRONT = 0;  

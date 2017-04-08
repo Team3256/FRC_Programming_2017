@@ -36,8 +36,8 @@ public class GearHandler extends Subsystem implements Log {
 	private double startDeployTime = 0.0;
 	private double manualInput = 0.0;
 	private boolean currentlyDeploying = false;
-	private ControlMode pivotControlMode;
-	private boolean isManuallyPivoting = false;
+	private TalonControlMode pivotControlMode;
+	private int absolutePosition = 0;
 	
 	public enum GearHandlerState{
 		//manually updating the up/down pivot motion with a joystick axis
@@ -70,14 +70,27 @@ public class GearHandler extends Subsystem implements Log {
 		if (pivot.isSensorPresent(FeedbackDevice.CtreMagEncoder_Absolute) != FeedbackDeviceStatus.FeedbackStatusPresent){
 			DriverStation.reportError("Did not detect encoder for gear pivot", true);
 		}
+		absolutePosition = pivot.getEncPosition();
+		pivot.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
+		if (pivot.isSensorPresent(FeedbackDevice.CtreMagEncoder_Relative) != FeedbackDeviceStatus.FeedbackStatusPresent){
+			DriverStation.reportError("Did not detect encoder for gear pivot", true);
+		}
+		pivot.setEncPosition(absolutePosition);
 		pivotControlMode = TalonControlMode.Position;
-		pivot.changeControlMode(TalonControlMode.Position);
+		pivot.changeControlMode(pivotControlMode);
+		//pivot.setForwardSoftLimit(); TODO: empirically find the actual desired encoder limits and set them
+		pivot.enableForwardSoftLimit(false);
+		//pivot.setReverseSoftLimit(); TODO: empirically find the actual desired encoder limits and set them
+		pivot.enableReverseSoftLimit(false);
 		pivot.set(0);
 		gearBumperSwitch = new DigitalInput(Constants.GEAR_BUMPER_SWITCH);
 		gearHandlerState = GearHandlerState.STOPPED;
 	}
 	
 	public void setCAN(double outputValue) {
+		if (pivot.getControlMode()!= TalonControlMode.PercentVbus){
+			pivot.changeControlMode(TalonControlMode.PercentVbus);
+		}
 		pivot.set(outputValue);
 	}
 	
@@ -94,7 +107,7 @@ public class GearHandler extends Subsystem implements Log {
 			if (timeEnd < 0.5)
 				ledStrip.turnOff();
 			else
-				ledStrip.blue();				
+				ledStrip.red();				
 		}
 		manualInput = OI.manipulator.getY(Hand.kLeft);
 		if (Math.abs(manualInput) > Constants.XBOX_DEADBAND_VALUE){
@@ -211,7 +224,7 @@ public class GearHandler extends Subsystem implements Log {
 	}
 	
 	private boolean hasGear(){
-		return gearBumperSwitch.get();
+		return !gearBumperSwitch.get();
 	}
 	
 	public void initDefaultCommand() {
