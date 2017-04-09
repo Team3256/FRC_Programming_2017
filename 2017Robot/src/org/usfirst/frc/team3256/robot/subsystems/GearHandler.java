@@ -34,7 +34,6 @@ public class GearHandler extends Subsystem implements Log {
 	private double manualInput = 0.0;
 	private boolean currentlyDeploying = false;
 	private TalonControlMode pivotControlMode;
-	private int initialAbsoluteEncoderPosition = 0;
 	
 	public enum GearHandlerState{
 		//manually updating the up/down pivot motion with a joystick axis
