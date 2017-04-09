@@ -1,6 +1,5 @@
 package org.usfirst.frc.team3256.robot.subsystems;
 
-import org.usfirst.frc.team3256.lib.LEDStrip;
 import org.usfirst.frc.team3256.lib.Log;
 import org.usfirst.frc.team3256.robot.Constants;
 import org.usfirst.frc.team3256.robot.OI;
@@ -27,12 +26,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class GearHandler extends Subsystem implements Log {
 
 	private static GearHandler instance;
-	private VictorSP roller;
+	private VictorSP gearRoller;
 	private CANTalon pivot;
-	private LEDStrip ledStrip = LEDStrip.getInstance();
 	private DigitalInput gearBumperSwitch;
 	private GearHandlerState gearHandlerState;
-	private double startIntakePivotTime = 0.0;
 	private double startDeployTime = 0.0;
 	private double manualInput = 0.0;
 	private boolean currentlyDeploying = false;
@@ -63,20 +60,18 @@ public class GearHandler extends Subsystem implements Log {
 	}
 
 	private GearHandler(){
-		roller = new VictorSP(Constants.GEAR_ROLLER);
+		gearRoller = new VictorSP(Constants.GEAR_ROLLER);
 		pivot = new CANTalon(Constants.GEAR_INTAKE_PIVOT);
 		pivotControlMode = TalonControlMode.PercentVbus;
 		pivot.changeControlMode(pivotControlMode);
 		pivot.setStatusFrameRateMs(StatusFrameRate.Feedback, 100);
-		initialAbsoluteEncoderPosition = pivot.getPulseWidthPosition() & 0xFFF;
-		pivot.setEncPosition(initialAbsoluteEncoderPosition%4096);
+		pivot.setPosition(30);
 		pivot.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
-		SmartDashboard.putBoolean("Detects mag encoder?", true);
 		if (pivot.isSensorPresent(FeedbackDevice.CtreMagEncoder_Relative) != FeedbackDeviceStatus.FeedbackStatusPresent){
 			SmartDashboard.putBoolean("Does not detect mag encoder?", false);
 		}
-		pivot.reverseOutput(false);
-		pivot.reverseSensor(false);
+		pivot.reverseOutput(true);
+		pivot.reverseSensor(true);
 		pivot.setAllowableClosedLoopErr(10);
 		pivot.configPeakOutputVoltage(8, -8);
 		pivot.configNominalOutputVoltage(0, 0);
@@ -127,25 +122,24 @@ public class GearHandler extends Subsystem implements Log {
 					pivot.changeControlMode(TalonControlMode.MotionMagic);
 					pivot.setProfile(Constants.PIVOT_TALON_SLOT_MAGIC);
 				}
-				startIntakePivotTime = Timer.getFPGATimestamp();
-				pivot.set(9.0);
+				pivot.set(0.0);
 				setState(GearHandlerState.INTAKE);
 				break;
 			case INTAKE:
-				roller.set(1);
+				gearRoller.set(-1);
 				if (hasGear())
 					setState(GearHandlerState.START_PIVOT_FOR_STOW);
 				break;
 			case START_PIVOT_FOR_STOW:
-				roller.set(0);
+				gearRoller.set(0);
 				if (pivotControlMode != TalonControlMode.MotionMagic){
 					pivot.changeControlMode(TalonControlMode.MotionMagic);
 					pivot.setProfile(Constants.PIVOT_TALON_SLOT_MAGIC);
 				}
-				pivot.set(0.0);
+				pivot.set(30.0);
 				setState(GearHandlerState.STOW);
 			case STOW:
-				roller.set(0);
+				gearRoller.set(0);
 				currentlyDeploying = false;
 				break;
 			case START_PIVOT_FOR_DEPLOY:
@@ -155,18 +149,18 @@ public class GearHandler extends Subsystem implements Log {
 				}
 				startDeployTime = Timer.getFPGATimestamp();
 				currentlyDeploying = true;
-				pivot.set(20.0); //small angle to tilt on peg
+				pivot.set(25.0);
 				setState(GearHandlerState.EXHAUST);
 				break;
 			case EXHAUST:
-				roller.set(-1.0);
+				gearRoller.set(-1.0);
 				if (releasedGear()){
 					setState(GearHandlerState.START_PIVOT_FOR_STOW);
 					currentlyDeploying = false;
 				}
 				break;
 			case STOPPED:
-				roller.set(0);
+				gearRoller.set(0);
 				pivot.set(0);
 				break;
 		}
@@ -209,24 +203,15 @@ public class GearHandler extends Subsystem implements Log {
 		}
 	}
 	
-	//TODO: implement actual numbers
-	private boolean onTarget(){
-		return getError() < 1;
-	}
-	
-	//TODO: scale values accordingly
-	private double getError(){
-		return Math.abs(pivot.getSetpoint()-pivot.getEncPosition());
-	}
-	
 	public boolean hasGear(){
+		// Gear bumper switch is set to true when open; gear falling into gear handler sets it to false
 		return !gearBumperSwitch.get();
 	}
 	
 	public void initDefaultCommand() {
     	
     }
-	
+
 	public double getPosition(){
 		return pivot.getEncPosition();
 	}
@@ -235,6 +220,7 @@ public class GearHandler extends Subsystem implements Log {
 	public void logToDashboard() {
 		SmartDashboard.putString("Gear Intake State", "" + gearHandlerState);
 		SmartDashboard.putString("Gear Handler Pivot Control Mode", "" + pivotControlMode);
+		SmartDashboard.putNumber("Gear Handler Encoder Ticks", getPosition());
 		SmartDashboard.putBoolean("Has gear?",hasGear());
 	}
 }

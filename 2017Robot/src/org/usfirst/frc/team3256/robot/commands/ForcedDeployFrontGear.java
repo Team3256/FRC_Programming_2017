@@ -8,11 +8,11 @@ import edu.wpi.first.wpilibj.command.InstantCommand;
 /**
  *
  */
-public class ManualDeployFrontGear extends InstantCommand {
+public class ForcedDeployFrontGear extends InstantCommand {
 
 	GearHandler gearHandler = GearHandler.getInstance();
 	
-    public ManualDeployFrontGear() {
+    public ForcedDeployFrontGear() {
         super();
         requires(gearHandler);
     }
