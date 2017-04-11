@@ -8,9 +8,9 @@ import org.usfirst.frc.team3256.robot.commands.GroundIntakeBalls;
 import org.usfirst.frc.team3256.robot.commands.HoldBackGearDeploy;
 import org.usfirst.frc.team3256.robot.commands.HumanPlayerBallsIntake;
 import org.usfirst.frc.team3256.robot.commands.HumanPlayerGearIntake;
-import org.usfirst.frc.team3256.robot.commands.ForcedDeployFrontGear;
+import org.usfirst.frc.team3256.robot.commands.IntakeGearNoPivot;
 import org.usfirst.frc.team3256.robot.commands.StartIntakeGear;
-import org.usfirst.frc.team3256.robot.commands.StopFrontGear;
+import org.usfirst.frc.team3256.robot.commands.StopGearRoller;
 import org.usfirst.frc.team3256.robot.commands.RunHang;
 import org.usfirst.frc.team3256.robot.commands.ShootBalls;
 import org.usfirst.frc.team3256.robot.commands.StowGearHandler;
@@ -87,8 +87,8 @@ public class OI implements Log{
     		leftBumper2.whenReleased(new StowGearHandler());
     		buttonB2.whenPressed(new DeployFrontGear());
     		buttonB2.whenReleased(new StowGearHandler());
-    		leftTrigger2.toggleWhenActive(new ForcedDeployFrontGear());
-    		leftTrigger2.whenInactive(new StopFrontGear());
+    		leftTrigger2.toggleWhenActive(new IntakeGearNoPivot());
+    		leftTrigger2.whenInactive(new StopGearRoller());
     	}
     	else{
         	leftTrigger2.toggleWhenActive(new GroundIntakeBalls());

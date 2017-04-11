@@ -61,9 +61,9 @@ public class LEDStrip {
 	
 	public void update() {
 		double timeEnd = Timer.getFPGATimestamp() - (int) Timer.getFPGATimestamp(); //gets decimal portion of time stamp
-		boolean ledsShouldBeOn = timeEnd < 0.25 || (timeEnd >= 0.5 && timeEnd < 0.75); //blinks led every quarter second
-		this.green.set(GearHandler.getInstance().hasGear() && ledsShouldBeOn);   // set to green if handler has a gear
-		this.red.set(!GearHandler.getInstance().hasGear() && ledsShouldBeOn);    // set to red if it doesn't
-		this.blue.set(DriverStation.getInstance().getMatchTime() <= 30 && ledsShouldBeOn);  // set to blue if in last 30 seconds
+		boolean properTime = timeEnd < 0.25 || (timeEnd >= 0.5 && timeEnd < 0.75); //blinks led every quarter second
+		this.green.set(GearHandler.getInstance().hasGear() && properTime);   // set to green if handler has a gear
+		this.red.set(!GearHandler.getInstance().hasGear() && properTime);    // set to red if it doesn't
+		this.blue.set(DriverStation.getInstance().getMatchTime() <= 30 && !properTime);  //set to blue if in last 30 seconds, and switch with red/green instead of at the same time
 	}
 }

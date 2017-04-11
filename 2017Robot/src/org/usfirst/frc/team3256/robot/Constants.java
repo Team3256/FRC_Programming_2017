@@ -72,6 +72,11 @@ public class Constants {
 	public static final double SHOOT_BALLS_POWER = -1;
 	public static final double WINCH_HANGER_POWER = 1.0;
 	public static final double WINCH_ATTACH_TO_VELCRO_POWER = 0.3;
+	public static final double GEAR_PIVOT_STOW_POS = 25.0;
+	public static final double GEAR_PIVOT_GROUND_POS = -23.5;
+	public static final double GEAR_PIVOT_DEPLOY_POS = 0.0;
+	public static final double GEAR_PIVOT_FORWARD_SOFT_LIMIT_POS = 30.0;
+	public static final double GEAR_PIVOT_REVERSE_SOFT_LIMIT_POS = -30.0;
 	
 	//Period for all control loops
 	public static final double CONTROL_LOOP_DT = 0.02;

@@ -37,7 +37,7 @@ public class PIDTurn extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
     	drive.resetGyro();
-    	drive.shiftUp(false);
+    	drive.shiftUp(true);
     	pid.setSetpoint(setpoint);  
         notifier = new Notifier(new Runnable(){
 			@Override

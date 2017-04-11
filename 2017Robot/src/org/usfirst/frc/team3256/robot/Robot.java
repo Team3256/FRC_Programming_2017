@@ -20,6 +20,7 @@ import org.usfirst.frc.team3256.robot.subsystems.Hanger.HangerState;
 import org.usfirst.frc.team3256.robot.subsystems.Manipulator;
 import org.usfirst.frc.team3256.robot.subsystems.Manipulator.HumanPlayerLoadingState;
 import org.usfirst.frc.team3256.robot.subsystems.Roller;
+import org.usfirst.frc.team3256.robot.subsystems.GearHandler.GearHandlerState;
 
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
@@ -118,6 +119,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void disabledInit() {
+		gearHandler.zeroEncoder();
 		gyroCalibrator.start();
 	}
 
@@ -164,6 +166,7 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void teleopInit() {
+		gearHandler.setState(GearHandlerState.MANUAL_CONTROL);
 		Constants.useGearIntakeSubsystem = subsystemChooser.getSelected();
 		operatorInterface = new OI();
 		gyroCalibrator.stop();

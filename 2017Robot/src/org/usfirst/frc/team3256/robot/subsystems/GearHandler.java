@@ -31,13 +31,14 @@ public class GearHandler extends Subsystem implements Log {
 	private DigitalInput gearBumperSwitch;
 	private GearHandlerState gearHandlerState;
 	private double startDeployTime = 0.0;
-	private double manualInput = 0.0;
+	private double manualPivotInput = 0.0;
+	private double manualRollerInput = 0.0;
 	private boolean currentlyDeploying = false;
 	private TalonControlMode pivotControlMode;
 	
 	public enum GearHandlerState{
 		//manually updating the up/down pivot motion with a joystick axis
-		MANUAL_PIVOT,
+		MANUAL_CONTROL,
 		//start pivoting the intake downwards
 		START_PIVOT_FOR_INTAKE,
 		//run intake to intake gear
@@ -64,20 +65,20 @@ public class GearHandler extends Subsystem implements Log {
 		pivotControlMode = TalonControlMode.PercentVbus;
 		pivot.changeControlMode(pivotControlMode);
 		pivot.setStatusFrameRateMs(StatusFrameRate.Feedback, 100);
-		pivot.setPosition(30);
+		pivot.setPosition(Constants.GEAR_PIVOT_STOW_POS);
 		pivot.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
 		if (pivot.isSensorPresent(FeedbackDevice.CtreMagEncoder_Relative) != FeedbackDeviceStatus.FeedbackStatusPresent){
-			SmartDashboard.putBoolean("Does not detect mag encoder?", false);
+			DriverStation.reportError("GEAR PIVOT ENCODER NOT DETECTED\n\n\n\n\n", false);
 		}
 		pivot.reverseOutput(true);
 		pivot.reverseSensor(true);
-		pivot.setAllowableClosedLoopErr(10);
-		pivot.configPeakOutputVoltage(8, -8);
+		pivot.setAllowableClosedLoopErr(3);
+		pivot.configPeakOutputVoltage(10, -10);
 		pivot.configNominalOutputVoltage(0, 0);
-		//pivot.setForwardSoftLimit(); TODO: empirically find the actual desired encoder limits and set them
-		pivot.enableForwardSoftLimit(false);
-		//pivot.setReverseSoftLimit(); TODO: empirically find the actual desired encoder limits and set them
-		pivot.enableReverseSoftLimit(false);
+		pivot.setForwardSoftLimit(Constants.GEAR_PIVOT_FORWARD_SOFT_LIMIT_POS); 
+		pivot.enableForwardSoftLimit(true);
+		pivot.setReverseSoftLimit(Constants.GEAR_PIVOT_REVERSE_SOFT_LIMIT_POS);
+		pivot.enableReverseSoftLimit(true);
 		pivot.setPID(Constants.KP_PIVOT_POSITION, Constants.KI_PIVOT_POSITION, Constants.KD_PIVOT_POSITION, Constants.KF_PIVOT_POSITION, 
 				Constants.IZONE_PIVOT_POSITION, Constants.CLOSED_LOOP_RAMP_RATE_PIVOT_POSITION, Constants.PIVOT_TALON_SLOT_POSITION);
 		pivot.setPID(Constants.KP_PIVOT_MAGIC, Constants.KI_PIVOT_MAGIC, Constants.KD_PIVOT_MAGIC, Constants.KF_PIVOT_MAGIC, 
@@ -98,30 +99,41 @@ public class GearHandler extends Subsystem implements Log {
 	
 	//uses magic profile
 	public void update(){
-		manualInput = OI.manipulator.getY(Hand.kLeft);
-		if (Math.abs(manualInput) > Constants.XBOX_DEADBAND_VALUE){
-			gearHandlerState = GearHandlerState.MANUAL_PIVOT;
+		if (pivot.isSensorPresent(FeedbackDevice.CtreMagEncoder_Relative) != FeedbackDeviceStatus.FeedbackStatusPresent){
+			gearHandlerState = GearHandlerState.MANUAL_CONTROL;
+		}
+		manualPivotInput = OI.manipulator.getY(Hand.kLeft);
+		manualRollerInput = OI.manipulator.getY(Hand.kRight);
+		if (Math.abs(manualPivotInput) > Constants.XBOX_DEADBAND_VALUE || Math.abs(manualRollerInput) > Constants.XBOX_DEADBAND_VALUE){
+			gearHandlerState = GearHandlerState.MANUAL_CONTROL;
 		}
 		pivotControlMode = pivot.getControlMode();
 		switch (gearHandlerState){
-			case MANUAL_PIVOT:
+			case MANUAL_CONTROL:
 				if (pivotControlMode != TalonControlMode.PercentVbus){
 					pivot.changeControlMode(TalonControlMode.PercentVbus);
 				}
-				if (manualInput > Constants.XBOX_DEADBAND_VALUE){
+				if (manualPivotInput > Constants.XBOX_DEADBAND_VALUE){
 					pivot.set(0.5);
 				}
-				else if (manualInput < -Constants.XBOX_DEADBAND_VALUE){
+				else if (manualPivotInput < -Constants.XBOX_DEADBAND_VALUE){
 					pivot.set(-0.5);
 				}
 				else pivot.set(0);
+				if (manualRollerInput > Constants.XBOX_DEADBAND_VALUE){
+					gearRoller.set(1);
+				}
+				else if (manualRollerInput < -Constants.XBOX_DEADBAND_VALUE){
+					gearRoller.set(-1);
+				}
+				else gearRoller.set(0);
 				break;
 			case START_PIVOT_FOR_INTAKE:
 				if (pivotControlMode != TalonControlMode.MotionMagic){
 					pivot.changeControlMode(TalonControlMode.MotionMagic);
 					pivot.setProfile(Constants.PIVOT_TALON_SLOT_MAGIC);
 				}
-				pivot.set(0.0);
+				pivot.set(Constants.GEAR_PIVOT_GROUND_POS);
 				setState(GearHandlerState.INTAKE);
 				break;
 			case INTAKE:
@@ -135,24 +147,27 @@ public class GearHandler extends Subsystem implements Log {
 					pivot.changeControlMode(TalonControlMode.MotionMagic);
 					pivot.setProfile(Constants.PIVOT_TALON_SLOT_MAGIC);
 				}
-				pivot.set(30.0);
+				pivot.set(Constants.GEAR_PIVOT_STOW_POS);
 				setState(GearHandlerState.STOW);
+				break;
 			case STOW:
 				gearRoller.set(0);
 				currentlyDeploying = false;
 				break;
 			case START_PIVOT_FOR_DEPLOY:
-				if (pivotControlMode != TalonControlMode.MotionMagic){
-					pivot.changeControlMode(TalonControlMode.MotionMagic);
-					pivot.setProfile(Constants.PIVOT_TALON_SLOT_MAGIC);
+				if (pivotControlMode != TalonControlMode.Position){
+					pivot.changeControlMode(TalonControlMode.Position);
+					pivot.setProfile(Constants.PIVOT_TALON_SLOT_POSITION);
 				}
 				startDeployTime = Timer.getFPGATimestamp();
 				currentlyDeploying = true;
-				pivot.set(25.0);
+				pivot.set(Constants.GEAR_PIVOT_DEPLOY_POS);
 				setState(GearHandlerState.EXHAUST);
 				break;
 			case EXHAUST:
-				gearRoller.set(-1.0);
+				if (pivot.getClosedLoopError()<3){
+					gearRoller.set(0.5);
+				}
 				if (releasedGear()){
 					setState(GearHandlerState.START_PIVOT_FOR_STOW);
 					currentlyDeploying = false;
@@ -160,6 +175,9 @@ public class GearHandler extends Subsystem implements Log {
 				break;
 			case STOPPED:
 				gearRoller.set(0);
+				if (pivotControlMode != TalonControlMode.PercentVbus){
+					pivot.changeControlMode(TalonControlMode.PercentVbus);
+				}
 				pivot.set(0);
 				break;
 		}
@@ -170,13 +188,13 @@ public class GearHandler extends Subsystem implements Log {
 	}
 
 	private boolean releasedGear(){
-		return Timer.getFPGATimestamp()-startDeployTime > 5.0 && currentlyDeploying && !hasGear();
+		return Timer.getFPGATimestamp()-startDeployTime > 2.0 && currentlyDeploying && !hasGear();
 	}
 	
 	public void setState(GearHandlerState wantedState){
 		switch (wantedState){
-			case MANUAL_PIVOT:
-				gearHandlerState = GearHandlerState.MANUAL_PIVOT;
+			case MANUAL_CONTROL:
+				gearHandlerState = GearHandlerState.MANUAL_CONTROL;
 				break;
 			case START_PIVOT_FOR_INTAKE:
 				gearHandlerState = GearHandlerState.START_PIVOT_FOR_INTAKE;
@@ -211,15 +229,14 @@ public class GearHandler extends Subsystem implements Log {
     	
     }
 
-	public double getPosition(){
-		return pivot.getEncPosition();
+	public void zeroEncoder(){
+		pivot.setPosition(Constants.GEAR_PIVOT_STOW_POS);
 	}
 	
 	@Override
 	public void logToDashboard() {
 		SmartDashboard.putString("Gear Intake State", "" + gearHandlerState);
 		SmartDashboard.putString("Gear Handler Pivot Control Mode", "" + pivotControlMode);
-		SmartDashboard.putNumber("Gear Handler Encoder Ticks", getPosition());
 		SmartDashboard.putBoolean("Has gear?",hasGear());
 	}
 }

@@ -8,18 +8,18 @@ import edu.wpi.first.wpilibj.command.InstantCommand;
 /**
  *
  */
-public class ForcedDeployFrontGear extends InstantCommand {
+public class IntakeGearNoPivot extends InstantCommand {
 
 	GearHandler gearHandler = GearHandler.getInstance();
 	
-    public ForcedDeployFrontGear() {
+    public IntakeGearNoPivot() {
         super();
         requires(gearHandler);
     }
 
     // Called once when the command executes
     protected void initialize() {
-    	gearHandler.setState(GearHandlerState.EXHAUST);
+    	gearHandler.setState(GearHandlerState.INTAKE);
     }
 
 }
