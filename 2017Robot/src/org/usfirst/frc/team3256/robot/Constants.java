@@ -79,14 +79,14 @@ public class Constants {
 	public static final double GEAR_PIVOT_INTAKE_POS = -23.5;
 	public static final double GEAR_PIVOT_GROUND_POS = -26.0;
 	public static final double GEAR_PIVOT_DEPLOY_POS = 0.0;
-	public static final double GEAR_PIVOT_FORWARD_SOFT_LIMIT_POS = 30.0;
-	public static final double GEAR_PIVOT_REVERSE_SOFT_LIMIT_POS = -30.0;
+	public static final double GEAR_PIVOT_FORWARD_SOFT_LIMIT_POS = 27.0;
+	public static final double GEAR_PIVOT_REVERSE_SOFT_LIMIT_POS = -27.0;
 	
 	//Period for all control loops
 	public static final double CONTROL_LOOP_DT = 0.02;
 	public static final double SLOW_LOOP_DT = 0.05;
 	
-	//Turn PID Gains - LOW GEAR
+	//Turn PID Gains
 	public static final double KP_PID_TURN = 0.075;
 	public static final double KI_PID_TURN = 0.0045; //0.006
 	public static final double KD_PID_TURN = 0.012;

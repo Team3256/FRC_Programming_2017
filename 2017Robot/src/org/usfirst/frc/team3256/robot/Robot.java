@@ -25,11 +25,8 @@ import org.usfirst.frc.team3256.robot.subsystems.GearHandler.GearHandlerState;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -61,7 +58,6 @@ public class Robot extends IterativeRobot {
 	Command autonomousCommand;
 	double autoStartTime = 0;
 	double autoEndTime = 0;
-	private Alliance alliance;
 	
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -144,7 +140,6 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousInit() {
 		Constants.useGearIntakeSubsystem = subsystemChooser.getSelected();
-	
 		operatorInterface = new OI();
 		gyroCalibrator.stop();
 		manipulator.setHumanLoadingState(HumanPlayerLoadingState.GEAR_INTAKE);
