@@ -73,7 +73,8 @@ public class Constants {
 	public static final double WINCH_HANGER_POWER = 1.0;
 	public static final double WINCH_ATTACH_TO_VELCRO_POWER = 0.3;
 	public static final double GEAR_PIVOT_STOW_POS = 25.0;
-	public static final double GEAR_PIVOT_GROUND_POS = -23.5;
+	public static final double GEAR_PIVOT_INTAKE_POS = -23.5;
+	public static final double GEAR_PIVOT_GROUND_POS = -26.0;
 	public static final double GEAR_PIVOT_DEPLOY_POS = 0.0;
 	public static final double GEAR_PIVOT_FORWARD_SOFT_LIMIT_POS = 30.0;
 	public static final double GEAR_PIVOT_REVERSE_SOFT_LIMIT_POS = -30.0;
@@ -106,22 +107,22 @@ public class Constants {
 	public static final double KD_TURN = 0.0;
 	
 	//Gear Handler pivot position PID Gains
-	public static final double KP_PIVOT_POSITION = 0.1;
+	public static final double KP_PIVOT_POSITION = 0.02;
 	public static final double KI_PIVOT_POSITION = 0.0;
-	public static final double KD_PIVOT_POSITION = 0.0;
+	public static final double KD_PIVOT_POSITION = 0.2;
 	public static final double KF_PIVOT_POSITION = 0.0;
 	public static final int IZONE_PIVOT_POSITION = 0;
 	public static final double CLOSED_LOOP_RAMP_RATE_PIVOT_POSITION = 6.0;
 	public static final int PIVOT_TALON_SLOT_POSITION = 0;
 	
 	//motion magic PID
-	public static final double KP_PIVOT_MAGIC = 0.02;
+	public static final double KP_PIVOT_MAGIC = 0.05;
 	public static final double KI_PIVOT_MAGIC = 0.0;
 	public static final double KD_PIVOT_MAGIC = 0.0;
 	public static final double KF_PIVOT_MAGIC = 0.027;
 	public static final int IZONE_PIVOT_MAGIC = 0;
 	public static final double CLOSED_LOOP_RAMP_RATE_PIVOT_MAGIC = 6.0;
 	public static final int PIVOT_TALON_SLOT_MAGIC = 1;
-	public static final double MAGIC_ACCELERATION = 4125.0;
-	public static final double MAGIC_CRUISE_VELOCITY = 4125.0;
+	public static final double MAGIC_ACCELERATION = 4125.0*2;
+	public static final double MAGIC_CRUISE_VELOCITY = 4125.0*2;
 }

@@ -14,6 +14,7 @@ import org.usfirst.frc.team3256.robot.commands.StopGearRoller;
 import org.usfirst.frc.team3256.robot.commands.RunHang;
 import org.usfirst.frc.team3256.robot.commands.ShootBalls;
 import org.usfirst.frc.team3256.robot.commands.StowGearHandler;
+import org.usfirst.frc.team3256.robot.commands.ZeroGearHandler;
 import org.usfirst.frc.team3256.robot.commands.StopHang;
 import org.usfirst.frc.team3256.robot.commands.StopRollers;
 import org.usfirst.frc.team3256.robot.triggers.DualButton;
@@ -94,6 +95,7 @@ public class OI implements Log{
         	leftTrigger2.toggleWhenActive(new GroundIntakeBalls());
         	leftTrigger2.whenInactive(new StopRollers());
     	}
+    	buttonXB2.whenPressed(new ZeroGearHandler());
     }
 
 	@Override

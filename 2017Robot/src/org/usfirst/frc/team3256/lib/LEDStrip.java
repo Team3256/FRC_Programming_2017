@@ -1,12 +1,14 @@
 package org.usfirst.frc.team3256.lib;
 
 import org.usfirst.frc.team3256.robot.subsystems.GearHandler;
+import org.usfirst.frc.team3256.robot.subsystems.GearHandler.GearHandlerState;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Timer;
 
 public class LEDStrip {
+	private double lastPickupTime = 0; //holds the last time a gear was picked up
 	
 	private Solenoid red;
 	private Solenoid green;
@@ -60,10 +62,14 @@ public class LEDStrip {
 	}
 	
 	public void update() {
-		double timeEnd = Timer.getFPGATimestamp() - (int) Timer.getFPGATimestamp(); //gets decimal portion of time stamp
-		boolean properTime = timeEnd < 0.25 || (timeEnd >= 0.5 && timeEnd < 0.75); //blinks led every quarter second
-		this.green.set(GearHandler.getInstance().hasGear() && properTime);   // set to green if handler has a gear
-		this.red.set(!GearHandler.getInstance().hasGear() && properTime);    // set to red if it doesn't
-		this.blue.set(DriverStation.getInstance().getMatchTime() <= 30 && !properTime);  //set to blue if in last 30 seconds, and switch with red/green instead of at the same time
+		GearHandlerState gearHandlerState = GearHandler.getInstance().getGearHandlerState();
+		double timeDecimal = Timer.getFPGATimestamp() - (int) Timer.getFPGATimestamp(); //gets decimal portion of time stamp
+		boolean flashTime = timeDecimal < 0.25 || (timeDecimal >= 0.5 && timeDecimal < 0.75); //blinks led every quarter second
+		
+		this.blue.set(gearHandlerState != GearHandlerState.INTAKE && Timer.getFPGATimestamp() - lastPickupTime > 3);
+		this.red.set(gearHandlerState == GearHandlerState.INTAKE && flashTime);
+		if (gearHandlerState == GearHandlerState.START_PIVOT_FOR_STOW)
+			lastPickupTime = Timer.getFPGATimestamp();
+		this.green.set(Timer.getFPGATimestamp() - lastPickupTime <= 3 && flashTime);
 	}
 }

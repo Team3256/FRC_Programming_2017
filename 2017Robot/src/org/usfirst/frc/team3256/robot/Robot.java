@@ -78,6 +78,7 @@ public class Robot extends IterativeRobot {
 		manipulator = Manipulator.getInstance();
 		hanger = Hanger.getInstance();
 		gearHandler = GearHandler.getInstance();
+		gearHandler.setEncoderPosition(Constants.GEAR_PIVOT_GROUND_POS);
 		compressor = new Compressor(0);
 		compressor.setClosedLoopControl(true);
 		logger = new Logger();
@@ -90,6 +91,7 @@ public class Robot extends IterativeRobot {
 		gyroCalibrator = new GyroCalibrator();
 		UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
 		camera.setResolution(480, 360);
+		camera.setFPS(15);
 		
 		autonomousChooser = new SendableChooser<>();
 		autonomousChooser.addDefault("Do Nothing Auto", new DoNothingAuto());
@@ -119,7 +121,6 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void disabledInit() {
-		gearHandler.zeroEncoder();
 		gyroCalibrator.start();
 	}
 

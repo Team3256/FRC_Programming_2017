@@ -65,7 +65,7 @@ public class GearHandler extends Subsystem implements Log {
 		pivotControlMode = TalonControlMode.PercentVbus;
 		pivot.changeControlMode(pivotControlMode);
 		pivot.setStatusFrameRateMs(StatusFrameRate.Feedback, 100);
-		pivot.setPosition(Constants.GEAR_PIVOT_STOW_POS);
+		pivot.setPosition(Constants.GEAR_PIVOT_INTAKE_POS);
 		pivot.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
 		if (pivot.isSensorPresent(FeedbackDevice.CtreMagEncoder_Relative) != FeedbackDeviceStatus.FeedbackStatusPresent){
 			DriverStation.reportError("GEAR PIVOT ENCODER NOT DETECTED\n\n\n\n\n", false);
@@ -129,11 +129,11 @@ public class GearHandler extends Subsystem implements Log {
 				else gearRoller.set(0);
 				break;
 			case START_PIVOT_FOR_INTAKE:
-				if (pivotControlMode != TalonControlMode.MotionMagic){
-					pivot.changeControlMode(TalonControlMode.MotionMagic);
-					pivot.setProfile(Constants.PIVOT_TALON_SLOT_MAGIC);
+				if (pivotControlMode != TalonControlMode.Position){
+					pivot.changeControlMode(TalonControlMode.Position);
+					pivot.setProfile(Constants.PIVOT_TALON_SLOT_POSITION);
 				}
-				pivot.set(Constants.GEAR_PIVOT_GROUND_POS);
+				pivot.set(Constants.GEAR_PIVOT_INTAKE_POS);
 				setState(GearHandlerState.INTAKE);
 				break;
 			case INTAKE:
@@ -143,9 +143,9 @@ public class GearHandler extends Subsystem implements Log {
 				break;
 			case START_PIVOT_FOR_STOW:
 				gearRoller.set(0);
-				if (pivotControlMode != TalonControlMode.MotionMagic){
-					pivot.changeControlMode(TalonControlMode.MotionMagic);
-					pivot.setProfile(Constants.PIVOT_TALON_SLOT_MAGIC);
+				if (pivotControlMode != TalonControlMode.Position){
+					pivot.changeControlMode(TalonControlMode.Position);
+					pivot.setProfile(Constants.PIVOT_TALON_SLOT_POSITION);
 				}
 				pivot.set(Constants.GEAR_PIVOT_STOW_POS);
 				setState(GearHandlerState.STOW);
@@ -183,6 +183,10 @@ public class GearHandler extends Subsystem implements Log {
 		}
 	}
 
+	public void setEncoderPosition(double pos) {
+		pivot.setPosition(pos);
+	}
+	
 	public GearHandlerState getState(){
 		return gearHandlerState;
 	}
@@ -192,32 +196,11 @@ public class GearHandler extends Subsystem implements Log {
 	}
 	
 	public void setState(GearHandlerState wantedState){
-		switch (wantedState){
-			case MANUAL_CONTROL:
-				gearHandlerState = GearHandlerState.MANUAL_CONTROL;
-				break;
-			case START_PIVOT_FOR_INTAKE:
-				gearHandlerState = GearHandlerState.START_PIVOT_FOR_INTAKE;
-				break;
-			case INTAKE:
-				gearHandlerState = GearHandlerState.INTAKE;
-				break;
-			case START_PIVOT_FOR_STOW:
-				gearHandlerState = GearHandlerState.START_PIVOT_FOR_STOW;
-				break;
-			case STOW:
-				gearHandlerState = GearHandlerState.STOW;
-				break;
-			case START_PIVOT_FOR_DEPLOY:
-				gearHandlerState = GearHandlerState.START_PIVOT_FOR_DEPLOY;
-				break;
-			case EXHAUST:
-				gearHandlerState = GearHandlerState.EXHAUST;
-				break;
-			case STOPPED:
-				gearHandlerState = GearHandlerState.STOPPED;
-				break;
-		}
+		gearHandlerState = wantedState;
+	}
+	
+	public GearHandlerState getGearHandlerState() {
+		return gearHandlerState;
 	}
 	
 	public boolean hasGear(){
