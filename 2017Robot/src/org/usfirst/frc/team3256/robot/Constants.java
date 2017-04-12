@@ -67,6 +67,9 @@ public class Constants {
 	
 //------------------------------SOFTWARE CONSTANTS------------------------------
 
+	// LED Flash Flag
+	public static boolean FLASH_LEDS = false; //if this is false, we keep LEDs solid if we want them on, otherwise flash them
+	
 	//Preset Values
 	public static final double GROUND_INTAKE_POWER = 1;
 	public static final double SHOOT_BALLS_POWER = -1;

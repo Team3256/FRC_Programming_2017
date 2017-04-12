@@ -95,7 +95,7 @@ public class OI implements Log{
         	leftTrigger2.toggleWhenActive(new GroundIntakeBalls());
         	leftTrigger2.whenInactive(new StopRollers());
     	}
-    	buttonXB2.whenPressed(new ZeroGearHandler());
+    	//buttonXB2.whenPressed(new ZeroGearHandler());
     }
 
 	@Override

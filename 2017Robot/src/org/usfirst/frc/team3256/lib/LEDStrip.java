@@ -1,5 +1,6 @@
 package org.usfirst.frc.team3256.lib;
 
+import org.usfirst.frc.team3256.robot.Constants;
 import org.usfirst.frc.team3256.robot.subsystems.GearHandler;
 import org.usfirst.frc.team3256.robot.subsystems.GearHandler.GearHandlerState;
 
@@ -65,11 +66,12 @@ public class LEDStrip {
 		GearHandlerState gearHandlerState = GearHandler.getInstance().getGearHandlerState();
 		double timeDecimal = Timer.getFPGATimestamp() - (int) Timer.getFPGATimestamp(); //gets decimal portion of time stamp
 		boolean flashTime = timeDecimal < 0.25 || (timeDecimal >= 0.5 && timeDecimal < 0.75); //blinks led every quarter second
+		boolean flashOverride = true; //if you don't want it to flash
 		
 		this.blue.set(gearHandlerState != GearHandlerState.INTAKE && Timer.getFPGATimestamp() - lastPickupTime > 3);
-		this.red.set(gearHandlerState == GearHandlerState.INTAKE && flashTime);
+		this.red.set(gearHandlerState == GearHandlerState.INTAKE && (flashTime || !Constants.FLASH_LEDS));
 		if (gearHandlerState == GearHandlerState.START_PIVOT_FOR_STOW)
 			lastPickupTime = Timer.getFPGATimestamp();
-		this.green.set(Timer.getFPGATimestamp() - lastPickupTime <= 3 && flashTime);
+		this.green.set(Timer.getFPGATimestamp() - lastPickupTime <= 3 && (flashTime || !Constants.FLASH_LEDS));
 	}
 }
