@@ -97,7 +97,7 @@ public class GearHandler extends Subsystem implements Log {
 		pivot.set(outputValue);
 	}
 	
-	//uses magic profile
+	//uses position
 	public void update(){
 		if (pivot.isSensorPresent(FeedbackDevice.CtreMagEncoder_Relative) != FeedbackDeviceStatus.FeedbackStatusPresent){
 			gearHandlerState = GearHandlerState.MANUAL_CONTROL;
@@ -121,14 +121,18 @@ public class GearHandler extends Subsystem implements Log {
 				}
 				else pivot.set(0);
 				if (manualRollerInput > Constants.XBOX_DEADBAND_VALUE){
-					gearRoller.set(1);
+					gearRoller.set(Constants.GEAR_EXHAUST_POWER);
 				}
 				else if (manualRollerInput < -Constants.XBOX_DEADBAND_VALUE){
-					gearRoller.set(-1);
+					gearRoller.set(Constants.GEAR_INTAKE_POWER);
 				}
 				else gearRoller.set(0);
 				break;
 			case START_PIVOT_FOR_INTAKE:
+				if (hasGear()) {
+					setState(GearHandlerState.STOW);
+					break;
+				}
 				if (pivotControlMode != TalonControlMode.Position){
 					pivot.changeControlMode(TalonControlMode.Position);
 					pivot.setProfile(Constants.PIVOT_TALON_SLOT_POSITION);
@@ -137,7 +141,7 @@ public class GearHandler extends Subsystem implements Log {
 				setState(GearHandlerState.INTAKE);
 				break;
 			case INTAKE:
-				gearRoller.set(-1);
+				gearRoller.set(Constants.GEAR_INTAKE_POWER);
 				if (hasGear())
 					setState(GearHandlerState.START_PIVOT_FOR_STOW);
 				break;
@@ -166,7 +170,7 @@ public class GearHandler extends Subsystem implements Log {
 				break;
 			case EXHAUST:
 				if (pivot.getClosedLoopError()<3){
-					gearRoller.set(0.5);
+					gearRoller.set(Constants.GEAR_EXHAUST_POWER);
 				}
 				if (releasedGear()){
 					setState(GearHandlerState.START_PIVOT_FOR_STOW);

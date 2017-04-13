@@ -73,8 +73,13 @@ public class Constants {
 	//Preset Values
 	public static final double GROUND_INTAKE_POWER = 1;
 	public static final double SHOOT_BALLS_POWER = -1;
+	
 	public static final double WINCH_HANGER_POWER = 1.0;
 	public static final double WINCH_ATTACH_TO_VELCRO_POWER = 0.3;
+	
+	public static final double GEAR_INTAKE_POWER = -1.0;
+	public static final double GEAR_EXHAUST_POWER = 0.5;
+	
 	public static final double GEAR_PIVOT_STOW_POS = 25.0;
 	public static final double GEAR_PIVOT_INTAKE_POS = -23.5;
 	public static final double GEAR_PIVOT_GROUND_POS = -26.0;
