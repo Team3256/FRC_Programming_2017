@@ -66,9 +66,8 @@ public class Constants {
 	public static boolean useGearIntakeSubsystem;
 	
 //------------------------------SOFTWARE CONSTANTS------------------------------
-
-	// LED Flash Flag
-	public static boolean FLASH_LEDS = false; //if this is false, we keep LEDs solid if we want them on, otherwise flash them
+	//Cameras
+	public static final int NUM_CAMERAS = 2;
 	
 	//Preset Values
 	public static final double GROUND_INTAKE_POWER = 1;

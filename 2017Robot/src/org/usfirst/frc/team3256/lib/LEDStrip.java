@@ -1,6 +1,5 @@
 package org.usfirst.frc.team3256.lib;
 
-import org.usfirst.frc.team3256.robot.Constants;
 import org.usfirst.frc.team3256.robot.subsystems.GearHandler;
 import org.usfirst.frc.team3256.robot.subsystems.GearHandler.GearHandlerState;
 
@@ -61,14 +60,29 @@ public class LEDStrip {
 		blue.set(b);
 	}
 	
-	public void update() {
+	public void update(boolean flash) {
 		GearHandlerState gearHandlerState = GearHandler.getInstance().getGearHandlerState();
-		double timeDecimal = Timer.getFPGATimestamp() - (int) Timer.getFPGATimestamp(); //gets decimal portion of time stamp
-		boolean flashTime = timeDecimal < 0.25 || (timeDecimal >= 0.5 && timeDecimal < 0.75); //blinks led every quarter second
-		this.blue.set(gearHandlerState != GearHandlerState.INTAKE && Timer.getFPGATimestamp() - lastPickupTime > 3);
-		this.red.set(gearHandlerState == GearHandlerState.INTAKE && (flashTime || !Constants.FLASH_LEDS));
+		boolean hasGear = GearHandler.getInstance().hasGear();
+		
+		// Gets decimal portion of time
+		double timeDecimal = Timer.getFPGATimestamp() - (int) Timer.getFPGATimestamp();
+		// Blinks every quarter of a second, or if we want it solid
+		//either leave led as solid or blink every quarter second
+		//otherwise disable led
+		boolean enableLEDs = !flash || (timeDecimal < 0.25 || (timeDecimal >= 0.5 && timeDecimal < 0.75)); 
+		
+		// Blue = gear handler stowed
+		this.blue.set(gearHandlerState != GearHandlerState.INTAKE && (Timer.getFPGATimestamp() - lastPickupTime >= 3 || !hasGear));
+	
+		// Red = gear handler down, no gear collected
+		this.red.set(gearHandlerState == GearHandlerState.INTAKE && enableLEDs);
+
+		// If just detected gear (START_PIVOT_FOR_STOW state only occurs once immediately after gear is collected,
+		// goes to STOW state afterwards), then remember this point in time
 		if (gearHandlerState == GearHandlerState.START_PIVOT_FOR_STOW)
 			lastPickupTime = Timer.getFPGATimestamp();
-		this.green.set(Timer.getFPGATimestamp() - lastPickupTime <= 3 && (flashTime || !Constants.FLASH_LEDS));
+		
+		//enable green for 3 seconds after we pick up a gear
+		this.green.set((Timer.getFPGATimestamp() - lastPickupTime < 3 && hasGear) && enableLEDs);
 	}
 }

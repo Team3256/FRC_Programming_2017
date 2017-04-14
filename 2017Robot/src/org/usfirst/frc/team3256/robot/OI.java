@@ -14,12 +14,15 @@ import org.usfirst.frc.team3256.robot.commands.StopGearRoller;
 import org.usfirst.frc.team3256.robot.commands.RunHang;
 import org.usfirst.frc.team3256.robot.commands.ShootBalls;
 import org.usfirst.frc.team3256.robot.commands.StowGearHandler;
+import org.usfirst.frc.team3256.robot.subsystems.GearHandler;
 import org.usfirst.frc.team3256.robot.commands.StopHang;
 import org.usfirst.frc.team3256.robot.commands.StopRollers;
 import org.usfirst.frc.team3256.robot.triggers.DualButton;
 import org.usfirst.frc.team3256.robot.triggers.JoystickTrigger;
 
 import edu.wpi.first.wpilibj.GenericHID.Hand;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -35,6 +38,9 @@ public class OI implements Log{
 	public static XboxController driver = new XboxController(Constants.DRIVER_CONTROLLER);
 	public static XboxController manipulator = new XboxController(Constants.MANIPULATOR_CONTROLLER);
 	
+	boolean rumbling = false;
+	boolean hasGear = false;
+	double startRumblingTS;
 	//Controller 1
 	public static Button buttonA1 = new JoystickButton(driver, 1);
 	public static Button buttonB1 = new JoystickButton(driver, 2);
@@ -64,6 +70,7 @@ public class OI implements Log{
     				Run Hanger: Hold Left Bumper
     	*/
    
+    	
     	rightBumper1.toggleWhenActive(new RunHang());
     	rightBumper1.whenInactive(new StopHang());
     	leftBumper1.toggleWhenActive(new AttachVelcro());
@@ -95,7 +102,39 @@ public class OI implements Log{
         	leftTrigger2.whenInactive(new StopRollers());
     	}
     }
-
+    
+    public void update() {
+    	
+    	if (GearHandler.getInstance().hasGear()) {
+    		if (!hasGear) {
+    			hasGear = true;
+    			rumbling = true;
+    			startRumblingTS = Timer.getFPGATimestamp();
+    		}
+    		else {
+    			hasGear = false;
+    			rumbling = false;
+    		}
+    		
+			if (rumbling && Timer.getFPGATimestamp() - startRumblingTS > 1) 
+    			rumbling = false;
+		
+    		 if (rumbling){
+    			manipulator.setRumble(RumbleType.kLeftRumble, 1);
+    			manipulator.setRumble(RumbleType.kRightRumble, 1);
+    		}
+    		
+    		 else {
+    			 manipulator.setRumble(RumbleType.kLeftRumble, 0);
+    			 manipulator.setRumble(RumbleType.kRightRumble, 0);
+    		 }
+    	}
+    	else {
+    		 manipulator.setRumble(RumbleType.kLeftRumble, 0);
+			 manipulator.setRumble(RumbleType.kRightRumble, 0);
+    	}
+    }
+    
 	@Override
 	public void logToDashboard() {
 		SmartDashboard.putNumber("LEFT Y", driver.getY(Hand.kLeft));

@@ -216,10 +216,8 @@ public class DriveTrain extends Subsystem implements Log {
 	public void tankDrive(double left, double right, boolean wantsReverse){
 		if (Math.abs(left) < Constants.XBOX_DEADBAND_VALUE) left = 0;
 		if (Math.abs(right) < Constants.XBOX_DEADBAND_VALUE) right = 0;
-		if (left > 1) left = 1;
-		if (left < -1) left = -1;
-		if (right > 1) right = 1;
-		if (right < -1) right = -1;
+		left = Math.max(-1, Math.min(1, left));
+		right = Math.max(-1, Math.min(1, right));
 		if (wantsReverse){
 			left *= -1;
 			right *= -1;
@@ -239,10 +237,8 @@ public class DriveTrain extends Subsystem implements Log {
 		if (Math.abs(turn) < Constants.XBOX_DEADBAND_VALUE) turn = 0;
 		double left = throttle + turn;
 		double right = throttle - turn;
-		if (left > 1) left = 1;
-		if (left < -1) left = -1;
-		if (right > 1) right = 1;
-		if (right < -1) right = -1;
+		left = Math.max(-1, Math.min(1, left));
+		right = Math.max(-1, Math.min(1, right));
 		setLeftMotorPower(left);
 		setRightMotorPower(right);
 	}

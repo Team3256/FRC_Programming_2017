@@ -76,9 +76,9 @@ public class GearHandler extends Subsystem implements Log {
 		pivot.configPeakOutputVoltage(10, -10);
 		pivot.configNominalOutputVoltage(0, 0);
 		pivot.setForwardSoftLimit(Constants.GEAR_PIVOT_FORWARD_SOFT_LIMIT_POS); 
-		pivot.enableForwardSoftLimit(true);
+		pivot.enableForwardSoftLimit(false);
 		pivot.setReverseSoftLimit(Constants.GEAR_PIVOT_REVERSE_SOFT_LIMIT_POS);
-		pivot.enableReverseSoftLimit(true);
+		pivot.enableReverseSoftLimit(false);
 		pivot.setPID(Constants.KP_PIVOT_POSITION, Constants.KI_PIVOT_POSITION, Constants.KD_PIVOT_POSITION, Constants.KF_PIVOT_POSITION, 
 				Constants.IZONE_PIVOT_POSITION, Constants.CLOSED_LOOP_RAMP_RATE_PIVOT_POSITION, Constants.PIVOT_TALON_SLOT_POSITION);
 		pivot.setPID(Constants.KP_PIVOT_MAGIC, Constants.KI_PIVOT_MAGIC, Constants.KD_PIVOT_MAGIC, Constants.KF_PIVOT_MAGIC, 
@@ -89,14 +89,7 @@ public class GearHandler extends Subsystem implements Log {
 		gearBumperSwitch = new DigitalInput(Constants.GEAR_BUMPER_SWITCH);
 		gearHandlerState = GearHandlerState.STOPPED;
 	}
-	
-	public void setCAN(double outputValue) {
-		if (pivot.getControlMode()!= TalonControlMode.PercentVbus){
-			pivot.changeControlMode(TalonControlMode.PercentVbus);
-		}
-		pivot.set(outputValue);
-	}
-	
+
 	//uses position
 	public void update(){
 		if (pivot.isSensorPresent(FeedbackDevice.CtreMagEncoder_Relative) != FeedbackDeviceStatus.FeedbackStatusPresent){
@@ -215,16 +208,13 @@ public class GearHandler extends Subsystem implements Log {
 	public void initDefaultCommand() {
     	
     }
-
-	public void zeroEncoder(){
-		pivot.setPosition(Constants.GEAR_PIVOT_STOW_POS);
-	}
 	
 	@Override
 	public void logToDashboard() {
 		SmartDashboard.putString("Gear Intake State", "" + gearHandlerState);
 		SmartDashboard.putString("Gear Handler Pivot Control Mode", "" + pivotControlMode);
-		SmartDashboard.putBoolean("Has gear?",hasGear());
+		SmartDashboard.putNumber("Has gear?",!hasGear() ? 0 : 1);
+		SmartDashboard.putNumber("Pivot Position", pivot.getPosition());
 	}
 }
 

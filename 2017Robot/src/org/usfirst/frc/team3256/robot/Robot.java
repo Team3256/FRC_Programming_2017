@@ -55,6 +55,7 @@ public class Robot extends IterativeRobot {
 	GyroCalibrator gyroCalibrator;
 	SendableChooser<Command> autonomousChooser;
 	SendableChooser<Boolean> subsystemChooser;
+	SendableChooser<Boolean> flashLEDsChooser;
 	Command autonomousCommand;
 	double autoStartTime = 0;
 	double autoEndTime = 0;
@@ -85,9 +86,10 @@ public class Robot extends IterativeRobot {
 		logger.addLog(PDP.getInstance());
 		logger.start();
 		gyroCalibrator = new GyroCalibrator();
-		UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-		camera.setResolution(480, 360);
-		camera.setFPS(15);
+		for (int i = 0; i < Constants.NUM_CAMERAS; ++i) {
+			UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+			camera.setResolution(240, 180);
+		}
 		
 		autonomousChooser = new SendableChooser<>();
 		autonomousChooser.addDefault("Do Nothing Auto", new DoNothingAuto());
@@ -107,6 +109,10 @@ public class Robot extends IterativeRobot {
 		subsystemChooser.addDefault("GROUND GEAR INTAKE", true);
 		subsystemChooser.addObject("BALL SUBSYSTEM", false);
 		SmartDashboard.putData("Subsystem Chooser", subsystemChooser);
+		flashLEDsChooser = new SendableChooser<>();
+		flashLEDsChooser.addDefault("Solid LEDs", false); //false is equivalent to solid
+		flashLEDsChooser.addObject("Flashing LEDs", true); //true is equivalent to flashing
+		SmartDashboard.putData("Flashing LEDs Chooser", flashLEDsChooser);
 	}
 
 	
@@ -180,7 +186,8 @@ public class Robot extends IterativeRobot {
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
 		gearHandler.update();
-		led.update();
+		led.update(flashLEDsChooser.getSelected());
+		operatorInterface.update();
 	}
 
 	/**
