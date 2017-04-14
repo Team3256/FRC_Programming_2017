@@ -41,7 +41,7 @@ public class OI implements Log{
 	
 	boolean rumbling = false;
 	boolean hasGear = false;
-	double startRumblingTS;
+	double startRumblingTimeStamp;
 	//Controller 1
 	public static Button buttonA1 = new JoystickButton(driver, 1);
 	public static Button buttonB1 = new JoystickButton(driver, 2);
@@ -88,8 +88,6 @@ public class OI implements Log{
     	buttonA2.whenPressed(new HumanPlayerBallsIntake());
     	buttonX2.whileHeld(new HoldBackGearDeploy());
     	buttonX2.whenReleased(new CloseBackGear());
-		rightTrigger2.toggleWhenActive(new ShootBalls());
-    	rightTrigger2.whenInactive(new StopRollers());
     	if (Constants.useGearIntakeSubsystem){
     		leftBumper2.whenPressed(new StartIntakeGear());
     		leftBumper2.whenReleased(new StowGearHandler());
@@ -98,17 +96,22 @@ public class OI implements Log{
     		rightBumper2.whenActive(new ZeroGearHandler());
     	}
     	else{
+    		rightTrigger2.toggleWhenActive(new ShootBalls());
+        	rightTrigger2.whenInactive(new StopRollers());
         	leftTrigger2.toggleWhenActive(new GroundIntakeBalls());
         	leftTrigger2.whenInactive(new StopRollers());
     	}
     }
     
-    public void update() {
+    public void updateRumble() {
     	if (GearHandler.getInstance().hasGear()) {
+    		// If we detect a gear but the flag hasn't been set yet
+    		// (this is the first iteration of update() after picking up the gear),
     		if (!hasGear) {
+    			// Start rumbling the joysticks and set the hasGear flag to true
     			hasGear = true;
     			rumbling = true;
-    			startRumblingTS = Timer.getFPGATimestamp();
+    			startRumblingTimeStamp = Timer.getFPGATimestamp();
     		}
     	}
     	else {
@@ -116,7 +119,8 @@ public class OI implements Log{
     		rumbling = false;
     	}
     	
-    	if (Timer.getFPGATimestamp() - startRumblingTS > 1) 
+    	// Stop rumbling after two seconds
+    	if (Timer.getFPGATimestamp() - startRumblingTimeStamp > 2) 
 			rumbling = false;
 		
     	if (rumbling){

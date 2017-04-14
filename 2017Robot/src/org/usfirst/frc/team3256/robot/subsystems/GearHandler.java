@@ -51,7 +51,7 @@ public class GearHandler extends Subsystem implements Log {
 		START_PIVOT_FOR_DEPLOY,
 		//deploy the gear by exhausting the rollers
 		EXHAUST,
-		// Freeze the gear handler wherever it is (stop all motors)
+		// Freeze the gear handler wherever it is (stop all motors),
 		STOPPED;
 	}
 	

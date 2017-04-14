@@ -187,7 +187,7 @@ public class Robot extends IterativeRobot {
 		Scheduler.getInstance().run();
 		gearHandler.update();
 		led.update(flashLEDsChooser.getSelected());
-		operatorInterface.update();
+		operatorInterface.updateRumble();
 	}
 
 	/**

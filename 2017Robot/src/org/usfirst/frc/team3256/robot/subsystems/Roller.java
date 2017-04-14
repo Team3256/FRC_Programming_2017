@@ -77,6 +77,10 @@ public class Roller extends Subsystem implements Log{
 		}
 	}
 	
+	public VictorSP getInnerMotor() {
+		return innerMotor;
+	}
+	
 	public void initDefaultCommand() {
     	
     }
