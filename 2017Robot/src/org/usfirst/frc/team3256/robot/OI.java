@@ -14,6 +14,7 @@ import org.usfirst.frc.team3256.robot.commands.StopGearRoller;
 import org.usfirst.frc.team3256.robot.commands.RunHang;
 import org.usfirst.frc.team3256.robot.commands.ShootBalls;
 import org.usfirst.frc.team3256.robot.commands.StowGearHandler;
+import org.usfirst.frc.team3256.robot.commands.ZeroGearHandler;
 import org.usfirst.frc.team3256.robot.subsystems.GearHandler;
 import org.usfirst.frc.team3256.robot.commands.StopHang;
 import org.usfirst.frc.team3256.robot.commands.StopRollers;
@@ -94,8 +95,7 @@ public class OI implements Log{
     		leftBumper2.whenReleased(new StowGearHandler());
     		buttonB2.whenPressed(new DeployFrontGear());
     		buttonB2.whenReleased(new StowGearHandler());
-    		leftTrigger2.toggleWhenActive(new IntakeGearNoPivot());
-    		leftTrigger2.whenInactive(new StopGearRoller());
+    		rightBumper2.whenActive(new ZeroGearHandler());
     	}
     	else{
         	leftTrigger2.toggleWhenActive(new GroundIntakeBalls());
@@ -104,35 +104,41 @@ public class OI implements Log{
     }
     
     public void update() {
-    	
     	if (GearHandler.getInstance().hasGear()) {
     		if (!hasGear) {
     			hasGear = true;
     			rumbling = true;
     			startRumblingTS = Timer.getFPGATimestamp();
     		}
-    		else {
-    			hasGear = false;
-    			rumbling = false;
-    		}
-    		
-			if (rumbling && Timer.getFPGATimestamp() - startRumblingTS > 1) 
-    			rumbling = false;
-		
-    		 if (rumbling){
-    			manipulator.setRumble(RumbleType.kLeftRumble, 1);
-    			manipulator.setRumble(RumbleType.kRightRumble, 1);
-    		}
-    		
-    		 else {
-    			 manipulator.setRumble(RumbleType.kLeftRumble, 0);
-    			 manipulator.setRumble(RumbleType.kRightRumble, 0);
-    		 }
     	}
     	else {
-    		 manipulator.setRumble(RumbleType.kLeftRumble, 0);
-			 manipulator.setRumble(RumbleType.kRightRumble, 0);
+    		hasGear = false;
+    		rumbling = false;
     	}
+    	
+    	if (Timer.getFPGATimestamp() - startRumblingTS > 1) 
+			rumbling = false;
+		
+    	if (rumbling){
+			rumbleJoysticks();
+		}
+		else {
+			 stopRumblingJoysticks();
+		}
+    }
+    
+    private void rumbleJoysticks() {
+		manipulator.setRumble(RumbleType.kLeftRumble, 1);
+		manipulator.setRumble(RumbleType.kRightRumble, 1);
+		driver.setRumble(RumbleType.kLeftRumble, 1);
+		driver.setRumble(RumbleType.kRightRumble, 1);
+    }
+    
+    private void stopRumblingJoysticks() {
+    	manipulator.setRumble(RumbleType.kLeftRumble, 0);
+		manipulator.setRumble(RumbleType.kRightRumble, 0);
+		driver.setRumble(RumbleType.kLeftRumble, 0);
+		driver.setRumble(RumbleType.kRightRumble, 0);
     }
     
 	@Override

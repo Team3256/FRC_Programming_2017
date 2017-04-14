@@ -107,16 +107,16 @@ public class GearHandler extends Subsystem implements Log {
 					pivot.changeControlMode(TalonControlMode.PercentVbus);
 				}
 				if (manualPivotInput > Constants.XBOX_DEADBAND_VALUE){
-					pivot.set(0.5);
+					pivot.set(0.25);
 				}
 				else if (manualPivotInput < -Constants.XBOX_DEADBAND_VALUE){
-					pivot.set(-0.5);
+					pivot.set(-0.25);
 				}
 				else pivot.set(0);
-				if (manualRollerInput > Constants.XBOX_DEADBAND_VALUE){
+				if (manualRollerInput < -Constants.XBOX_DEADBAND_VALUE){
 					gearRoller.set(Constants.GEAR_EXHAUST_POWER);
 				}
-				else if (manualRollerInput < -Constants.XBOX_DEADBAND_VALUE){
+				else if (manualRollerInput > Constants.XBOX_DEADBAND_VALUE){
 					gearRoller.set(Constants.GEAR_INTAKE_POWER);
 				}
 				else gearRoller.set(0);
