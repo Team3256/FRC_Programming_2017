@@ -77,7 +77,7 @@ public class GearHandler extends Subsystem implements Log {
 		else encoderDetected = true;
 		pivot.reverseOutput(true);
 		pivot.reverseSensor(true);
-		pivot.setAllowableClosedLoopErr(3);
+		pivot.setAllowableClosedLoopErr(5);
 		pivot.configPeakOutputVoltage(10, -10);
 		pivot.configNominalOutputVoltage(0, 0);
 		pivot.setForwardSoftLimit(Constants.GEAR_PIVOT_FORWARD_SOFT_LIMIT_POS); 

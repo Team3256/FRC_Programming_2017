@@ -25,7 +25,6 @@ import org.usfirst.frc.team3256.robot.subsystems.GearHandler.GearHandlerState;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
@@ -56,6 +55,7 @@ public class Robot extends IterativeRobot {
 	SendableChooser<Command> autonomousChooser;
 	SendableChooser<Boolean> subsystemChooser;
 	SendableChooser<Boolean> flashLEDsChooser;
+	UsbCamera camera0, camera1;
 	Command autonomousCommand;
 	double autoStartTime = 0;
 	double autoEndTime = 0;
@@ -75,7 +75,7 @@ public class Robot extends IterativeRobot {
 		manipulator = Manipulator.getInstance();
 		hanger = Hanger.getInstance();
 		gearHandler = GearHandler.getInstance();
-		gearHandler.setEncoderPosition(Constants.GEAR_PIVOT_GROUND_POS);
+		gearHandler.setEncoderPosition(Constants.GEAR_PIVOT_CALIBRATE_POS);
 		compressor = new Compressor(0);
 		compressor.setClosedLoopControl(true);
 		logger = new Logger();
@@ -86,11 +86,12 @@ public class Robot extends IterativeRobot {
 		logger.addLog(PDP.getInstance());
 		logger.start();
 		gyroCalibrator = new GyroCalibrator();
-		for (int i = 0; i < Constants.NUM_CAMERAS; ++i) {
-			UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-			camera.setResolution(240, 180);
-		}
-		
+		camera0 = CameraServer.getInstance().startAutomaticCapture();
+		camera0.setResolution(240, 180);
+		camera0.setExposureManual(75);
+		camera1 = CameraServer.getInstance().startAutomaticCapture();
+		camera1.setResolution(240, 180);
+		camera1.setExposureManual(75);
 		autonomousChooser = new SendableChooser<>();
 		autonomousChooser.addDefault("Do Nothing Auto", new DoNothingAuto());
 		autonomousChooser.addObject("Cross Baseline Only", new BaselineCross());

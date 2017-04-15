@@ -4,6 +4,7 @@ import org.usfirst.frc.team3256.lib.DelayedCommand;
 import org.usfirst.frc.team3256.robot.commands.DeployBackGear;
 import org.usfirst.frc.team3256.robot.commands.DriveToDistance;
 import org.usfirst.frc.team3256.robot.commands.PIDTurn;
+import org.usfirst.frc.team3256.robot.commands.ShiftCommand;
 import org.usfirst.frc.team3256.robot.commands.NoGearHandlerShootBalls;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
@@ -16,6 +17,8 @@ public class GearLeftAuto extends CommandGroup {
 
     public GearLeftAuto(boolean boiler) {
     	addSequential(new DriveToDistance(67, false)); //initial drive forward
+		addSequential(new WaitCommand(0.5));
+		addSequential(new ShiftCommand(false));
 		addSequential(new WaitCommand(0.5));
 		addSequential(new PIDTurn(60, true)); //turn towards gear
 		addSequential(new WaitCommand(0.5));

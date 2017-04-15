@@ -13,6 +13,6 @@ public class ZeroGearHandler extends InstantCommand {
 	}
 	
 	protected void initialize() {
-		gearHandler.setEncoderPosition(Constants.GEAR_PIVOT_GROUND_POS);
+		gearHandler.setEncoderPosition(Constants.GEAR_PIVOT_CALIBRATE_POS);
 	}
 }

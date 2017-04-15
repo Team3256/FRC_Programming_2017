@@ -68,7 +68,7 @@ public class Constants {
 //------------------------------SOFTWARE CONSTANTS------------------------------
 	// Miscellaneous
 	public static final int NUM_CAMERAS = 2;
-	public static final int RUMBLE_TIME = 2; // seconds
+	public static final double RUMBLE_TIME = 0.5; // seconds
 	
 	//Preset Values
 	public static final double GROUND_INTAKE_POWER = 1;
@@ -80,9 +80,9 @@ public class Constants {
 	public static final double GEAR_INTAKE_POWER = -1.0;
 	public static final double GEAR_EXHAUST_POWER = 0.5;
 	
-	public static final double GEAR_PIVOT_STOW_POS = 25.0;
+	public static final double GEAR_PIVOT_STOW_POS = 24.0;
 	public static final double GEAR_PIVOT_INTAKE_POS = -23.5;
-	public static final double GEAR_PIVOT_GROUND_POS = -26.0;
+	public static final double GEAR_PIVOT_CALIBRATE_POS = -24;
 	public static final double GEAR_PIVOT_DEPLOY_POS = 0.0;
 	public static final double GEAR_PIVOT_RELEASE_BALL_POS = -15;
 	public static final double GEAR_PIVOT_FORWARD_SOFT_LIMIT_POS = 27.0;
