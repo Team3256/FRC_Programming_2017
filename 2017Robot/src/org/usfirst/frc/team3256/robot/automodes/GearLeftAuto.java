@@ -4,7 +4,7 @@ import org.usfirst.frc.team3256.lib.DelayedCommand;
 import org.usfirst.frc.team3256.robot.commands.DeployBackGear;
 import org.usfirst.frc.team3256.robot.commands.DriveToDistance;
 import org.usfirst.frc.team3256.robot.commands.PIDTurn;
-import org.usfirst.frc.team3256.robot.commands.ShootBalls;
+import org.usfirst.frc.team3256.robot.commands.NoGearHandlerShootBalls;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.WaitCommand;
@@ -25,7 +25,7 @@ public class GearLeftAuto extends CommandGroup {
 		if (boiler) {
 			addSequential(new PIDTurn(25, false)); //turn towards boiler
 			addSequential(new DriveToDistance(70, true)); //drive to boiler
-			addSequential(new ShootBalls()); //shoot balls into boiler
+			addSequential(new NoGearHandlerShootBalls()); //shoot balls into boiler
 		}
     }
 }

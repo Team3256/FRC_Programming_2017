@@ -19,7 +19,7 @@ public class IntakeGearNoPivot extends InstantCommand {
 
     // Called once when the command executes
     protected void initialize() {
-    	gearHandler.setState(GearHandlerState.INTAKE);
+    	gearHandler.setState(GearHandlerState.GEAR_INTAKE);
     }
 
 }

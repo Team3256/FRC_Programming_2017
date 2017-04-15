@@ -34,15 +34,16 @@ public class GearHandler extends Subsystem implements Log {
 	private double manualPivotInput = 0.0;
 	private double manualRollerInput = 0.0;
 	private boolean currentlyDeploying = false;
+	private boolean encoderDetected;
 	private TalonControlMode pivotControlMode;
 	
 	public enum GearHandlerState{
 		//manually updating the up/down pivot motion with a joystick axis
 		MANUAL_CONTROL,
 		//start pivoting the intake downwards
-		START_PIVOT_FOR_INTAKE,
+		START_PIVOT_FOR_GEAR_INTAKE,
 		//run intake to intake gear
-		INTAKE,
+		GEAR_INTAKE,
 		//start pivoting the intake upwards to fit in the robot
 		START_PIVOT_FOR_STOW,
 		//automatically bring up gear handler vertical to stow inside the robot and stop running the intake
@@ -50,7 +51,9 @@ public class GearHandler extends Subsystem implements Log {
 		//automatically bring down the gear handler to a set position to deploy the gear
 		START_PIVOT_FOR_DEPLOY,
 		//deploy the gear by exhausting the rollers
-		EXHAUST,
+		GEAR_EXHAUST,
+		//automatically bring down gear handler so we can start releasing balls
+		START_PIVOT_FOR_BALL_CONTROl,
 		// Freeze the gear handler wherever it is (stop all motors),
 		STOPPED;
 	}
@@ -69,7 +72,9 @@ public class GearHandler extends Subsystem implements Log {
 		pivot.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
 		if (pivot.isSensorPresent(FeedbackDevice.CtreMagEncoder_Relative) != FeedbackDeviceStatus.FeedbackStatusPresent){
 			DriverStation.reportError("GEAR PIVOT ENCODER NOT DETECTED\n\n\n\n\n", false);
+			encoderDetected = false;
 		}
+		else encoderDetected = true;
 		pivot.reverseOutput(true);
 		pivot.reverseSensor(true);
 		pivot.setAllowableClosedLoopErr(3);
@@ -94,6 +99,10 @@ public class GearHandler extends Subsystem implements Log {
 	public void update(){
 		if (pivot.isSensorPresent(FeedbackDevice.CtreMagEncoder_Relative) != FeedbackDeviceStatus.FeedbackStatusPresent){
 			gearHandlerState = GearHandlerState.MANUAL_CONTROL;
+			encoderDetected = false;
+		}
+		else {
+			encoderDetected = true;
 		}
 		manualPivotInput = OI.manipulator.getY(Hand.kLeft);
 		manualRollerInput = OI.manipulator.getY(Hand.kRight);
@@ -121,7 +130,7 @@ public class GearHandler extends Subsystem implements Log {
 				}
 				else gearRoller.set(0);
 				break;
-			case START_PIVOT_FOR_INTAKE:
+			case START_PIVOT_FOR_GEAR_INTAKE:
 				if (hasGear()) {
 					setState(GearHandlerState.STOW);
 					break;
@@ -131,9 +140,9 @@ public class GearHandler extends Subsystem implements Log {
 					pivot.setProfile(Constants.PIVOT_TALON_SLOT_POSITION);
 				}
 				pivot.set(Constants.GEAR_PIVOT_INTAKE_POS);
-				setState(GearHandlerState.INTAKE);
+				setState(GearHandlerState.GEAR_INTAKE);
 				break;
-			case INTAKE:
+			case GEAR_INTAKE:
 				gearRoller.set(Constants.GEAR_INTAKE_POWER);
 				if (hasGear())
 					setState(GearHandlerState.START_PIVOT_FOR_STOW);
@@ -159,16 +168,22 @@ public class GearHandler extends Subsystem implements Log {
 				startDeployTime = Timer.getFPGATimestamp();
 				currentlyDeploying = true;
 				pivot.set(Constants.GEAR_PIVOT_DEPLOY_POS);
-				setState(GearHandlerState.EXHAUST);
+				setState(GearHandlerState.GEAR_EXHAUST);
 				break;
-			case EXHAUST:
-				if (pivot.getClosedLoopError()<3){
-					gearRoller.set(Constants.GEAR_EXHAUST_POWER);
-				}
+			case GEAR_EXHAUST:
 				if (releasedGear()){
 					setState(GearHandlerState.START_PIVOT_FOR_STOW);
 					currentlyDeploying = false;
 				}
+				gearRoller.set(Constants.GEAR_EXHAUST_POWER);
+				break;
+			case START_PIVOT_FOR_BALL_CONTROl:
+				if (pivot.getControlMode()!=TalonControlMode.Position){
+					pivot.changeControlMode(TalonControlMode.Position);
+					pivot.setProfile(Constants.PIVOT_TALON_SLOT_POSITION);
+				}
+				pivot.set(Constants.GEAR_PIVOT_RELEASE_BALL_POS);
+				gearRoller.set(0);
 				break;
 			case STOPPED:
 				gearRoller.set(0);
@@ -198,6 +213,10 @@ public class GearHandler extends Subsystem implements Log {
 	
 	public GearHandlerState getGearHandlerState() {
 		return gearHandlerState;
+	}
+	
+	public boolean hasEncoder(){
+		return encoderDetected;
 	}
 	
 	public boolean hasGear(){

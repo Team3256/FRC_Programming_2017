@@ -8,12 +8,12 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class GroundIntakeBalls extends Command {
+public class NoGearHandlerGroundIntakeBalls extends Command {
 
 	Roller roller = Roller.getInstance();
 	
 	//TESTED ON HARDWARE
-    public GroundIntakeBalls() {
+    public NoGearHandlerGroundIntakeBalls() {
         requires(roller);
     }
 

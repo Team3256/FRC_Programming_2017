@@ -64,25 +64,88 @@ public class LEDStrip {
 		GearHandlerState gearHandlerState = GearHandler.getInstance().getGearHandlerState();
 		boolean hasGear = GearHandler.getInstance().hasGear();
 		
+		if (gearHandlerState == GearHandlerState.START_PIVOT_FOR_STOW) {
+			lastPickupTime = Timer.getFPGATimestamp();
+		}
+		
 		// Gets decimal portion of time
 		double timeDecimal = Timer.getFPGATimestamp() - (int) Timer.getFPGATimestamp();
-		// Blinks every quarter of a second, or if we want it solid
-		//either leave led as solid or blink every quarter second
-		//otherwise disable led
-		boolean enableLEDs = !flash || (timeDecimal < 0.25 || (timeDecimal >= 0.5 && timeDecimal < 0.75)); 
+		
+		// If the flash 
+		boolean flashTime = timeDecimal < 0.25 || (timeDecimal >= 0.5 && timeDecimal < 0.75);
+		boolean enableLEDs = !flash || flashTime; 
+		
+		if (gearHandlerState == GearHandlerState.START_PIVOT_FOR_STOW) {
+			lastPickupTime = Timer.getFPGATimestamp();
+		}
+		
+		// These conditionals are expanded into if/else statements rather than boolean algebra
+		// for clarity
+		// Convert them back into boolean algebra at your own risk :)
+
+		// The encoder case overrides the rest of the cases
+		if (!GearHandler.getInstance().hasEncoder()) {
+			if (flashTime) {
+				this.blue.set(true);
+				this.red.set(true);
+			}
+			else {
+				this.blue.set(false);
+				this.red.set(false);
+			}
+			return;
+		}
+		
+		// First make sure if it is even possible for us to turn on LEDs
+		// according to our rules for when the LEDs should be turned on
+		if (enableLEDs) {
+			
+			// Blue
+			if (gearHandlerState != GearHandlerState.GEAR_INTAKE) {
+				if (Timer.getFPGATimestamp() - lastPickupTime >= 3 || !hasGear) {
+					this.blue.set(true);
+				}
+				else {
+					this.blue.set(false);
+				}
+			}
+			else {
+				this.blue.set(false);
+			}
+			
+			// Red
+			if (gearHandlerState == GearHandlerState.GEAR_INTAKE) {
+				this.red.set(true);
+			}
+			else {
+				this.red.set(false);
+			}
+			
+			// Green
+			if (hasGear) {
+				if (Timer.getFPGATimestamp() - lastPickupTime < 3) {
+					this.green.set(true);
+				}
+				else {
+					this.green.set(false);
+				}
+			}
+			else {
+				this.green.set(false);
+			}
+		}
+		
 		
 		// Blue = gear handler stowed
-		this.blue.set(gearHandlerState != GearHandlerState.INTAKE && (Timer.getFPGATimestamp() - lastPickupTime >= 3 || !hasGear));
+		//this.blue.set((gearHandlerState != GearHandlerState.GEAR_INTAKE && (Timer.getFPGATimestamp() - lastPickupTime >= 3 || !hasGear) || (GearHandler.getInstance().hasEncoder() && enableLEDs)));
 	
 		// Red = gear handler down, no gear collected
-		this.red.set(gearHandlerState == GearHandlerState.INTAKE && enableLEDs);
+		//this.red.set(gearHandlerState == GearHandlerState.GEAR_INTAKE && enableLEDs);
 
 		// If just detected gear (START_PIVOT_FOR_STOW state only occurs once immediately after gear is collected,
 		// goes to STOW state afterwards), then remember this point in time
-		if (gearHandlerState == GearHandlerState.START_PIVOT_FOR_STOW)
-			lastPickupTime = Timer.getFPGATimestamp();
 		
 		//enable green for 3 seconds after we pick up a gear
-		this.green.set((Timer.getFPGATimestamp() - lastPickupTime < 3 && hasGear) && enableLEDs);
+		//this.green.set((Timer.getFPGATimestamp() - lastPickupTime < 3 && hasGear) && enableLEDs);
 	}
 }

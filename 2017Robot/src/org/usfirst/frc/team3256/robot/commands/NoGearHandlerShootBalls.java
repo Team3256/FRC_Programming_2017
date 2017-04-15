@@ -8,14 +8,13 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class ShootBalls extends Command {
+public class NoGearHandlerShootBalls extends Command {
 
 	Roller roller = Roller.getInstance();
 	
 	//TESTED ON HARDWARE
-    public ShootBalls() {
+    public NoGearHandlerShootBalls() {
         requires(roller);
-        setTimeout(3);
     }
 
     // Called just before this Command runs the first time

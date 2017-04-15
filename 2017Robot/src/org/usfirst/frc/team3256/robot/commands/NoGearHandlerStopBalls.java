@@ -8,11 +8,11 @@ import edu.wpi.first.wpilibj.command.InstantCommand;
 /**
  *
  */
-public class StopRollers extends InstantCommand {
+public class NoGearHandlerStopBalls extends InstantCommand {
 
 	Roller roller = Roller.getInstance();
 	
-    public StopRollers() {
+    public NoGearHandlerStopBalls() {
         super();
         requires(roller);
     }

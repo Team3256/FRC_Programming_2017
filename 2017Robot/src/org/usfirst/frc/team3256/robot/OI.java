@@ -4,20 +4,21 @@ import org.usfirst.frc.team3256.lib.Log;
 import org.usfirst.frc.team3256.robot.commands.AttachVelcro;
 import org.usfirst.frc.team3256.robot.commands.CloseBackGear;
 import org.usfirst.frc.team3256.robot.commands.DeployFrontGear;
-import org.usfirst.frc.team3256.robot.commands.GroundIntakeBalls;
+import org.usfirst.frc.team3256.robot.commands.NoGearHandlerGroundIntakeBalls;
 import org.usfirst.frc.team3256.robot.commands.HoldBackGearDeploy;
 import org.usfirst.frc.team3256.robot.commands.HumanPlayerBallsIntake;
 import org.usfirst.frc.team3256.robot.commands.HumanPlayerGearIntake;
-import org.usfirst.frc.team3256.robot.commands.IntakeGearNoPivot;
+import org.usfirst.frc.team3256.robot.commands.GearHandlerIntakeBalls;
+import org.usfirst.frc.team3256.robot.commands.GearHandlerShootBalls;
+import org.usfirst.frc.team3256.robot.commands.GearHandlerStopBalls;
 import org.usfirst.frc.team3256.robot.commands.StartIntakeGear;
-import org.usfirst.frc.team3256.robot.commands.StopGearRoller;
 import org.usfirst.frc.team3256.robot.commands.RunHang;
-import org.usfirst.frc.team3256.robot.commands.ShootBalls;
+import org.usfirst.frc.team3256.robot.commands.NoGearHandlerShootBalls;
 import org.usfirst.frc.team3256.robot.commands.StowGearHandler;
 import org.usfirst.frc.team3256.robot.commands.ZeroGearHandler;
 import org.usfirst.frc.team3256.robot.subsystems.GearHandler;
 import org.usfirst.frc.team3256.robot.commands.StopHang;
-import org.usfirst.frc.team3256.robot.commands.StopRollers;
+import org.usfirst.frc.team3256.robot.commands.NoGearHandlerStopBalls;
 import org.usfirst.frc.team3256.robot.triggers.DualButton;
 import org.usfirst.frc.team3256.robot.triggers.JoystickTrigger;
 
@@ -94,16 +95,20 @@ public class OI implements Log{
     		buttonB2.whenPressed(new DeployFrontGear());
     		buttonB2.whenReleased(new StowGearHandler());
     		rightBumper2.whenActive(new ZeroGearHandler());
+    		rightTrigger2.toggleWhenActive(new GearHandlerShootBalls());
+    		rightTrigger2.whenInactive(new GearHandlerStopBalls());
+    		leftTrigger2.toggleWhenActive(new GearHandlerIntakeBalls());
+    		leftTrigger2.whenInactive(new GearHandlerStopBalls());
     	}
     	else{
-    		rightTrigger2.toggleWhenActive(new ShootBalls());
-        	rightTrigger2.whenInactive(new StopRollers());
-        	leftTrigger2.toggleWhenActive(new GroundIntakeBalls());
-        	leftTrigger2.whenInactive(new StopRollers());
+    		rightTrigger2.toggleWhenActive(new NoGearHandlerShootBalls());
+        	rightTrigger2.whenInactive(new NoGearHandlerStopBalls());
+        	leftTrigger2.toggleWhenActive(new NoGearHandlerGroundIntakeBalls());
+        	leftTrigger2.whenInactive(new NoGearHandlerStopBalls());
     	}
     }
     
-    public void updateRumble() {
+    public void update() {
     	if (GearHandler.getInstance().hasGear()) {
     		// If we detect a gear but the flag hasn't been set yet
     		// (this is the first iteration of update() after picking up the gear),
@@ -120,9 +125,16 @@ public class OI implements Log{
     	}
     	
     	// Stop rumbling after two seconds
-    	if (Timer.getFPGATimestamp() - startRumblingTimeStamp > 2) 
+    	if (Timer.getFPGATimestamp() - startRumblingTimeStamp > Constants.RUMBLE_TIME) 
 			rumbling = false;
 		
+    	// Rumble if the B button (deploy gear) is pressed
+    	// This should run regardless of any of the previous conditions, which is why
+    	// it is here at the very bottom
+    	if (manipulator.getBButton()) {
+    		rumbling = true;
+    	}
+    	
     	if (rumbling){
 			rumbleJoysticks();
 		}
