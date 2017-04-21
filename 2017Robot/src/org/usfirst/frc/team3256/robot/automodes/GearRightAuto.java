@@ -13,11 +13,8 @@ import edu.wpi.first.wpilibj.command.WaitCommand;
 public class GearRightAuto extends CommandGroup {
 	public GearRightAuto(boolean boiler) {
 		addSequential(new DriveToDistance(67, false)); //initial drive forward
-		addSequential(new WaitCommand(0.5));
 		addSequential(new ShiftCommand(false));
-		addSequential(new WaitCommand(0.5));
 		addSequential(new PIDTurn(60, false)); //turn towards gear
-		addSequential(new WaitCommand(0.5));
 		addSequential(new DriveToDistance(65, false)); //drive towards gear
 		addParallel(new DeployBackGear());
 		addSequential(new DelayedCommand(1, new DriveToDistance(20, true))); //drive backwards

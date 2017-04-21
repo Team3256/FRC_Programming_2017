@@ -59,7 +59,7 @@ public class PIDTurn extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return (pid.isFinished() && Math.abs(setpoint-drive.getAngle()) <= 1 && Timer.getFPGATimestamp()-startTime > 1) || Timer.getFPGATimestamp()-startTime > 2.5;
+        return (pid.isFinished() && Math.abs(setpoint-drive.getAngle()) <= 1 && Timer.getFPGATimestamp()-startTime > 1) || Timer.getFPGATimestamp()-startTime > 3.5;
     }
 
     /**

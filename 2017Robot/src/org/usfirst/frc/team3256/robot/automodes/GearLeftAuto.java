@@ -17,11 +17,8 @@ public class GearLeftAuto extends CommandGroup {
 
     public GearLeftAuto(boolean boiler) {
     	addSequential(new DriveToDistance(67, false)); //initial drive forward
-		addSequential(new WaitCommand(0.5));
 		addSequential(new ShiftCommand(false));
-		addSequential(new WaitCommand(0.5));
 		addSequential(new PIDTurn(60, true)); //turn towards gear
-		addSequential(new WaitCommand(0.5));
 		addSequential(new DriveToDistance(65, false)); //drive towards gear
 		addParallel(new DeployBackGear());
 		addSequential(new DelayedCommand(1, new DriveToDistance(20, true))); //drive backwards to boiler

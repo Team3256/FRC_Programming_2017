@@ -88,10 +88,10 @@ public class Robot extends IterativeRobot {
 		gyroCalibrator = new GyroCalibrator();
 		camera0 = CameraServer.getInstance().startAutomaticCapture();
 		camera0.setResolution(240, 180);
-		camera0.setExposureManual(75);
+		camera0.setExposureManual(100);
 		camera1 = CameraServer.getInstance().startAutomaticCapture();
 		camera1.setResolution(240, 180);
-		camera1.setExposureManual(75);
+		camera1.setExposureManual(100);
 		autonomousChooser = new SendableChooser<>();
 		autonomousChooser.addDefault("Do Nothing Auto", new DoNothingAuto());
 		autonomousChooser.addObject("Cross Baseline Only", new BaselineCross());
@@ -114,6 +114,7 @@ public class Robot extends IterativeRobot {
 		flashLEDsChooser.addDefault("Solid LEDs", false); //false is equivalent to solid
 		flashLEDsChooser.addObject("Flashing LEDs", true); //true is equivalent to flashing
 		SmartDashboard.putData("Flashing LEDs Chooser", flashLEDsChooser);
+		operatorInterface = new OI();
 	}
 
 	
@@ -169,12 +170,12 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void teleopInit() {
-		gearHandler.setState(GearHandlerState.MANUAL_CONTROL);
+		gearHandler.setState(GearHandlerState.STOPPED);
 		Constants.useGearIntakeSubsystem = subsystemChooser.getSelected();
-		operatorInterface = new OI();
+		//operatorInterface = new OI();
 		gyroCalibrator.stop();
-		driveTrain.resetEncoders();
-		driveTrain.resetGyro();
+		//driveTrain.resetEncoders();
+		//driveTrain.resetGyro();
 		driveTrain.shiftUp(true);
 		manipulator.setHumanLoadingState(HumanPlayerLoadingState.GEAR_INTAKE);
 		hanger.setHangerState(HangerState.WINCH_STOP);
