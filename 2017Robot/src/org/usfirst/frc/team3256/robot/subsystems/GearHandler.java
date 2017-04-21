@@ -160,7 +160,6 @@ public class GearHandler extends Subsystem implements Log {
 				break;
 			case STOW:
 				gearRoller.set(0);
-				currentlyDeploying = false;
 				break;
 			case START_PIVOT_FOR_DEPLOY:
 				if (pivotControlMode != TalonControlMode.Position){
@@ -174,17 +173,19 @@ public class GearHandler extends Subsystem implements Log {
 				break;
 			case GEAR_EXHAUST:
 				if (releasedGear()){
-					setState(GearHandlerState.START_PIVOT_FOR_STOW);
+					setState(GearHandlerState.START_PIVOT_FOR_STOW_LOW);
 					currentlyDeploying = false;
 				}
 				gearRoller.set(Constants.GEAR_EXHAUST_POWER);
 				break;
-			case START_PIVOT_FOR_STOW_LOW:
+			case START_PIVOT_FOR_STOW_LOW:				
+				gearRoller.set(0);
 				if (pivotControlMode != TalonControlMode.Position){
 					pivot.changeControlMode(TalonControlMode.Position);
 					pivot.setProfile(Constants.PIVOT_TALON_SLOT_POSITION);
 				}
 				pivot.set(Constants.GEAR_PIVOT_STOW_LOW_POS);
+				setState(GearHandlerState.STOW_LOW);
 				break;
 			case STOW_LOW:
 				gearRoller.set(0);

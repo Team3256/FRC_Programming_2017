@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class GearHandlerStopBalls extends CommandGroup {
 
     public GearHandlerStopBalls() {
-        addParallel(new StowGearHandler());
+        addParallel(new StowLowGearHandler());
         addSequential(new NoGearHandlerStopBalls());
     }
 }
