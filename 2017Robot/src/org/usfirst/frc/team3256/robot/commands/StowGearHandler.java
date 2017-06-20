@@ -19,7 +19,7 @@ public class StowGearHandler extends InstantCommand {
 
     // Called once when the command executes
     protected void initialize() {
-    	gearHandler.setState(GearHandlerState.START_PIVOT_FOR_STOW);
+    	gearHandler.setState(GearHandlerState.START_PIVOT_FOR_STOW_WITH_GEAR);
     }
 
 }

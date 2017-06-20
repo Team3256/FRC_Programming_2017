@@ -13,11 +13,9 @@ public class HopperAutoBlue extends CommandGroup {
 	public HopperAutoBlue() {
 		addSequential(new DriveToDistance(50, false)); //initial drive forward
 		addSequential(new WaitCommand(0.5));
-		addSequential(new PIDTurn(90, false, false)); //turn towards hopper
+		addSequential(new PIDTurn(90, false)); //turn towards hopper
 		addSequential(new HumanPlayerBallsIntake()); //set the robot to collect balls from the hopper
 		addSequential(new WaitCommand(0.5));
 		addSequential(new DriveToDistance(30, true)); //trigger hopper
-		addSequential(new WaitCommand(0.5));
-		addSequential(new PIDTurn(90, true, true)); //one wheel turn to face boiler
 	}
 }

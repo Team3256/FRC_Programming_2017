@@ -45,15 +45,13 @@ public class GearHandler extends Subsystem implements Log {
 		//run intake to intake gear
 		GEAR_INTAKE,
 		//start pivoting the intake upwards to fit in the robot
-		START_PIVOT_FOR_STOW,
+		START_PIVOT_FOR_STOW_WITH_GEAR,
 		//automatically bring up gear handler vertical to stow inside the robot and stop running the intake
-		STOW,
+		STOW_WITH_GEAR,
 		//automatically bring down the gear handler to a set position to deploy the gear
 		START_PIVOT_FOR_DEPLOY,
 		//deploy the gear by exhausting the rollers
 		GEAR_EXHAUST,
-		START_PIVOT_FOR_STOW_LOW,
-		STOW_LOW,
 		//automatically bring down gear handler so we can start releasing balls
 		START_PIVOT_FOR_BALL_CONTROl,
 		// Freeze the gear handler wherever it is (stop all motors),
@@ -134,7 +132,7 @@ public class GearHandler extends Subsystem implements Log {
 				break;
 			case START_PIVOT_FOR_GEAR_INTAKE:
 				if (hasGear()) {
-					setState(GearHandlerState.STOW);
+					setState(GearHandlerState.STOW_WITH_GEAR);
 					break;
 				}
 				if (pivotControlMode != TalonControlMode.Position){
@@ -147,19 +145,21 @@ public class GearHandler extends Subsystem implements Log {
 			case GEAR_INTAKE:
 				gearRoller.set(Constants.GEAR_INTAKE_POWER);
 				if (hasGear())
-					setState(GearHandlerState.START_PIVOT_FOR_STOW);
+					setState(GearHandlerState.START_PIVOT_FOR_STOW_WITH_GEAR);
+				//else setState(GearHandlerState.START_PIVOT_FOR_STOW_WITHOUT_GEAR);
 				break;
-			case START_PIVOT_FOR_STOW:
+			case START_PIVOT_FOR_STOW_WITH_GEAR:
 				gearRoller.set(0);
 				if (pivotControlMode != TalonControlMode.Position){
 					pivot.changeControlMode(TalonControlMode.Position);
 					pivot.setProfile(Constants.PIVOT_TALON_SLOT_POSITION);
 				}
 				pivot.set(Constants.GEAR_PIVOT_STOW_POS);
-				setState(GearHandlerState.STOW);
+				setState(GearHandlerState.STOW_WITH_GEAR);
 				break;
-			case STOW:
+			case STOW_WITH_GEAR:
 				gearRoller.set(0);
+				currentlyDeploying = false;
 				break;
 			case START_PIVOT_FOR_DEPLOY:
 				if (pivotControlMode != TalonControlMode.Position){
@@ -173,23 +173,10 @@ public class GearHandler extends Subsystem implements Log {
 				break;
 			case GEAR_EXHAUST:
 				if (releasedGear()){
-					setState(GearHandlerState.START_PIVOT_FOR_STOW_LOW);
+					setState(GearHandlerState.START_PIVOT_FOR_STOW_WITH_GEAR);
 					currentlyDeploying = false;
 				}
 				gearRoller.set(Constants.GEAR_EXHAUST_POWER);
-				break;
-			case START_PIVOT_FOR_STOW_LOW:				
-				gearRoller.set(0);
-				if (pivotControlMode != TalonControlMode.Position){
-					pivot.changeControlMode(TalonControlMode.Position);
-					pivot.setProfile(Constants.PIVOT_TALON_SLOT_POSITION);
-				}
-				pivot.set(Constants.GEAR_PIVOT_STOW_LOW_POS);
-				setState(GearHandlerState.STOW_LOW);
-				break;
-			case STOW_LOW:
-				gearRoller.set(0);
-				currentlyDeploying = false;
 				break;
 			case START_PIVOT_FOR_BALL_CONTROl:
 				if (pivot.getControlMode()!=TalonControlMode.Position){

@@ -11,13 +11,16 @@ import org.usfirst.frc.team3256.robot.automodes.GearLeftAuto;
 import org.usfirst.frc.team3256.robot.automodes.GearRightAuto;
 import org.usfirst.frc.team3256.robot.automodes.HopperAutoBlue;
 import org.usfirst.frc.team3256.robot.automodes.HopperAutoRed;
+import org.usfirst.frc.team3256.robot.commands.DriveTesting;
+import org.usfirst.frc.team3256.robot.commands.TurnTesting;
 import org.usfirst.frc.team3256.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team3256.robot.subsystems.GearHandler;
-import org.usfirst.frc.team3256.robot.subsystems.GearHandler.GearHandlerState;
 import org.usfirst.frc.team3256.robot.subsystems.Hanger;
 import org.usfirst.frc.team3256.robot.subsystems.Hanger.HangerState;
 import org.usfirst.frc.team3256.robot.subsystems.Manipulator;
 import org.usfirst.frc.team3256.robot.subsystems.Manipulator.HumanPlayerLoadingState;
+import org.usfirst.frc.team3256.robot.subsystems.Roller;
+import org.usfirst.frc.team3256.robot.subsystems.GearHandler.GearHandlerState;
 
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
@@ -43,6 +46,7 @@ public class Robot extends IterativeRobot {
 	DriveTrain driveTrain;
 	GearHandler gearHandler;
 	Manipulator manipulator;
+	Roller roller;
 	Hanger hanger;
 	Compressor compressor;
 	OI operatorInterface;
@@ -84,21 +88,23 @@ public class Robot extends IterativeRobot {
 		gyroCalibrator = new GyroCalibrator();
 		camera0 = CameraServer.getInstance().startAutomaticCapture();
 		camera0.setResolution(240, 180);
-		camera0.setExposureManual(75);
+		camera0.setExposureManual(100);
 		camera1 = CameraServer.getInstance().startAutomaticCapture();
 		camera1.setResolution(240, 180);
-		camera1.setExposureManual(75);
+		camera1.setExposureManual(100);
 		autonomousChooser = new SendableChooser<>();
 		autonomousChooser.addDefault("Do Nothing Auto", new DoNothingAuto());
 		autonomousChooser.addObject("Cross Baseline Only", new BaselineCross());
 		autonomousChooser.addObject("Center Gear", new GearCenterAuto());
-		autonomousChooser.addObject("Left-Side Gear", new GearLeftAuto());
-		autonomousChooser.addObject("Left-Side Gear w/ Blue Hopper", new GearLeftAuto());
+		autonomousChooser.addObject("Left-Side Gear", new GearLeftAuto(false));
+		autonomousChooser.addObject("Left-Side Gear w/ Blue Hopper", new GearLeftAuto(true));
 		autonomousChooser.addObject("Right-Side Gear", new GearRightAuto(false));
 		autonomousChooser.addObject("Right-Side Gear w/ Red Hopper", new GearRightAuto(true));
 		//autonomousChooser.addObject("TURN SUCKAS", new AlignToVision());
 		autonomousChooser.addObject("Hopper Blue", new HopperAutoBlue());
 		autonomousChooser.addObject("Hopper Red", new HopperAutoRed());
+		autonomousChooser.addObject("TEST TURN", new TurnTesting());
+		autonomousChooser.addObject("TEST MOVE STRAIGHT", new DriveTesting());
 		SmartDashboard.putData("Autonomous Chooser", autonomousChooser);
 		subsystemChooser = new SendableChooser<>();
 		subsystemChooser.addDefault("GROUND GEAR INTAKE", true);
@@ -108,6 +114,7 @@ public class Robot extends IterativeRobot {
 		flashLEDsChooser.addDefault("Solid LEDs", false); //false is equivalent to solid
 		flashLEDsChooser.addObject("Flashing LEDs", true); //true is equivalent to flashing
 		SmartDashboard.putData("Flashing LEDs Chooser", flashLEDsChooser);
+		operatorInterface = new OI();
 	}
 
 	
@@ -163,12 +170,12 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void teleopInit() {
-		gearHandler.setState(GearHandlerState.MANUAL_CONTROL);
+		gearHandler.setState(GearHandlerState.STOPPED);
 		Constants.useGearIntakeSubsystem = subsystemChooser.getSelected();
-		operatorInterface = new OI();
+		//operatorInterface = new OI();
 		gyroCalibrator.stop();
-		driveTrain.resetEncoders();
-		driveTrain.resetGyro();
+		//driveTrain.resetEncoders();
+		//driveTrain.resetGyro();
 		driveTrain.shiftUp(true);
 		manipulator.setHumanLoadingState(HumanPlayerLoadingState.GEAR_INTAKE);
 		hanger.setHangerState(HangerState.WINCH_STOP);

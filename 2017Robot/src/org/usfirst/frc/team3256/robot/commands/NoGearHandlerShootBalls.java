@@ -1,33 +1,30 @@
 package org.usfirst.frc.team3256.robot.commands;
 
-import org.usfirst.frc.team3256.robot.subsystems.Hanger;
-import org.usfirst.frc.team3256.robot.subsystems.Hanger.HangerState;
-import org.usfirst.frc.team3256.robot.subsystems.Roller.RollerState;
 import org.usfirst.frc.team3256.robot.subsystems.Roller;
+import org.usfirst.frc.team3256.robot.subsystems.Roller.RollerState;
 
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
  *
  */
-public class RunHang extends Command {
+public class NoGearHandlerShootBalls extends Command {
 
-	Hanger hanger = Hanger.getInstance();
 	Roller roller = Roller.getInstance();
 	
-    public RunHang() {
-    	requires(hanger);
-    	requires(roller);
+	//TESTED ON HARDWARE
+    public NoGearHandlerShootBalls() {
+        requires(roller);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
+    	
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	hanger.setHangerState(HangerState.WINCH_UP);
-    	roller.setRollerState(RollerState.STOPPED);
+    	roller.setRollerState(RollerState.SPIT_BALLS);
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -37,8 +34,6 @@ public class RunHang extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
-    	//stop hang 
-    	hanger.setHangerState(HangerState.WINCH_STOP);
     	roller.setRollerState(RollerState.STOPPED);
     }
 
