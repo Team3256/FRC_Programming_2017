@@ -19,7 +19,7 @@ public class GearLeftAuto extends CommandGroup {
 		addSequential(new WaitCommand(0.5));
 		addSequential(new ShiftCommand(false));
 		addSequential(new WaitCommand(0.5));
-		addSequential(new PIDTurn(60, true, false)); //turn towards gear
+		addSequential(new PIDTurn(60, true)); //turn towards gear
 		addSequential(new WaitCommand(0.5));
 		addSequential(new DriveToDistance(65, false)); //drive towards gear
 		addParallel(new DeployBackGear());

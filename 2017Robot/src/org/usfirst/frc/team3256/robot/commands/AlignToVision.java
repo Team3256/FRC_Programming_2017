@@ -8,7 +8,7 @@ public class AlignToVision extends Command {
 	private PIDTurn wrappedTurn;
 	
 	public AlignToVision() {
-		this.wrappedTurn = new PIDTurn(SmartDashboard.getNumber("angle", 0), SmartDashboard.getBoolean("direction", false), false);
+		this.wrappedTurn = new PIDTurn(SmartDashboard.getNumber("angle", 0), SmartDashboard.getBoolean("direction", false));
 	}
 	
 	@Override
