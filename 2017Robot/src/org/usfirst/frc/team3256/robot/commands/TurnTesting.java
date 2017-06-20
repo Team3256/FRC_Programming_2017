@@ -9,6 +9,6 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class TurnTesting extends CommandGroup {
 
     public TurnTesting() {
-        addSequential(new PIDTurn(60,true));
+        addSequential(new PIDTurn(60,true, false));
     }
 }
