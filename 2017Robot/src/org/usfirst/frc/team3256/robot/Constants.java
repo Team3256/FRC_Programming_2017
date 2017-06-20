@@ -63,7 +63,7 @@ public class Constants {
 	public static final double WHEEL_DIAMETER = 4.09; //inches -- theoretical 4", includes tread
 	public static final double INCHES_PER_TICK = WHEEL_DIAMETER*Math.PI/GRAYHILL_TICKS_PER_ROT;
 	public static final double GEAR_HANDLER_TICKS_TO_ANGLE = 1.0; //TODO: set to actual value
-	public static boolean useGearIntakeSubsystem = true;
+	public static boolean useGearIntakeSubsystem;
 	
 //------------------------------SOFTWARE CONSTANTS------------------------------
 	// Miscellaneous
@@ -81,8 +81,9 @@ public class Constants {
 	public static final double GEAR_EXHAUST_POWER = 0.5;
 	
 	public static final double GEAR_PIVOT_STOW_POS = 24.0;
+	public static final double GEAR_PIVOT_STOW_LOW_POS = -23.5;
 	public static final double GEAR_PIVOT_INTAKE_POS = -23.5;
-	public static final double GEAR_PIVOT_CALIBRATE_POS = -24; //24 with hard stop
+	public static final double GEAR_PIVOT_CALIBRATE_POS = -24;
 	public static final double GEAR_PIVOT_DEPLOY_POS = 0.0;
 	public static final double GEAR_PIVOT_RELEASE_BALL_POS = -15;
 	public static final double GEAR_PIVOT_FORWARD_SOFT_LIMIT_POS = 27.0;
@@ -93,9 +94,9 @@ public class Constants {
 	public static final double SLOW_LOOP_DT = 0.05;
 	
 	//Turn PID Gains
-	public static final double KP_PID_TURN = 0.05;
-	public static final double KI_PID_TURN = 0.002; //0.006
-	public static final double KD_PID_TURN = 0.03;
+	public static final double KP_PID_TURN = 0.075;
+	public static final double KI_PID_TURN = 0.0045; //0.006
+	public static final double KD_PID_TURN = 0.012;
 	
 	
 	//Drive Motion Profile Gains - HIGH GEAR

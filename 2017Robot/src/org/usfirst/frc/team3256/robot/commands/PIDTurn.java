@@ -18,20 +18,21 @@ public class PIDTurn extends Command {
 	private Notifier notifier;
 	private PIDController pid;
 	private double setpoint;
-	private boolean turnRight;
+	private boolean turnRight, oneWheel;
 	private double startTime, endTime, dt;
 	
 	/**
 	 * @param setpoint desired angle
 	 * @param turnRight desired direction
 	 */
-	public PIDTurn(double setpoint, final boolean turnRight) {
+	public PIDTurn(double setpoint, final boolean turnRight, boolean oneWheel) {
         requires(drive);
         pid = new PIDController(Constants.KP_PID_TURN, Constants.KI_PID_TURN, Constants.KD_PID_TURN);
         pid.setMinMaxOutput(0.15, 0.5);
         pid.setTolerance(0.1);
     	this.setpoint = setpoint;
     	this.turnRight = turnRight;
+    	this.oneWheel = oneWheel;
     }
  
     // Called just before this Command runs the first time
@@ -43,8 +44,8 @@ public class PIDTurn extends Command {
 			@Override
 			public void run() {
 		    	double output = pid.update(Math.abs(drive.getAngle()));
-		    	if (turnRight) drive.tankDrive(output, -output, false);
-		    	else drive.tankDrive(-output, output, false);
+		    	if (turnRight) drive.tankDrive(output, oneWheel ? 0 : -output, false);
+		    	else drive.tankDrive(oneWheel ? 0 : -output, output, false);
 			}
         });
 
@@ -59,7 +60,7 @@ public class PIDTurn extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return (pid.isFinished() && Math.abs(setpoint-drive.getAngle()) <= 1 && Timer.getFPGATimestamp()-startTime > 1) || Timer.getFPGATimestamp()-startTime > 3.5;
+        return (pid.isFinished() && Math.abs(setpoint-drive.getAngle()) <= 1 && Timer.getFPGATimestamp()-startTime > 1) || Timer.getFPGATimestamp()-startTime > 2.5;
     }
 
     /**
