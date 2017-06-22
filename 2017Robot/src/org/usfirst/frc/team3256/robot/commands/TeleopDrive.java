@@ -1,5 +1,6 @@
 package org.usfirst.frc.team3256.robot.commands;
 
+import org.usfirst.frc.team3256.lib.CheesyDrive;
 import org.usfirst.frc.team3256.robot.OI;
 import org.usfirst.frc.team3256.robot.subsystems.DriveTrain;
 
@@ -18,7 +19,8 @@ public class TeleopDrive extends Command {
 	
 	public enum TeleopDriveMode{
 		TANK,
-		ARCADE;
+		ARCADE,
+		CHEESY;
 	}
 	
 	//TESTED ON HARDWARE
@@ -38,9 +40,11 @@ public class TeleopDrive extends Command {
     		driveTrain.tankDrive(OI.driver.getY(Hand.kLeft), 
     				OI.driver.getY(Hand.kRight), OI.rightTrigger1.get());
     	}
-    	else{
+    	else if (wantedMode == TeleopDriveMode.ARCADE){
     		driveTrain.arcadeDrive(OI.driver.getY(Hand.kLeft), 
     				OI.driver.getX(Hand.kRight), OI.rightTrigger1.get());
+    	} else {
+    		CheesyDrive.cheesyDrive(OI.driver.getY(Hand.kLeft), OI.driver.getX(Hand.kRight), OI.rightTrigger1.get());
     	}
     	driveTrain.shiftUp(!OI.leftTrigger1.get());
     }
