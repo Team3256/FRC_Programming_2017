@@ -8,9 +8,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Command;
 
-/**
- *
- */
 public class TeleopDrive extends Command {
 
 	DriveTrain driveTrain = DriveTrain.getInstance();

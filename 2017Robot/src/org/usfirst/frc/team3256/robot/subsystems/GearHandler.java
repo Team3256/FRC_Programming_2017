@@ -250,4 +250,3 @@ public class GearHandler extends Subsystem implements Log {
 		SmartDashboard.putNumber("Pivot Position", pivot.getPosition());
 	}
 }
-
