@@ -57,7 +57,7 @@ public class DriveTrain extends Subsystem implements Log {
 	 * Sets the default command of the DriveTrain Subsystem, which is the TeleopDrive Command
 	 */
 	protected void initDefaultCommand() {
-		setDefaultCommand(new TeleopDrive(TeleopDriveMode.ARCADE));
+		setDefaultCommand(new TeleopDrive(TeleopDriveMode.CHEESY));
 	}
 	
 	/**
@@ -100,6 +100,13 @@ public class DriveTrain extends Subsystem implements Log {
 		SmartDashboard.putNumber("Right Velocity", getRightVelocity());
 	}
 	
+	public int getRawLeftTicks(){
+		return encoderLeft.get();
+	}
+
+	public int getRawRightTicks(){
+		return encoderRight.get();
+	}
 	/**
 	 * @param power - Sends the given power to run the left drive motors in open loop mode
 	 */
@@ -232,6 +239,8 @@ public class DriveTrain extends Subsystem implements Log {
 	 * @param wantsReverse - If true, reverse the front and back of the robot
 	 */
 	public void arcadeDrive(double throttle, double turn, boolean wantsReverse){
+		throttle = Math.pow(throttle, 3);
+		turn = Math.pow(turn, 3);
 		if (wantsReverse) throttle *= -1;
 		if (Math.abs(throttle) < Constants.XBOX_DEADBAND_VALUE) throttle = 0;
 		if (Math.abs(turn) < Constants.XBOX_DEADBAND_VALUE) turn = 0;

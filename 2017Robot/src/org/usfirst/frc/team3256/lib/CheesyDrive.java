@@ -12,8 +12,8 @@ import org.usfirst.frc.team3256.robot.subsystems.DriveTrain;
 public class CheesyDrive {
 	//Driving constants
 	static double mQuickStopAccumulator;
-    public static final double kThrottleDeadband = 0.02;
-    private static final double kWheelDeadband = 0.02;
+    public static final double kThrottleDeadband = 0.25;
+    private static final double kWheelDeadband = 0.25;
     private static final double kTurnSensitivity = 1.0;
     private static DriveSignal mSignal = new DriveSignal(0, 0);
 
@@ -28,7 +28,7 @@ public class CheesyDrive {
        
         if (isQuickTurn) {
         	//if we want a quick turn, set quick stop accumulator and powers
-            if (Math.abs(throttle) < 0.2) {
+            if (Math.abs(throttle) < 0.4) {
                 double alpha = 0.1;
                 mQuickStopAccumulator = (1 - alpha) * mQuickStopAccumulator + alpha * limit(wheel, 1.0) * 2;
             }

@@ -52,8 +52,6 @@ public class GearHandler extends Subsystem implements Log {
 		START_PIVOT_FOR_DEPLOY,
 		//deploy the gear by exhausting the rollers
 		GEAR_EXHAUST,
-		START_PIVOT_FOR_STOW_LOW,
-		STOW_LOW,
 		//automatically bring down gear handler so we can start releasing balls
 		START_PIVOT_FOR_BALL_CONTROl,
 		// Freeze the gear handler wherever it is (stop all motors),
@@ -173,23 +171,10 @@ public class GearHandler extends Subsystem implements Log {
 				break;
 			case GEAR_EXHAUST:
 				if (releasedGear()){
-					setState(GearHandlerState.START_PIVOT_FOR_STOW_LOW);
+					setState(GearHandlerState.STOW);
 					currentlyDeploying = false;
 				}
 				gearRoller.set(Constants.GEAR_EXHAUST_POWER);
-				break;
-			case START_PIVOT_FOR_STOW_LOW:				
-				gearRoller.set(0);
-				if (pivotControlMode != TalonControlMode.Position){
-					pivot.changeControlMode(TalonControlMode.Position);
-					pivot.setProfile(Constants.PIVOT_TALON_SLOT_POSITION);
-				}
-				pivot.set(Constants.GEAR_PIVOT_STOW_LOW_POS);
-				setState(GearHandlerState.STOW_LOW);
-				break;
-			case STOW_LOW:
-				gearRoller.set(0);
-				currentlyDeploying = false;
 				break;
 			case START_PIVOT_FOR_BALL_CONTROl:
 				if (pivot.getControlMode()!=TalonControlMode.Position){

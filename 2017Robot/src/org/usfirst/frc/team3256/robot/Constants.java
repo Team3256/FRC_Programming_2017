@@ -65,7 +65,7 @@ public class Constants {
 	public static final double MAX_VEL_TURN_LOW_GEAR_DEG_SEC = 800.0; 
 	public static final double MAX_ACCEL_TURN_LOW_GEAR_DEG_SEC2 = 700.0; 
 	public static final int GRAYHILL_TICKS_PER_ROT = 256;
-	public static final double WHEEL_DIAMETER = 4.09; //inches -- theoretical 4", includes tread
+	public static final double WHEEL_DIAMETER = 4.04; //inches -- theoretical 4", includes tread
 	public static final double INCHES_PER_TICK = WHEEL_DIAMETER*Math.PI/GRAYHILL_TICKS_PER_ROT;
 	public static final double GEAR_HANDLER_TICKS_TO_ANGLE = 1.0; //TODO: set to actual value
 	public static boolean useGearIntakeSubsystem;
@@ -86,16 +86,15 @@ public class Constants {
 	public static final double GEAR_EXHAUST_POWER = 0.5;
 	
 	public static final double GEAR_PIVOT_STOW_POS = 24.0;
-	public static final double GEAR_PIVOT_STOW_LOW_POS = -23.5;
 	public static final double GEAR_PIVOT_INTAKE_POS = -23.5;
 	public static final double GEAR_PIVOT_CALIBRATE_POS = -24;
-	public static final double GEAR_PIVOT_DEPLOY_POS = 0.0;
+	public static final double GEAR_PIVOT_DEPLOY_POS = -18.0;
 	public static final double GEAR_PIVOT_RELEASE_BALL_POS = -15;
 	public static final double GEAR_PIVOT_FORWARD_SOFT_LIMIT_POS = 27.0;
 	public static final double GEAR_PIVOT_REVERSE_SOFT_LIMIT_POS = -27.0;
 	
 	//Period for all control loops
-	public static final double CONTROL_LOOP_DT = 0.02;
+	public static final double CONTROL_LOOP_DT = 0.01;
 	public static final double SLOW_LOOP_DT = 0.05;
 	
 	//Turn PID Gains
@@ -103,13 +102,13 @@ public class Constants {
 	public static final double KI_PID_TURN = 0.0045; //0.006
 	public static final double KD_PID_TURN = 0.012;
 		
-	//Drive Motion Profile Gains - HIGH GEAR
+	//Drive Motion Profile Gains - HIGH GEARS
 	public static final double KV_DISTANCE = 1.0/MAX_VEL_HIGH_GEAR_IN_SEC;
 	public static final double KA_DISTANCE = 0.0;
-	public static final double KP_DISTANCE = 0.32;
+	public static final double KP_DISTANCE = 0.2;
 	public static final double KI_DISTANCE = 0.0;
 	public static final double KD_DISTANCE = 0.0;
-	public static final double KP_STRAIGHT = 0.03;
+	public static final double KP_STRAIGHT = 0.05;
 	public static final double KI_STRAIGHT = 0.0;
 	public static final double KD_STRAIGHT = 0.0;
 	
@@ -139,4 +138,11 @@ public class Constants {
 	public static final int PIVOT_TALON_SLOT_MAGIC = 1;
 	public static final double MAGIC_ACCELERATION = 4125.0*2;
 	public static final double MAGIC_CRUISE_VELOCITY = 4125.0*2;
+	
+	//path following
+	public static final double KP_PATH = 0.01;
+	public static final double KI_PATH = 0.0;
+	public static final double KD_PATH = 0.0;
+	public static final double KV_PATH = 1/MAX_VEL_HIGH_GEAR_IN_SEC;
+	public static final double KA_PATH = 0.0;
 }

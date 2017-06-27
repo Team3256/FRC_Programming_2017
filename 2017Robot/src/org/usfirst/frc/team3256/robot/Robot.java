@@ -11,6 +11,8 @@ import org.usfirst.frc.team3256.robot.automodes.GearLeftAuto;
 import org.usfirst.frc.team3256.robot.automodes.GearRightAuto;
 import org.usfirst.frc.team3256.robot.automodes.HopperAutoBlue;
 import org.usfirst.frc.team3256.robot.automodes.HopperAutoRed;
+import org.usfirst.frc.team3256.robot.commands.DriveTesting;
+import org.usfirst.frc.team3256.robot.commands.TestPath;
 import org.usfirst.frc.team3256.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team3256.robot.subsystems.GearHandler;
 import org.usfirst.frc.team3256.robot.subsystems.GearHandler.GearHandlerState;
@@ -99,6 +101,8 @@ public class Robot extends IterativeRobot {
 		//autonomousChooser.addObject("TURN SUCKAS", new AlignToVision());
 		autonomousChooser.addObject("Hopper Blue", new HopperAutoBlue());
 		autonomousChooser.addObject("Hopper Red", new HopperAutoRed());
+		autonomousChooser.addObject("Test Path", new TestPath());
+		autonomousChooser.addObject("Drive Testing", new DriveTesting());
 		SmartDashboard.putData("Autonomous Chooser", autonomousChooser);
 		subsystemChooser = new SendableChooser<>();
 		subsystemChooser.addDefault("GROUND GEAR INTAKE", true);
