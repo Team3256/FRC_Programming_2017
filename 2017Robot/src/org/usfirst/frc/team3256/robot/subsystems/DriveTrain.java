@@ -36,8 +36,8 @@ public class DriveTrain extends Subsystem implements Log {
 		leftDrive = new VictorSP(Constants.LEFT_DRIVE);
 		rightDrive = new VictorSP(Constants.RIGHT_DRIVE);
 		//set motor directions
-		leftDrive.setInverted(false);
-		rightDrive.setInverted(true);
+		leftDrive.setInverted(true);
+		rightDrive.setInverted(false);
 		//Encoders for the left and right side of the drivetrain
 		encoderLeft = new Encoder(Constants.ENCODER_LEFT_A, Constants.ENCODER_LEFT_B);
 		encoderRight = new Encoder(Constants.ENCODER_RIGHT_A, Constants.ENCODER_RIGHT_B);

@@ -3,6 +3,7 @@ import java.io.IOException;
 
 import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
+import jaci.pathfinder.Trajectory.Segment;
 import jaci.pathfinder.Waypoint;
 import net.schmizz.sshj.SSHClient;
 import net.schmizz.sshj.sftp.SFTPClient;
@@ -46,6 +47,11 @@ public class TrajectoryGenerator {
 		};
 		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.01, 120, 108, 240);
 		Trajectory trajectory = Pathfinder.generate(points, config);
+		double t = 0;
+		for (Segment segment : trajectory.segments) {
+			t += segment.dt;
+			System.out.println(t + ", " + segment.velocity);
+		}
 		File centerGearFowardPath = new File("CenterGearFowardPath.csv");
 		Pathfinder.writeToCSV(centerGearFowardPath, trajectory);
 		File centerGearForwardPathBinary = new File("CenterGearForwardPath.bin");

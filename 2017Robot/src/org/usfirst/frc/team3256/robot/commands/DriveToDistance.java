@@ -45,12 +45,12 @@ public class DriveToDistance extends Command {
 			public void run() {
 				DrivePWM signal = controller.update();
 				if (!goForward){
-					drive.setLeftMotorPower(signal.getLeftPWM());
-					drive.setRightMotorPower(signal.getRightPWM());
-				}
-				else{
 					drive.setLeftMotorPower(-signal.getLeftPWM());
 					drive.setRightMotorPower(-signal.getRightPWM());
+				}
+				else{
+					drive.setLeftMotorPower(signal.getLeftPWM());
+					drive.setRightMotorPower(signal.getRightPWM());
 				}
 			}
         });

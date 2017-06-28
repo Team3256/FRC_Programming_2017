@@ -90,6 +90,7 @@ public class Robot extends IterativeRobot {
 		camera1 = CameraServer.getInstance().startAutomaticCapture();
 		camera1.setResolution(240, 180);
 		camera1.setExposureManual(75);
+		driveTrain.calibrateGyro();
 		autonomousChooser = new SendableChooser<>();
 		autonomousChooser.addDefault("Do Nothing Auto", new DoNothingAuto());
 		autonomousChooser.addObject("Cross Baseline Only", new BaselineCross());

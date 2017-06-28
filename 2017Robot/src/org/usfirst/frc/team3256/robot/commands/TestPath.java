@@ -18,6 +18,11 @@ public class TestPath extends Command {
 	
     public TestPath() {
     	requires(drive);
+    }
+
+    // Called just before this Command runs the first time
+    protected void initialize() {
+    	controller.init("/home/lvuser/CenterGearForwardPath.bin");
     	notifier = new Notifier(new Runnable(){
     		
     		@Override 
@@ -25,11 +30,6 @@ public class TestPath extends Command {
     			controller.update();
     		}
     	});
-    }
-
-    // Called just before this Command runs the first time
-    protected void initialize() {
-    	controller.init("/home/lvuser/CenterGearForwardPath.bin");
     	notifier.startPeriodic(Constants.CONTROL_LOOP_DT);
     }
 
