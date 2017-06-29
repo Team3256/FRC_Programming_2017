@@ -13,6 +13,7 @@ import org.usfirst.frc.team3256.robot.automodes.HopperAutoBlue;
 import org.usfirst.frc.team3256.robot.automodes.HopperAutoRed;
 import org.usfirst.frc.team3256.robot.commands.DriveTesting;
 import org.usfirst.frc.team3256.robot.commands.TestPath;
+import org.usfirst.frc.team3256.robot.commands.TurnTesting;
 import org.usfirst.frc.team3256.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team3256.robot.subsystems.GearHandler;
 import org.usfirst.frc.team3256.robot.subsystems.GearHandler.GearHandlerState;
@@ -84,12 +85,14 @@ public class Robot extends IterativeRobot {
 		logger.addLog(PDP.getInstance());
 		logger.start();
 		gyroCalibrator = new GyroCalibrator();
+		/*
 		camera0 = CameraServer.getInstance().startAutomaticCapture();
 		camera0.setResolution(240, 180);
 		camera0.setExposureManual(75);
 		camera1 = CameraServer.getInstance().startAutomaticCapture();
 		camera1.setResolution(240, 180);
 		camera1.setExposureManual(75);
+		*/
 		driveTrain.calibrateGyro();
 		autonomousChooser = new SendableChooser<>();
 		autonomousChooser.addDefault("Do Nothing Auto", new DoNothingAuto());
@@ -104,6 +107,7 @@ public class Robot extends IterativeRobot {
 		autonomousChooser.addObject("Hopper Red", new HopperAutoRed());
 		autonomousChooser.addObject("Test Path", new TestPath());
 		autonomousChooser.addObject("Drive Testing", new DriveTesting());
+		autonomousChooser.addObject("Turn Testing", new TurnTesting());
 		SmartDashboard.putData("Autonomous Chooser", autonomousChooser);
 		subsystemChooser = new SendableChooser<>();
 		subsystemChooser.addDefault("GROUND GEAR INTAKE", true);

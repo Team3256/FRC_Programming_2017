@@ -36,8 +36,8 @@ public class MotionProfiledTurn extends Command {
 			public void run() {
 				double output = turnController.update();
 				SmartDashboard.putNumber("OUTPUT MP TURN", output);
-				if (turnRight) drive.tankDrive(output, -output, false);
-		    	else drive.tankDrive(-output, output, false);
+				if (turnRight) drive.tankDrive(-output, output, false);
+		    	else drive.tankDrive(output, -output, false);
 			}
     	});
     	turnController.reset();

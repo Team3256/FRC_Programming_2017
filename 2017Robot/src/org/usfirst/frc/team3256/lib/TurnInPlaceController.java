@@ -8,17 +8,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class TurnInPlaceController {
 
 	//Motion Profiling
-	private Trajectory trajectory;
-	private TrajectoryGenerator trajectoryGenerator;
-	private TrajectoryFollower trajectoryFollower;
+	private TrajectoryController trajectoryController;
 
 	private DriveTrain drive = DriveTrain.getInstance();
 	private double output;
 	
 	public TurnInPlaceController(){
-		trajectoryGenerator = new TrajectoryGenerator();
-		trajectoryFollower = new TrajectoryFollower();
-		trajectoryGenerator.setConfig(Constants.MAX_VEL_TURN_LOW_GEAR_DEG_SEC, Constants.MAX_ACCEL_TURN_LOW_GEAR_DEG_SEC2, Constants.CONTROL_LOOP_DT);
+		trajectoryController = new TrajectoryController();
 	}
 	
 	/**
@@ -26,19 +22,22 @@ public class TurnInPlaceController {
 	 */
 	public void setSetpoint(double setpoint){
 		reset();
-		trajectory = trajectoryGenerator.generateTraj(0, 0, setpoint);
-		SmartDashboard.putNumber("TURN INCHES SETPOINT" , setpoint);
-		trajectoryFollower.setTrajectory(trajectory);
-		trajectoryFollower.setGains(Constants.KV_TURN, Constants.KA_TURN, 
-				Constants.KP_TURN, Constants.KI_TURN, Constants.KD_TURN);
-		trajectoryFollower.setLoopTime(Constants.CONTROL_LOOP_DT);
+		TrajectoryController.TrajectoryConfig config = new TrajectoryController.TrajectoryConfig();
+		config.dt = Constants.CONTROL_LOOP_DT;
+		config.max_acc = Constants.MAX_ACCEL_TURN_LOW_GEAR_DEG_SEC2;
+		config.max_vel = Constants.MAX_VEL_TURN_LOW_GEAR_DEG_SEC;
+		trajectoryController.configure(Constants.KP_TURN, Constants.KI_TURN, Constants.KD_TURN, Constants.KV_TURN, Constants.KA_TURN, config);
+		TrajectoryController.TrajectorySetpoint initialState = new TrajectoryController.TrajectorySetpoint();
+		initialState.pos = 0;
+		initialState.vel = 0;
+		initialState.acc = 0;
+		trajectoryController.setGoal(initialState, setpoint);
 	}
 	
 	/**
 	 * resets the motion profiling controller and the gyro
 	 */
 	public void reset(){	
-		trajectoryFollower.resetController();
 		drive.resetGyro();
 		drive.resetEncoders();
 	}
@@ -47,14 +46,14 @@ public class TurnInPlaceController {
 	 * @return true when the follower is finished
 	 */
 	public boolean isFinished(){
-		return trajectoryFollower.isFinished();
+		return trajectoryController.isFinishedTrajectory();
 	}
 	
 	/**
 	 * @return output the calculated motor output of the trajectory follower
 	 */
 	public double update(){	
-		output = trajectoryFollower.update(Math.abs(drive.getAngle()));
+		output = trajectoryController.calculate(drive.getAngle(), drive.getAngularVelocity());
 		return output;
 	}
 	

@@ -62,8 +62,8 @@ public class Constants {
 	public static final double ROBOT_CIRCUMFERENCE = Math.PI*ROBOT_TRACK;
 	public static final double MAX_VEL_HIGH_GEAR_IN_SEC = 10.0 * 12.0; // 18.94 theoretical ft/s
 	public static final double MAX_ACCEL_HIGH_GEAR_IN_SEC2 = 9.0 * 12.0; 
-	public static final double MAX_VEL_TURN_LOW_GEAR_DEG_SEC = 800.0; 
-	public static final double MAX_ACCEL_TURN_LOW_GEAR_DEG_SEC2 = 700.0; 
+	public static final double MAX_VEL_TURN_LOW_GEAR_DEG_SEC = 300.0; 
+	public static final double MAX_ACCEL_TURN_LOW_GEAR_DEG_SEC2 = 300.0; 
 	public static final int GRAYHILL_TICKS_PER_ROT = 256;
 	public static final double WHEEL_DIAMETER = 4.04; //inches -- theoretical 4", includes tread
 	public static final double INCHES_PER_TICK = WHEEL_DIAMETER*Math.PI/GRAYHILL_TICKS_PER_ROT;
@@ -105,9 +105,9 @@ public class Constants {
 	//Drive Motion Profile Gains - HIGH GEARS
 	public static final double KV_DISTANCE = 1.0/MAX_VEL_HIGH_GEAR_IN_SEC;
 	public static final double KA_DISTANCE = 0.0;
-	public static final double KP_DISTANCE = 0.2;
+	public static final double KP_DISTANCE = 0.6;
 	public static final double KI_DISTANCE = 0.0;
-	public static final double KD_DISTANCE = 0.0;
+	public static final double KD_DISTANCE = 0.02;
 	public static final double KP_STRAIGHT = 0.05;
 	public static final double KI_STRAIGHT = 0.0;
 	public static final double KD_STRAIGHT = 0.0;
@@ -115,9 +115,9 @@ public class Constants {
 	//Turn Motion Profile Gains - HIGH GEAR
 	public static final double KV_TURN = 1.0/MAX_VEL_TURN_LOW_GEAR_DEG_SEC;
 	public static final double KA_TURN = 0.0;
-	public static final double KP_TURN = 0.0;
-	public static final double KI_TURN = 0.0;
-	public static final double KD_TURN = 0.0;
+	public static final double KP_TURN = 0.05;
+	public static final double KI_TURN = 0.003;
+	public static final double KD_TURN = 0.005;
 	
 	//Gear Handler pivot position PID Gains
 	public static final double KP_PIVOT_POSITION = 0.02;
@@ -140,9 +140,10 @@ public class Constants {
 	public static final double MAGIC_CRUISE_VELOCITY = 4125.0*2;
 	
 	//path following
-	public static final double KP_PATH = 0.01;
+	public static final double KP_PATH = 0.5;
 	public static final double KI_PATH = 0.0;
 	public static final double KD_PATH = 0.0;
 	public static final double KV_PATH = 1/MAX_VEL_HIGH_GEAR_IN_SEC;
 	public static final double KA_PATH = 0.0;
+	
 }

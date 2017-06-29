@@ -8,7 +8,7 @@ import org.usfirst.frc.team3256.robot.subsystems.DriveTrain;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
-import jaci.pathfinder.followers.EncoderFollower;
+import jaci.pathfinder.followers.DistanceFollower;
 import jaci.pathfinder.modifiers.TankModifier;
 
 public class PathController {
@@ -16,7 +16,7 @@ public class PathController {
 	private DriveTrain drive;
 	private Trajectory traj;
 	private TankModifier modifier;
-	private EncoderFollower leftFollower, rightFollower;
+	private DistanceFollower leftFollower, rightFollower;
 	
 	public PathController(){
 		drive = DriveTrain.getInstance();
@@ -27,23 +27,21 @@ public class PathController {
 		drive.resetGyro();
 		traj = Pathfinder.readFromFile(new File(trajectoryName));
 		modifier = new TankModifier(traj).modify(Constants.ROBOT_TRACK);
-		leftFollower = new EncoderFollower(modifier.getLeftTrajectory());
-		rightFollower = new EncoderFollower(modifier.getRightTrajectory());
-		leftFollower.configureEncoder(0, Constants.GRAYHILL_TICKS_PER_ROT, Constants.WHEEL_DIAMETER);
-		rightFollower.configureEncoder(0, Constants.GRAYHILL_TICKS_PER_ROT, Constants.WHEEL_DIAMETER);
+		leftFollower = new DistanceFollower(modifier.getLeftTrajectory());
+		rightFollower = new DistanceFollower(modifier.getRightTrajectory());
 		leftFollower.configurePIDVA(Constants.KP_PATH, Constants.KI_PATH, Constants.KD_PATH, Constants.KV_PATH, Constants.KA_PATH);
 		rightFollower.configurePIDVA(Constants.KP_PATH, Constants.KI_PATH, Constants.KD_PATH, Constants.KV_PATH, Constants.KA_PATH);
 	}
 	
 	public void update(){
-		double left = leftFollower.calculate(drive.getRawLeftTicks());
-		double right = rightFollower.calculate(drive.getRawRightTicks());
+		double left = leftFollower.calculate(drive.getLeftPosition());
+		double right = rightFollower.calculate(drive.getRightPosition());
 		
 		double heading = drive.getAngle();
 		double headingSetpoint = Pathfinder.r2d(leftFollower.getHeading());
 		
 		double angleDiff = Pathfinder.boundHalfDegrees(headingSetpoint - heading);
-		double turn = 0.8 * (-1.0/80.0) * angleDiff;
+		double turn = 5*0.8 * (-1.0/80.0) * angleDiff;
 		left += turn;
 		right -= turn;
 		SmartDashboard.putNumber("left path pow", left);
@@ -59,7 +57,5 @@ public class PathController {
 	public void reset() {
 		leftFollower.reset();
 		rightFollower.reset();
-		drive.resetEncoders();
-		drive.resetGyro();
 	}
 }

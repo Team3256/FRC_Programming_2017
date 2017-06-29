@@ -19,7 +19,6 @@ public class TrajectoryGenerator {
 	static SSHClient ssh;
 	
 	public static void main(String[] args) throws IOException {
-		generateCenterGearForwardPath();
 		ssh = new SSHClient();
 		//ssh.loadKnownHosts();
 		ssh.addHostKeyVerifier("db:21:39:cc:ce:49:1b:b6:09:29:3e:72:1b:fb:fd:bd");
@@ -43,19 +42,17 @@ public class TrajectoryGenerator {
 	public static void generateCenterGearForwardPath(){
 		Waypoint[] points = new Waypoint[] {                      
 			    new Waypoint(0, 0, Pathfinder.d2r(0)),
-			    new Waypoint(77, 0, Pathfinder.d2r(0))
+			    new Waypoint(50, 0, Pathfinder.d2r(0))
 		};
-		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.01, 120, 108, 240);
+		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.01, 120, 108, 120);
 		Trajectory trajectory = Pathfinder.generate(points, config);
-		double t = 0;
-		for (Segment segment : trajectory.segments) {
-			t += segment.dt;
-			System.out.println(t + ", " + segment.velocity);
-		}
 		File centerGearFowardPath = new File("CenterGearFowardPath.csv");
 		Pathfinder.writeToCSV(centerGearFowardPath, trajectory);
 		File centerGearForwardPathBinary = new File("CenterGearForwardPath.bin");
 		Pathfinder.writeToFile(centerGearForwardPathBinary, trajectory);
+		for (Segment segment : trajectory.segments) {
+			System.out.println(segment.x + ", " + segment.y);
+		}
 	}
 	
 }
