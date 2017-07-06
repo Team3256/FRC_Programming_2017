@@ -83,14 +83,11 @@ public class OI implements Log{
     	buttonA2.whenPressed(new HumanPlayerBallsIntake());
     	buttonX2.whileHeld(new HoldBackGearDeploy());
     	buttonX2.whenReleased(new CloseBackGear());
-    	if (Constants.useGearIntakeSubsystem){
-    		leftBumper2.whenPressed(new StartIntakeGear());
-    		leftBumper2.whenReleased(new StowGearHandler());
-    		buttonB2.whenPressed(new DeployFrontGear());
-    		buttonB2.whenReleased(new StowGearHandler());
-    		rightBumper2.whenActive(new ZeroGearHandler());
-    	}
-
+    	leftBumper2.whenPressed(new StartIntakeGear());
+    	leftBumper2.whenReleased(new StowGearHandler());
+   		buttonB2.whenPressed(new DeployFrontGear());
+   		buttonB2.whenReleased(new StowGearHandler());
+   		rightBumper2.whenActive(new ZeroGearHandler());
     }
     
     public void update() {

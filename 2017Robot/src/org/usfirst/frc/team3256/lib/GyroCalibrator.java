@@ -1,39 +1,37 @@
 package org.usfirst.frc.team3256.lib;
 
-import org.usfirst.frc.team3256.robot.Constants;
 import org.usfirst.frc.team3256.robot.subsystems.DriveTrain;
 
-import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class GyroCalibrator {
+public class GyroCalibrator implements Loop{
 
-	private ADXRS453_Gyro gyro = DriveTrain.getInstance().getGyro();
-	private Notifier notifier;
-	private double prevTime = 0.0;
+	private ADXRS453_Gyro gyro;
+	private double previousTime = 0.0;
 	
 	public GyroCalibrator(){
-		notifier = new Notifier(new Runnable(){
+		gyro = DriveTrain.getInstance().getGyro();
+	}
 
-			@Override
-			public void run() {
-				double currentTime = Timer.getFPGATimestamp();
-				if (currentTime-prevTime > ADXRS453_Gyro.kCalibrationSampleTime){
-					gyro.endCalibrate();
-					prevTime = currentTime;
-					gyro.startCalibrate();
-				}
-			}
-			
-		});
+	@Override
+	public void initialize() {
+		
+	}
+
+	@Override
+	public void update() {
+		double now = Timer.getFPGATimestamp();
+		if (now-previousTime > ADXRS453_Gyro.kCalibrationSampleTime){
+			gyro.endCalibrate();
+			previousTime = now;
+			SmartDashboard.putNumber("Gyroscope calibration current time", Timer.getFPGATimestamp());
+			gyro.startCalibrate();
+		}
 	}
 	
-	public void start(){
-		notifier.startPeriodic(Constants.SLOW_LOOP_DT);
-	}
-	
-	public void stop(){
+	@Override
+	public void end() {
 		gyro.cancelCalibrate();
-		notifier.stop();
 	}
 }

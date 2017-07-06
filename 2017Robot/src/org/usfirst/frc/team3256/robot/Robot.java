@@ -3,6 +3,7 @@ package org.usfirst.frc.team3256.robot;
 import org.usfirst.frc.team3256.lib.GyroCalibrator;
 import org.usfirst.frc.team3256.lib.LEDStrip;
 import org.usfirst.frc.team3256.lib.Logger;
+import org.usfirst.frc.team3256.lib.Looper;
 import org.usfirst.frc.team3256.lib.PDP;
 import org.usfirst.frc.team3256.robot.automodes.BaselineCross;
 import org.usfirst.frc.team3256.robot.automodes.DoNothingAuto;
@@ -42,6 +43,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Robot extends IterativeRobot {
 	
+	Looper disabledLooper;
 	LEDStrip led;
 	DriveTrain driveTrain;
 	GearHandler gearHandler;
@@ -50,7 +52,6 @@ public class Robot extends IterativeRobot {
 	Compressor compressor;
 	OI operatorInterface;
 	Logger logger;
-	GyroCalibrator gyroCalibrator;
 	SendableChooser<Command> autonomousChooser;
 	SendableChooser<Boolean> subsystemChooser;
 	SendableChooser<Boolean> flashLEDsChooser;
@@ -84,7 +85,8 @@ public class Robot extends IterativeRobot {
 		logger.addLog(gearHandler);
 		logger.addLog(PDP.getInstance());
 		logger.start();
-		gyroCalibrator = new GyroCalibrator();
+		disabledLooper = new Looper();
+		disabledLooper.addLoop(new GyroCalibrator());
 		/*
 		camera0 = CameraServer.getInstance().startAutomaticCapture();
 		camera0.setResolution(240, 180);
@@ -109,14 +111,6 @@ public class Robot extends IterativeRobot {
 		autonomousChooser.addObject("Drive Testing", new DriveTesting());
 		autonomousChooser.addObject("Turn Testing", new TurnTesting());
 		SmartDashboard.putData("Autonomous Chooser", autonomousChooser);
-		subsystemChooser = new SendableChooser<>();
-		subsystemChooser.addDefault("GROUND GEAR INTAKE", true);
-		subsystemChooser.addObject("BALL SUBSYSTEM", false);
-		SmartDashboard.putData("Subsystem Chooser", subsystemChooser);
-		flashLEDsChooser = new SendableChooser<>();
-		flashLEDsChooser.addDefault("Solid LEDs", false); //false is equivalent to solid
-		flashLEDsChooser.addObject("Flashing LEDs", true); //true is equivalent to flashing
-		SmartDashboard.putData("Flashing LEDs Chooser", flashLEDsChooser);
 	}
 
 	
@@ -127,12 +121,13 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void disabledInit() {
-		gyroCalibrator.start();
+		disabledLooper.start();
 	}
 
 	@Override
 	public void disabledPeriodic() {
 		Scheduler.getInstance().run();
+		disabledLooper.log();
 	}
 
 	/**
@@ -149,9 +144,8 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void autonomousInit() {
-		Constants.useGearIntakeSubsystem = subsystemChooser.getSelected();
 		operatorInterface = new OI();
-		gyroCalibrator.stop();
+		disabledLooper.stop();
 		manipulator.setHumanLoadingState(HumanPlayerLoadingState.GEAR_INTAKE);
 		autoStartTime = Timer.getFPGATimestamp();
 		autonomousCommand = autonomousChooser.getSelected();
@@ -174,9 +168,8 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopInit() {
 		gearHandler.setState(GearHandlerState.MANUAL_CONTROL);
-		Constants.useGearIntakeSubsystem = subsystemChooser.getSelected();
 		operatorInterface = new OI();
-		gyroCalibrator.stop();
+		disabledLooper.stop();
 		driveTrain.resetEncoders();
 		driveTrain.resetGyro();
 		driveTrain.shiftUp(true);
@@ -191,7 +184,6 @@ public class Robot extends IterativeRobot {
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
 		gearHandler.update();
-		led.update(flashLEDsChooser.getSelected());
 		operatorInterface.update();
 	}
 

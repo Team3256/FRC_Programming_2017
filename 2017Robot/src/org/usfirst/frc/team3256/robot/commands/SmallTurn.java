@@ -14,7 +14,7 @@ public class SmallTurn extends Command {
 	private DriveTrain drive = DriveTrain.getInstance();
 	private double degrees;
 	private boolean turnRight;
-	private double power = 0.175;
+	private double power = 0.2;
 	private Notifier notifier;
 	
     public SmallTurn(double degrees, boolean turnRight) {
@@ -45,11 +45,12 @@ public class SmallTurn extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return Math.abs(Math.abs(drive.getAngle()) - degrees) < 0.5;
+        return Math.abs(Math.abs(drive.getAngle()) - degrees) < 0.75;
     }
 
     // Called once after isFinished returns true

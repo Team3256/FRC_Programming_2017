@@ -67,8 +67,6 @@ public class Constants {
 	public static final int GRAYHILL_TICKS_PER_ROT = 256;
 	public static final double WHEEL_DIAMETER = 4.04; //inches -- theoretical 4", includes tread
 	public static final double INCHES_PER_TICK = WHEEL_DIAMETER*Math.PI/GRAYHILL_TICKS_PER_ROT;
-	public static final double GEAR_HANDLER_TICKS_TO_ANGLE = 1.0; //TODO: set to actual value
-	public static boolean useGearIntakeSubsystem;
 	
 //------------------------------SOFTWARE CONSTANTS------------------------------
 	// Miscellaneous
