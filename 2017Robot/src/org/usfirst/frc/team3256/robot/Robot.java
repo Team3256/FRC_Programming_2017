@@ -156,6 +156,7 @@ public class Robot extends IterativeRobot {
 		autoStartTime = Timer.getFPGATimestamp();
 		autonomousCommand = autonomousChooser.getSelected();
 		autonomousCommand.start();
+		System.out.println("AUTO STARTED");
 	}
 
 	/**

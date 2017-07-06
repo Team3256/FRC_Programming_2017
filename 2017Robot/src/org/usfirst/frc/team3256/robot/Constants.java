@@ -63,7 +63,7 @@ public class Constants {
 	public static final double MAX_VEL_HIGH_GEAR_IN_SEC = 10.0 * 12.0; // 18.94 theoretical ft/s
 	public static final double MAX_ACCEL_HIGH_GEAR_IN_SEC2 = 9.0 * 12.0; 
 	public static final double MAX_VEL_TURN_LOW_GEAR_DEG_SEC = 300.0; 
-	public static final double MAX_ACCEL_TURN_LOW_GEAR_DEG_SEC2 = 300.0; 
+	public static final double MAX_ACCEL_TURN_LOW_GEAR_DEG_SEC2 = 250.0; 
 	public static final int GRAYHILL_TICKS_PER_ROT = 256;
 	public static final double WHEEL_DIAMETER = 4.04; //inches -- theoretical 4", includes tread
 	public static final double INCHES_PER_TICK = WHEEL_DIAMETER*Math.PI/GRAYHILL_TICKS_PER_ROT;
@@ -116,8 +116,8 @@ public class Constants {
 	public static final double KV_TURN = 1.0/MAX_VEL_TURN_LOW_GEAR_DEG_SEC;
 	public static final double KA_TURN = 0.0;
 	public static final double KP_TURN = 0.05;
-	public static final double KI_TURN = 0.003;
-	public static final double KD_TURN = 0.005;
+	public static final double KI_TURN = 0.0;
+	public static final double KD_TURN = 0.0;
 	
 	//Gear Handler pivot position PID Gains
 	public static final double KP_PIVOT_POSITION = 0.02;
