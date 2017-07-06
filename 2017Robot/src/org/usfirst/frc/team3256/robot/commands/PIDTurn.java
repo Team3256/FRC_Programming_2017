@@ -44,8 +44,14 @@ public class PIDTurn extends Command {
 			@Override
 			public void run() {
 		    	double output = pid.update(Math.abs(drive.getAngle()));
-		    	if (turnRight) drive.tankDrive(output, oneWheel ? 0 : -output, false);
-		    	else drive.tankDrive(oneWheel ? 0 : -output, output, false);
+		    	if (turnRight){
+		    		drive.setLeftMotorPower(output);
+		    		drive.setRightMotorPower(oneWheel ? 0 : -output);
+		    	}
+		    	else{
+		    		drive.setLeftMotorPower(oneWheel ? 0 : -output);
+		    		drive.setRightMotorPower(output);
+		    	}
 			}
         });
 
@@ -67,7 +73,7 @@ public class PIDTurn extends Command {
      * Stops the turn once it is finished
      */
     protected void end() {
-    	drive.tankDrive(0, 0, false);
+    	drive.setOpenLoop(0, 0);
     	notifier.stop();
     	notifier = null;
     	endTime = Timer.getFPGATimestamp();

@@ -36,8 +36,14 @@ public class MotionProfiledTurn extends Command {
 			public void run() {
 				double output = turnController.update();
 				SmartDashboard.putNumber("OUTPUT MP TURN", output);
-				if (turnRight) drive.tankDrive(-output, output, false);
-		    	else drive.tankDrive(output, -output, false);
+				if (turnRight){
+					drive.setLeftMotorPower(-output);
+					drive.setRightMotorPower(output);
+				}
+		    	else{
+		    		drive.setLeftMotorPower(output);
+		    		drive.setRightMotorPower(-output);
+		    	}
 			}
     	});
     	turnController.reset();
@@ -56,7 +62,7 @@ public class MotionProfiledTurn extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
-    	drive.tankDrive(0, 0, true);
+    	drive.setOpenLoop(0, 0);
     	notifier.stop();
     	notifier = null;
     }

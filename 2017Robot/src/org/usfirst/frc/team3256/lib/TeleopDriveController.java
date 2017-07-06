@@ -1,31 +1,55 @@
 package org.usfirst.frc.team3256.lib;
 
+import org.usfirst.frc.team3256.robot.Constants;
 import org.usfirst.frc.team3256.robot.subsystems.DriveTrain;
 
-/**
- * Helper class to implement "Cheesy Drive". "Cheesy Drive" simply means that
- * the "turning" stick controls the curvature of the robot's path rather than
- * its rate of heading change. This helps make the robot more controllable at
- * high speeds. Also handles the robot's quick turn functionality - "quick turn"
- * overrides constant-curvature turning for turn-in-place maneuvers.
- */
-public class CheesyDrive {
-	//Driving constants
-	static double mQuickStopAccumulator;
-    public static final double kThrottleDeadband = 0.25;
-    private static final double kWheelDeadband = 0.25;
+public class TeleopDriveController {
+	
+	private static double mQuickStopAccumulator;
     private static final double kTurnSensitivity = 1.0;
-    private static DriveSignal mSignal = new DriveSignal(0, 0);
+    private static DriveTrain drive = DriveTrain.getInstance();
 
+	/**
+	 * @param left - The left throttle value
+	 * @param right - The right throttle value
+	 * @param wantsReverse - If true, reverse the front and back of the robot
+	 * Tank Drive allows direct control of the left and right drives of the robot
+	 */
+	public static void tankDrive(double left, double right, boolean wantsReverse){
+		left = handleDeadband(left, Constants.XBOX_DEADBAND_VALUE);
+		right = handleDeadband(right, Constants.XBOX_DEADBAND_VALUE);
+		left = limit(left, 1);
+		right = limit(right, 1);
+		if (wantsReverse){
+			left *= -1;
+			right *= -1;
+		}
+		drive.setOpenLoop(left, right);
+	}
+    
+	/**
+	 * @param throttle - The throttle value
+	 * @param turn - The turn or wheel value
+	 * @param wantsReverse - If true, reverse the front and back of the robot
+	 */
+	public static void arcadeDrive(double throttle, double turn, boolean wantsReverse){
+		throttle = Math.pow(throttle, 3);
+		turn = Math.pow(turn, 3);
+		if (wantsReverse) throttle *= -1;
+		throttle = handleDeadband(throttle, Constants.XBOX_DEADBAND_VALUE);
+		turn = handleDeadband(turn, Constants.XBOX_DEADBAND_VALUE);
+		double left = throttle + turn;
+		double right = throttle - turn;
+		left = limit(left, 1);
+		right = limit(right, 1);
+		drive.setOpenLoop(left, right);
+	}
+    
     public static void cheesyDrive(double throttle, double wheel, boolean isQuickTurn) {
-
-        wheel = handleDeadband(wheel, kWheelDeadband);
-        throttle = handleDeadband(throttle, kThrottleDeadband);
-
+        wheel = handleDeadband(wheel, Constants.XBOX_DEADBAND_VALUE);
+        throttle = handleDeadband(throttle, Constants.XBOX_DEADBAND_VALUE);
         double overPower;
         double angularPower;
-        
-       
         if (isQuickTurn) {
         	//if we want a quick turn, set quick stop accumulator and powers
             if (Math.abs(throttle) < 0.4) {
@@ -48,8 +72,8 @@ public class CheesyDrive {
         }
         
         //set right and left motor powers
-        double rightPwm = throttle - angularPower;
         double leftPwm = throttle + angularPower;
+        double rightPwm = throttle - angularPower;
         
         //keep left and right motor powers between -1.0 and 1.0
         if (leftPwm > 1.0) {
@@ -66,12 +90,7 @@ public class CheesyDrive {
             rightPwm = -1.0;
         }
         
-        mSignal.rightMotor = rightPwm;
-        mSignal.leftMotor = leftPwm;
-        
-        //run left and right motors to respective motor powers
-        DriveTrain.getInstance().setLeftMotorPower(leftPwm);
-        DriveTrain.getInstance().setRightMotorPower(rightPwm);
+        drive.setOpenLoop(leftPwm, rightPwm);
     }
 
     public static double handleDeadband(double val, double deadband) {

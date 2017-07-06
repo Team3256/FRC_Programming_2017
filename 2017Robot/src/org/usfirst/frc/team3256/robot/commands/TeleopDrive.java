@@ -1,6 +1,6 @@
 package org.usfirst.frc.team3256.robot.commands;
 
-import org.usfirst.frc.team3256.lib.CheesyDrive;
+import org.usfirst.frc.team3256.lib.TeleopDriveController;
 import org.usfirst.frc.team3256.robot.OI;
 import org.usfirst.frc.team3256.robot.subsystems.DriveTrain;
 
@@ -34,14 +34,14 @@ public class TeleopDrive extends Command {
     protected void execute() {
     	if (DriverStation.getInstance().isAutonomous()) return;
     	if (wantedMode == TeleopDriveMode.TANK){
-    		driveTrain.tankDrive(OI.driver.getY(Hand.kLeft), 
+    		TeleopDriveController.tankDrive(OI.driver.getY(Hand.kLeft), 
     				OI.driver.getY(Hand.kRight), OI.rightTrigger1.get());
     	}
     	else if (wantedMode == TeleopDriveMode.ARCADE){
-    		driveTrain.arcadeDrive(OI.driver.getY(Hand.kLeft), 
+    		TeleopDriveController.arcadeDrive(OI.driver.getY(Hand.kLeft), 
     				OI.driver.getX(Hand.kRight), OI.rightTrigger1.get());
     	} else {
-    		CheesyDrive.cheesyDrive(OI.driver.getY(Hand.kLeft), OI.driver.getX(Hand.kRight), OI.rightTrigger1.get());
+    		TeleopDriveController.cheesyDrive(OI.driver.getY(Hand.kLeft), OI.driver.getX(Hand.kRight), OI.rightTrigger1.get());
     	}
     	driveTrain.shiftUp(!OI.leftTrigger1.get());
     }

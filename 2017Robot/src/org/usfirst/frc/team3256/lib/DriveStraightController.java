@@ -57,10 +57,10 @@ public class DriveStraightController {
 	}
 	
 	/**
-	 * @return DrivePWM with the left and right velocities of the robot
+	 * @return DriveSignal with the left and right velocities of the robot
 	 * calculated based on our current position and angle
 	 */
-	public DrivePWM update(){
+	public DriveSignal update(){
 		//follower output for distance
 		output = trajectoryFollower.update(Math.abs(drive.getAveragePosition()));
 		//pid output for driving straight
@@ -68,7 +68,7 @@ public class DriveStraightController {
 		//adjust values for the left and right sides of the drivetrain
 		leftOutput = output - headingAdjustment;
 		rightOutput = output + headingAdjustment;
-		DrivePWM signal = new DrivePWM(leftOutput, rightOutput);
+		DriveSignal signal = new DriveSignal(leftOutput, rightOutput);
 		return signal;
 	}
 	

@@ -55,11 +55,9 @@ public class SmallTurn extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
-    	drive.tankDrive(0, 0, false);
     	System.out.println("FINISHED");
-    	drive.tankDrive(0, 0, false);
+    	drive.setOpenLoop(0, 0);
     	drive.shiftUp(true);
-    	notifier.stop();
     	notifier.stop();
     	notifier = null;
     }

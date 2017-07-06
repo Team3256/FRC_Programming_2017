@@ -53,8 +53,6 @@ public class Robot extends IterativeRobot {
 	OI operatorInterface;
 	Logger logger;
 	SendableChooser<Command> autonomousChooser;
-	SendableChooser<Boolean> subsystemChooser;
-	SendableChooser<Boolean> flashLEDsChooser;
 	UsbCamera camera0, camera1;
 	Command autonomousCommand;
 	double autoStartTime = 0;
@@ -83,7 +81,7 @@ public class Robot extends IterativeRobot {
 		logger.addLog(manipulator);
 		logger.addLog(hanger);
 		logger.addLog(gearHandler);
-		logger.addLog(PDP.getInstance());
+		//logger.addLog(PDP.getInstance());
 		logger.start();
 		disabledLooper = new Looper();
 		disabledLooper.addLoop(new GyroCalibrator());
@@ -96,6 +94,7 @@ public class Robot extends IterativeRobot {
 		camera1.setExposureManual(75);
 		*/
 		driveTrain.calibrateGyro();
+		operatorInterface = new OI();
 		autonomousChooser = new SendableChooser<>();
 		autonomousChooser.addDefault("Do Nothing Auto", new DoNothingAuto());
 		autonomousChooser.addObject("Cross Baseline Only", new BaselineCross());
@@ -144,7 +143,6 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void autonomousInit() {
-		operatorInterface = new OI();
 		disabledLooper.stop();
 		manipulator.setHumanLoadingState(HumanPlayerLoadingState.GEAR_INTAKE);
 		autoStartTime = Timer.getFPGATimestamp();
@@ -168,7 +166,6 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopInit() {
 		gearHandler.setState(GearHandlerState.MANUAL_CONTROL);
-		operatorInterface = new OI();
 		disabledLooper.stop();
 		driveTrain.resetEncoders();
 		driveTrain.resetGyro();

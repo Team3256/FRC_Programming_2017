@@ -2,6 +2,7 @@ package org.usfirst.frc.team3256.robot.subsystems;
 
 import org.usfirst.frc.team3256.lib.ADXRS453_Gyro;
 import org.usfirst.frc.team3256.lib.Log;
+import org.usfirst.frc.team3256.lib.Loop;
 import org.usfirst.frc.team3256.lib.PDP;
 import org.usfirst.frc.team3256.robot.Constants;
 import org.usfirst.frc.team3256.robot.commands.TeleopDrive;
@@ -14,7 +15,7 @@ import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class DriveTrain extends Subsystem implements Log {
+public class DriveTrain extends Subsystem implements Log, Loop {
 	
 	//Singleton Instance of the DriveTrain Subsystem
 	private static DriveTrain instance;
@@ -26,6 +27,28 @@ public class DriveTrain extends Subsystem implements Log {
 	private ADXRS453_Gyro gyro;
 	private DoubleSolenoid shifter;
 	PDP pdp = PDP.getInstance();
+	
+	public enum DriveControlMode{
+		OPEN_LOOP,
+		AUTO_ALIGN,
+		MOTION_PROFILE,
+		PATH_FOLLOWING;
+	}
+	
+	@Override
+	public void initialize() {
+		
+	}
+
+	@Override
+	public void update() {
+		
+	}
+
+	@Override
+	public void end() {
+		
+	}
 	
 	/**
 	 * Cannot be instantiated out of the class, so we will always only have one DriveTrain instance
@@ -100,13 +123,6 @@ public class DriveTrain extends Subsystem implements Log {
 		SmartDashboard.putNumber("Right Velocity", getRightVelocity());
 	}
 	
-	public int getRawLeftTicks(){
-		return encoderLeft.get();
-	}
-
-	public int getRawRightTicks(){
-		return encoderRight.get();
-	}
 	/**
 	 * @param power - Sends the given power to run the left drive motors in open loop mode
 	 */
@@ -119,6 +135,11 @@ public class DriveTrain extends Subsystem implements Log {
 	 */
 	public void setRightMotorPower(double power) {
 		rightDrive.set(power);
+	}
+	
+	public void setOpenLoop(double left, double right){
+		setLeftMotorPower(left);
+		setRightMotorPower(right);
 	}
 	
 	/**
@@ -178,10 +199,6 @@ public class DriveTrain extends Subsystem implements Log {
 		encoderRight.reset();
 	}
 
-	public double degreeToInches(double degrees){
-		return degrees/360.0*Constants.ROBOT_CIRCUMFERENCE;
-	}
-	
 	public ADXRS453_Gyro getGyro(){
 		return gyro;
 	}
@@ -213,42 +230,5 @@ public class DriveTrain extends Subsystem implements Log {
 	public double getAngularVelocity(){
 		return gyro.getRate();
 	}
-	
-	/**
-	 * @param left - The left throttle value
-	 * @param right - The right throttle value
-	 * @param wantsReverse - If true, reverse the front and back of the robot
-	 * Tank Drive allows direct control of the left and right drives of the robot
-	 */
-	public void tankDrive(double left, double right, boolean wantsReverse){
-		if (Math.abs(left) < Constants.XBOX_DEADBAND_VALUE) left = 0;
-		if (Math.abs(right) < Constants.XBOX_DEADBAND_VALUE) right = 0;
-		left = Math.max(-1, Math.min(1, left));
-		right = Math.max(-1, Math.min(1, right));
-		if (wantsReverse){
-			left *= -1;
-			right *= -1;
-		}
-		setLeftMotorPower(left);
-		setRightMotorPower(right);
-	}
-	
-	/**
-	 * @param throttle - The throttle value
-	 * @param turn - The turn or wheel value
-	 * @param wantsReverse - If true, reverse the front and back of the robot
-	 */
-	public void arcadeDrive(double throttle, double turn, boolean wantsReverse){
-		throttle = Math.pow(throttle, 3);
-		turn = Math.pow(turn, 3);
-		if (wantsReverse) throttle *= -1;
-		if (Math.abs(throttle) < Constants.XBOX_DEADBAND_VALUE) throttle = 0;
-		if (Math.abs(turn) < Constants.XBOX_DEADBAND_VALUE) turn = 0;
-		double left = throttle + turn;
-		double right = throttle - turn;
-		left = Math.max(-1, Math.min(1, left));
-		right = Math.max(-1, Math.min(1, right));
-		setLeftMotorPower(left);
-		setRightMotorPower(right);
-	}
+
 }

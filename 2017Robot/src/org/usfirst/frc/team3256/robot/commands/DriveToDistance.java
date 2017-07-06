@@ -1,6 +1,6 @@
 package org.usfirst.frc.team3256.robot.commands;
 
-import org.usfirst.frc.team3256.lib.DrivePWM;
+import org.usfirst.frc.team3256.lib.DriveSignal;
 import org.usfirst.frc.team3256.lib.DriveStraightController;
 import org.usfirst.frc.team3256.robot.Constants;
 import org.usfirst.frc.team3256.robot.subsystems.DriveTrain;
@@ -43,14 +43,14 @@ public class DriveToDistance extends Command {
         notifier = new Notifier(new Runnable(){
 			@Override
 			public void run() {
-				DrivePWM signal = controller.update();
+				DriveSignal signal = controller.update();
 				if (!goForward){
-					drive.setLeftMotorPower(-signal.getLeftPWM());
-					drive.setRightMotorPower(-signal.getRightPWM());
+					drive.setLeftMotorPower(-signal.leftMotor);
+					drive.setRightMotorPower(-signal.rightMotor);
 				}
 				else{
-					drive.setLeftMotorPower(signal.getLeftPWM());
-					drive.setRightMotorPower(signal.getRightPWM());
+					drive.setLeftMotorPower(signal.leftMotor);
+					drive.setRightMotorPower(signal.rightMotor);
 				}
 			}
         });
@@ -75,7 +75,7 @@ public class DriveToDistance extends Command {
     	endAngle = drive.getAngle();
     	dAngle = endAngle-startAngle;
     	SmartDashboard.putNumber("CHANGE IN GYRO ANGLE", dAngle);
-    	drive.tankDrive(0, 0, false);
+    	drive.setOpenLoop(0,0);
     	notifier.stop();
     	notifier = null;
     }
