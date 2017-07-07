@@ -13,7 +13,6 @@ import org.usfirst.frc.team3256.robot.commands.StopHang;
 import org.usfirst.frc.team3256.robot.commands.StowGearHandler;
 import org.usfirst.frc.team3256.robot.commands.ZeroGearHandler;
 import org.usfirst.frc.team3256.robot.subsystems.GearHandler;
-import org.usfirst.frc.team3256.robot.triggers.DualButton;
 import org.usfirst.frc.team3256.robot.triggers.JoystickTrigger;
 
 import edu.wpi.first.wpilibj.GenericHID.Hand;
@@ -52,7 +51,6 @@ public class OI implements Log{
     public static Button buttonB2 = new JoystickButton(manipulator, 2);
     public static Button buttonX2 = new JoystickButton(manipulator, 3);
     public static Button buttonY2 = new JoystickButton(manipulator, 4);
-    public static Button buttonXB2 = new DualButton(manipulator, 2, 3);
     public static Button leftBumper2 = new JoystickButton(manipulator, 5);
     public static Button rightBumper2 = new JoystickButton(manipulator, 6);
 	public static Trigger rightTrigger2 = new JoystickTrigger(manipulator,3);

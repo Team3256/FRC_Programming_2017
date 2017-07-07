@@ -1,13 +1,8 @@
 package org.usfirst.frc.team3256.robot.commands;
 
-import org.usfirst.frc.team3256.lib.DriveSignal;
-import org.usfirst.frc.team3256.lib.DriveStraightController;
-import org.usfirst.frc.team3256.robot.Constants;
 import org.usfirst.frc.team3256.robot.subsystems.DriveTrain;
 
-import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
@@ -15,10 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class DriveToDistance extends Command {
 
 	DriveTrain drive = DriveTrain.getInstance();
-	DriveStraightController controller;
-	Notifier notifier;
 	private double setpoint;
-	private double startAngle, endAngle, dAngle;
 	private boolean goForward;
 	
 	/**
@@ -35,27 +27,7 @@ public class DriveToDistance extends Command {
      * Initializes the drivetrain and this command
      */
     protected void initialize() {
-    	drive.resetEncoders();
-    	drive.resetGyro();        
-    	drive.shiftUp(true);
-    	startAngle = drive.getAngle();
-    	controller = new DriveStraightController();
-        notifier = new Notifier(new Runnable(){
-			@Override
-			public void run() {
-				DriveSignal signal = controller.update();
-				if (!goForward){
-					drive.setLeftMotorPower(-signal.leftMotor);
-					drive.setRightMotorPower(-signal.rightMotor);
-				}
-				else{
-					drive.setLeftMotorPower(signal.leftMotor);
-					drive.setRightMotorPower(signal.rightMotor);
-				}
-			}
-        });
-    	controller.setSetpoint(setpoint, !goForward);
-    	notifier.startPeriodic(Constants.CONTROL_LOOP_DT);
+    	drive.setDriveStraightSetpoint(setpoint, goForward);
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -65,19 +37,14 @@ public class DriveToDistance extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return controller.isFinished() || Math.abs(setpoint-drive.getAveragePosition()) <= 1;
+        return drive.isFinishedDriveStraight();
     }
 
     /**
      * Stops the drive after it is finished
      */
     protected void end() {
-    	endAngle = drive.getAngle();
-    	dAngle = endAngle-startAngle;
-    	SmartDashboard.putNumber("CHANGE IN GYRO ANGLE", dAngle);
     	drive.setOpenLoop(0,0);
-    	notifier.stop();
-    	notifier = null;
     }
 
     // Called when another command which requires one or more of the same

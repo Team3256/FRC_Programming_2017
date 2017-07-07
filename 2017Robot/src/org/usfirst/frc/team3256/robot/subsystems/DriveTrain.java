@@ -1,6 +1,9 @@
 package org.usfirst.frc.team3256.robot.subsystems;
 
 import org.usfirst.frc.team3256.lib.ADXRS453_Gyro;
+import org.usfirst.frc.team3256.lib.BangBangController;
+import org.usfirst.frc.team3256.lib.DriveSignal;
+import org.usfirst.frc.team3256.lib.DriveStraightController;
 import org.usfirst.frc.team3256.lib.Log;
 import org.usfirst.frc.team3256.lib.Loop;
 import org.usfirst.frc.team3256.lib.PDP;
@@ -27,22 +30,42 @@ public class DriveTrain extends Subsystem implements Log, Loop {
 	private ADXRS453_Gyro gyro;
 	private DoubleSolenoid shifter;
 	PDP pdp = PDP.getInstance();
+	private DriveControlMode driveControlMode = DriveControlMode.OPEN_LOOP;
+	private DriveStraightController driveStraightController;
+	private BangBangController alignController;
+	private boolean goForward, turnRight;
 	
 	public enum DriveControlMode{
 		OPEN_LOOP,
 		AUTO_ALIGN,
 		MOTION_PROFILE,
+		SLOW_TURN,
 		PATH_FOLLOWING;
 	}
 	
 	@Override
 	public void initialize() {
-		
+		driveStraightController = null;
+		setOpenLoop(0,0);
 	}
 
 	@Override
 	public void update() {
-		
+		switch (driveControlMode){
+		case OPEN_LOOP:
+			//teleop drive is running as the default command
+			return;
+		case AUTO_ALIGN:
+			break;
+		case MOTION_PROFILE:
+			updateDriveStraight();
+			break;
+		case SLOW_TURN:
+			
+			break;
+		case PATH_FOLLOWING:
+			break;
+		}
 	}
 
 	@Override
@@ -74,6 +97,38 @@ public class DriveTrain extends Subsystem implements Log, Loop {
 		gyro = new ADXRS453_Gyro();
 		//Shifter to shift between high and low gear
 		shifter = new DoubleSolenoid(Constants.DRIVE_SHIFTER_A,Constants.DRIVE_SHIFTER_B);
+	}
+	
+	public void setDriveStraightSetpoint(double setpoint, boolean goForward){
+		this.goForward = goForward;
+		if (driveControlMode != DriveControlMode.MOTION_PROFILE){
+			driveControlMode = DriveControlMode.MOTION_PROFILE;
+		}
+		resetEncoders();
+		shiftUp(true);
+		driveStraightController = new DriveStraightController();
+		driveStraightController.setSetpoint(setpoint, !goForward);
+	}
+	
+	public boolean isFinishedDriveStraight(){
+        return (driveControlMode == DriveControlMode.MOTION_PROFILE && driveStraightController.isFinished())
+        		|| driveControlMode != DriveControlMode.MOTION_PROFILE;
+	}
+	
+	private void updateDriveStraight(){
+		DriveSignal signal = driveStraightController.update();
+		if (!goForward){
+			setLeftMotorPower(-signal.leftMotor);
+			setRightMotorPower(-signal.rightMotor);
+		}
+		else{
+			setLeftMotorPower(signal.leftMotor);
+			setRightMotorPower(signal.rightMotor);
+		}
+	}
+	
+	public void setAlignSetpoint(double setpoint, boolean turnRight){
+		this.turnRight = turnRight;
 	}
 	
 	/**
@@ -123,6 +178,10 @@ public class DriveTrain extends Subsystem implements Log, Loop {
 		SmartDashboard.putNumber("Right Velocity", getRightVelocity());
 	}
 	
+	public DriveControlMode getDriveMode(){
+		return driveControlMode;
+	}
+	
 	/**
 	 * @param power - Sends the given power to run the left drive motors in open loop mode
 	 */
@@ -131,13 +190,16 @@ public class DriveTrain extends Subsystem implements Log, Loop {
 	}
 	
 	/**
-	 * @param power - Sends the given power to run the right drive motors in open loop mode
+	 * @param power - Sends the given power to run the sright drive motors in open loop mode
 	 */
 	public void setRightMotorPower(double power) {
 		rightDrive.set(power);
 	}
 	
 	public void setOpenLoop(double left, double right){
+		if (driveControlMode != DriveControlMode.OPEN_LOOP){
+			driveControlMode = DriveControlMode.OPEN_LOOP;
+		}
 		setLeftMotorPower(left);
 		setRightMotorPower(right);
 	}

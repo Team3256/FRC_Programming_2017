@@ -18,7 +18,7 @@ public class BangBangController {
 	public BangBangController(double setpoint, double output){
 		this.setpoint = setpoint;
 		this.output = output;
-		tolerance = 2;
+		tolerance = 1;
 	}
 	
 	/**
@@ -26,7 +26,7 @@ public class BangBangController {
 	 * The power is set to 1, the maximum
 	 */
 	public BangBangController(double setpoint){
-		this(setpoint,1.0);
+		this(setpoint, 1.0);
 	}
 	
 	/**

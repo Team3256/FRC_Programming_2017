@@ -13,6 +13,7 @@ public class DriveStraightController {
 	//PID for driving straight
 	private PIDController headingController;
 	private DriveTrain drive = DriveTrain.getInstance();
+	private double setpoint;
 	private double output, headingAdjustment, leftOutput, rightOutput;
 	private boolean reversed;
 	
@@ -28,6 +29,7 @@ public class DriveStraightController {
 	 * @param reversed true if we are driving backwards, false if we are not reversed and driving forward
 	 */
 	public void setSetpoint(double setpoint, boolean reversed){
+		this.setpoint = setpoint;
 		trajectory = trajectoryGenerator.generateTraj(0, 0, setpoint);
 		trajectoryFollower.setTrajectory(trajectory);
 		trajectoryFollower.setGains(Constants.KV_DISTANCE, Constants.KA_DISTANCE, 
@@ -53,7 +55,7 @@ public class DriveStraightController {
 	 * @return true when the follower (distnace controller) has finished 
 	 */
 	public boolean isFinished(){
-		return trajectoryFollower.isFinished();
+		return trajectoryFollower.isFinished()  || Math.abs(setpoint-drive.getAveragePosition()) <= 1;
 	}
 	
 	/**

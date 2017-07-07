@@ -20,7 +20,6 @@ public class TeleopDrive extends Command {
 		CHEESY;
 	}
 	
-	//TESTED ON HARDWARE
     public TeleopDrive(TeleopDriveMode wantedMode) {
         requires(driveTrain);
 		this.wantedMode = wantedMode;
