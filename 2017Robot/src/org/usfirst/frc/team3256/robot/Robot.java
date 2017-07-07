@@ -44,6 +44,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends IterativeRobot {
 	
 	Looper disabledLooper;
+	Looper enabledLooper;
 	LEDStrip led;
 	DriveTrain driveTrain;
 	GearHandler gearHandler;
@@ -85,6 +86,8 @@ public class Robot extends IterativeRobot {
 		logger.start();
 		disabledLooper = new Looper();
 		disabledLooper.addLoop(new GyroCalibrator());
+		enabledLooper = new Looper();
+		enabledLooper.addLoop(DriveTrain.getInstance());
 		/*
 		camera0 = CameraServer.getInstance().startAutomaticCapture();
 		camera0.setResolution(240, 180);
@@ -120,6 +123,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void disabledInit() {
+		enabledLooper.stop();
 		disabledLooper.start();
 	}
 
@@ -148,6 +152,7 @@ public class Robot extends IterativeRobot {
 		autoStartTime = Timer.getFPGATimestamp();
 		autonomousCommand = autonomousChooser.getSelected();
 		autonomousCommand.start();
+		enabledLooper.start();
 		System.out.println("AUTO STARTED");
 	}
 
@@ -167,6 +172,7 @@ public class Robot extends IterativeRobot {
 	public void teleopInit() {
 		gearHandler.setState(GearHandlerState.MANUAL_CONTROL);
 		disabledLooper.stop();
+		enabledLooper.start();
 		driveTrain.resetEncoders();
 		driveTrain.resetGyro();
 		driveTrain.shiftUp(true);

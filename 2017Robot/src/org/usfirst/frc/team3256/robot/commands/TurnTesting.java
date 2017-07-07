@@ -11,7 +11,7 @@ public class TurnTesting extends CommandGroup {
 
     public TurnTesting() {
     	//addSequential(new MotionProfiledTurn(90, true));
-        addSequential(new SmallTurn(3, true));
+        addSequential(new SmallTurn(3, false));
         addSequential(new WaitCommand(1));
         //addSequential(new SmallTurn(3, false));
     }

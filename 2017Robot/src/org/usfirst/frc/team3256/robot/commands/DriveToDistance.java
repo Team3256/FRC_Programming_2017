@@ -27,6 +27,7 @@ public class DriveToDistance extends Command {
      * Initializes the drivetrain and this command
      */
     protected void initialize() {
+    	drive.shiftUp(true);
     	drive.setDriveStraightSetpoint(setpoint, goForward);
     }
 

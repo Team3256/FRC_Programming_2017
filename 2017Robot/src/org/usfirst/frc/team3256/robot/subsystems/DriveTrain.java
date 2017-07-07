@@ -56,6 +56,7 @@ public class DriveTrain extends Subsystem implements Log, Loop {
 			//teleop drive is running as the default command
 			return;
 		case AUTO_ALIGN:
+			updateAlign();
 			break;
 		case MOTION_PROFILE:
 			updateDriveStraight();
@@ -104,8 +105,6 @@ public class DriveTrain extends Subsystem implements Log, Loop {
 		if (driveControlMode != DriveControlMode.MOTION_PROFILE){
 			driveControlMode = DriveControlMode.MOTION_PROFILE;
 		}
-		resetEncoders();
-		shiftUp(true);
 		driveStraightController = new DriveStraightController();
 		driveStraightController.setSetpoint(setpoint, !goForward);
 	}
@@ -129,6 +128,27 @@ public class DriveTrain extends Subsystem implements Log, Loop {
 	
 	public void setAlignSetpoint(double setpoint, boolean turnRight){
 		this.turnRight = turnRight;
+		if (driveControlMode != DriveControlMode.AUTO_ALIGN){
+			driveControlMode = DriveControlMode.AUTO_ALIGN;
+		}
+		alignController = new BangBangController(setpoint, 0.2);
+	}
+	
+	public boolean isFinishedAlign(){
+		return (driveControlMode == DriveControlMode.AUTO_ALIGN && alignController.isFinished())
+				|| driveControlMode != DriveControlMode.AUTO_ALIGN;
+	}
+	
+	public void updateAlign(){
+		double output = alignController.update(Math.abs(getAngle()));
+		if (turnRight){
+			setLeftMotorPower(output);
+			setRightMotorPower(-output);
+		}
+		else{
+			setLeftMotorPower(-output);
+			setRightMotorPower(output);
+		}
 	}
 	
 	/**
@@ -158,6 +178,7 @@ public class DriveTrain extends Subsystem implements Log, Loop {
 		else{
 			SmartDashboard.putBoolean("GYRO IS CALIBRATING", true);
 		}
+		SmartDashboard.putString("Drive Control Mode", "" + driveControlMode);
 		SmartDashboard.putNumber("Left Encoder: MXP- " + Constants.ENCODER_LEFT_A +
 				"," + Constants.ENCODER_LEFT_B + " ", getLeftPosition());
 		SmartDashboard.putNumber("Right Encoder: MXP- " + Constants.ENCODER_RIGHT_A + 

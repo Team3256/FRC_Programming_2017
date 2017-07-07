@@ -14,8 +14,6 @@ public class SmallTurn extends Command {
 	private DriveTrain drive = DriveTrain.getInstance();
 	private double degrees;
 	private boolean turnRight;
-	private double power = 0.2;
-	private Notifier notifier;
 	
     public SmallTurn(double degrees, boolean turnRight) {
     	requires(drive);
@@ -25,22 +23,9 @@ public class SmallTurn extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	drive.resetEncoders();
     	drive.resetGyro();
     	drive.shiftUp(false);
-    	notifier = new Notifier(new Runnable(){
-    		@Override
-    		public void run(){
-    			if (turnRight){
-    				drive.setLeftMotorPower(-power);
-    				drive.setRightMotorPower(power);
-    			}
-    			else{
-    				drive.setLeftMotorPower(power);
-    				drive.setRightMotorPower(-power);
-    			}
-    		}});
-    	notifier.startPeriodic(Constants.CONTROL_LOOP_DT);
+    	drive.setAlignSetpoint(degrees, turnRight);
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -50,7 +35,7 @@ public class SmallTurn extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return Math.abs(Math.abs(drive.getAngle()) - degrees) < 0.75;
+        return drive.isFinishedAlign();
     }
 
     // Called once after isFinished returns true
@@ -58,8 +43,6 @@ public class SmallTurn extends Command {
     	System.out.println("FINISHED");
     	drive.setOpenLoop(0, 0);
     	drive.shiftUp(true);
-    	notifier.stop();
-    	notifier = null;
     }
 
     // Called when another command which requires one or more of the same
