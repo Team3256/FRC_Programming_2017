@@ -18,7 +18,7 @@ public class BangBangController {
 	public BangBangController(double setpoint, double output){
 		this.setpoint = setpoint;
 		this.output = output;
-		tolerance = 1;
+		tolerance = 0.5;
 	}
 	
 	/**

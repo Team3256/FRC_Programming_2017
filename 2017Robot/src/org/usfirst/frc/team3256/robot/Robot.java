@@ -4,7 +4,6 @@ import org.usfirst.frc.team3256.lib.GyroCalibrator;
 import org.usfirst.frc.team3256.lib.LEDStrip;
 import org.usfirst.frc.team3256.lib.Logger;
 import org.usfirst.frc.team3256.lib.Looper;
-import org.usfirst.frc.team3256.lib.PDP;
 import org.usfirst.frc.team3256.robot.automodes.BaselineCross;
 import org.usfirst.frc.team3256.robot.automodes.DoNothingAuto;
 import org.usfirst.frc.team3256.robot.automodes.GearCenterAuto;
@@ -17,11 +16,8 @@ import org.usfirst.frc.team3256.robot.commands.TestPath;
 import org.usfirst.frc.team3256.robot.commands.TurnTesting;
 import org.usfirst.frc.team3256.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team3256.robot.subsystems.GearHandler;
-import org.usfirst.frc.team3256.robot.subsystems.GearHandler.GearHandlerState;
 import org.usfirst.frc.team3256.robot.subsystems.Hanger;
-import org.usfirst.frc.team3256.robot.subsystems.Hanger.HangerState;
 import org.usfirst.frc.team3256.robot.subsystems.Manipulator;
-import org.usfirst.frc.team3256.robot.subsystems.Manipulator.HumanPlayerLoadingState;
 
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
@@ -87,7 +83,10 @@ public class Robot extends IterativeRobot {
 		disabledLooper = new Looper();
 		disabledLooper.addLoop(new GyroCalibrator());
 		enabledLooper = new Looper();
-		enabledLooper.addLoop(DriveTrain.getInstance());
+		enabledLooper.addLoop(driveTrain);
+		enabledLooper.addLoop(gearHandler);
+		enabledLooper.addLoop(manipulator);
+		enabledLooper.addLoop(hanger);
 		/*
 		camera0 = CameraServer.getInstance().startAutomaticCapture();
 		camera0.setResolution(240, 180);
@@ -115,12 +114,6 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putData("Autonomous Chooser", autonomousChooser);
 	}
 
-	
-	/**
-	 * This function is called once each time the robot enters Disabled mode.
-	 * You can use it to reset any subsystem information you want to clear when
-	 * the robot is disabled.
-	 */
 	@Override
 	public void disabledInit() {
 		enabledLooper.stop();
@@ -132,35 +125,21 @@ public class Robot extends IterativeRobot {
 		Scheduler.getInstance().run();
 		disabledLooper.log();
 	}
-
-	/**
-	 * This autonomous (along with the chooser code above) shows how to select
-	 * between different autonomous modes using the dashboard. The sendable
-	 * chooser code works with the Java SmartDashboard. If you prefer the
-	 * LabVIEW Dashboard, remove all of the chooser code and uncomment the
-	 * getString code to get the auto name from the text box below the Gyro
-	 *
-	 * You can add additional auto modes by adding additional commands to the
-	 * chooser code above (like the commented example) or additional comparisons
-	 * to the switch structure below with additional strings & commands.
-	 */
 	
 	@Override
 	public void autonomousInit() {
 		disabledLooper.stop();
-		manipulator.setHumanLoadingState(HumanPlayerLoadingState.GEAR_INTAKE);
 		autoStartTime = Timer.getFPGATimestamp();
 		autonomousCommand = autonomousChooser.getSelected();
-		autonomousCommand.start();
+		SmartDashboard.putString("Choosen Auto", autonomousCommand + "");
 		enabledLooper.start();
+		autonomousCommand.start();
 		System.out.println("AUTO STARTED");
 	}
 
-	/**
-	 * This function is called periodically during autonomous
-	 */
 	@Override
 	public void autonomousPeriodic() {
+		enabledLooper.log();
 		Scheduler.getInstance().run();
 		if (!autonomousCommand.isRunning()){
 			autoEndTime = Timer.getFPGATimestamp();
@@ -170,29 +149,17 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void teleopInit() {
-		gearHandler.setState(GearHandlerState.MANUAL_CONTROL);
 		disabledLooper.stop();
 		enabledLooper.start();
-		driveTrain.resetEncoders();
-		driveTrain.resetGyro();
-		driveTrain.shiftUp(true);
-		manipulator.setHumanLoadingState(HumanPlayerLoadingState.GEAR_INTAKE);
-		hanger.setHangerState(HangerState.WINCH_STOP);
 	}
 
-	/**
-	 * This function is called periodically during operator control
-	 */
 	@Override
 	public void teleopPeriodic() {
+		enabledLooper.log();
 		Scheduler.getInstance().run();
-		gearHandler.update();
 		operatorInterface.update();
 	}
 
-	/**
-	 * This function is called periodically during test mode
-	 */
 	@Override
 	public void testPeriodic() {
 		LiveWindow.run();

@@ -46,7 +46,11 @@ public class DriveTrain extends Subsystem implements Log, Loop {
 	@Override
 	public void initialize() {
 		driveStraightController = null;
+		alignController = null;
 		setOpenLoop(0,0);
+		resetEncoders();
+		resetGyro();
+		shiftUp(true);
 	}
 
 	@Override
@@ -71,7 +75,7 @@ public class DriveTrain extends Subsystem implements Log, Loop {
 
 	@Override
 	public void end() {
-		
+		setOpenLoop(0,0);
 	}
 	
 	/**
@@ -102,11 +106,11 @@ public class DriveTrain extends Subsystem implements Log, Loop {
 	
 	public void setDriveStraightSetpoint(double setpoint, boolean goForward){
 		this.goForward = goForward;
+		driveStraightController = new DriveStraightController();
+		driveStraightController.setSetpoint(setpoint, !goForward);
 		if (driveControlMode != DriveControlMode.MOTION_PROFILE){
 			driveControlMode = DriveControlMode.MOTION_PROFILE;
 		}
-		driveStraightController = new DriveStraightController();
-		driveStraightController.setSetpoint(setpoint, !goForward);
 	}
 	
 	public boolean isFinishedDriveStraight(){
@@ -142,12 +146,12 @@ public class DriveTrain extends Subsystem implements Log, Loop {
 	public void updateAlign(){
 		double output = alignController.update(Math.abs(getAngle()));
 		if (turnRight){
-			setLeftMotorPower(output);
-			setRightMotorPower(-output);
-		}
-		else{
 			setLeftMotorPower(-output);
 			setRightMotorPower(output);
+		}
+		else{
+			setLeftMotorPower(output);
+			setRightMotorPower(-output);
 		}
 	}
 	

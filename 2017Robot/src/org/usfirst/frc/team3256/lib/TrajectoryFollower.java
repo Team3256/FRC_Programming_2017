@@ -107,7 +107,6 @@ public class TrajectoryFollower{
 			feedForwardValue = calcFeedForward(s.getVel(), s.getAccel());
 			//calculate fb value
 			feedBackValue = calcFeedBack(s.getPos(), currPos, s.getVel());
-			System.out.println("FF VALUE------------" + feedForwardValue);
 			//output = ff + fb
 			output = feedForwardValue + feedBackValue;
 			//increment current segment 

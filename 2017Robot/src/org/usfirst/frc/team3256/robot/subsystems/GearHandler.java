@@ -1,6 +1,7 @@
 package org.usfirst.frc.team3256.robot.subsystems;
 
 import org.usfirst.frc.team3256.lib.Log;
+import org.usfirst.frc.team3256.lib.Loop;
 import org.usfirst.frc.team3256.robot.Constants;
 import org.usfirst.frc.team3256.robot.OI;
 
@@ -23,7 +24,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 /**
  *
  */
-public class GearHandler extends Subsystem implements Log {
+public class GearHandler extends Subsystem implements Log, Loop {
 
 	private static GearHandler instance;
 	private VictorSP gearRoller;
@@ -92,10 +93,15 @@ public class GearHandler extends Subsystem implements Log {
 		pivot.setMotionMagicCruiseVelocity(Constants.MAGIC_CRUISE_VELOCITY);
 		pivot.set(0);
 		gearBumperSwitch = new DigitalInput(Constants.GEAR_BUMPER_SWITCH);
-		gearHandlerState = GearHandlerState.STOPPED;
 	}
 
+	@Override
+	public void initialize() {
+		gearHandlerState = GearHandlerState.MANUAL_CONTROL;
+	}
+	
 	//uses position
+	@Override
 	public void update(){
 		if (pivot.isSensorPresent(FeedbackDevice.CtreMagEncoder_Relative) != FeedbackDeviceStatus.FeedbackStatusPresent){
 			gearHandlerState = GearHandlerState.MANUAL_CONTROL;
@@ -194,6 +200,13 @@ public class GearHandler extends Subsystem implements Log {
 		}
 	}
 
+	@Override
+	public void end() {
+		pivot.changeControlMode(TalonControlMode.PercentVbus);
+		pivot.set(0);
+	}
+
+	
 	public void setEncoderPosition(double pos) {
 		pivot.setPosition(pos);
 	}

@@ -1,12 +1,13 @@
 package org.usfirst.frc.team3256.robot.subsystems;
 
 import org.usfirst.frc.team3256.lib.Log;
+import org.usfirst.frc.team3256.lib.Loop;
 import org.usfirst.frc.team3256.robot.Constants;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class Manipulator extends Subsystem implements Log {
+public class Manipulator extends Subsystem implements Log, Loop {
 
 	// Singleton instance of the Manipulator Subsystem
 	private static Manipulator instance;
@@ -56,31 +57,7 @@ public class Manipulator extends Subsystem implements Log {
 	 *            subsystem.
 	 */
 	public void setHumanLoadingState(HumanPlayerLoadingState wantedState) {
-		switch (wantedState) {
-		case GEAR_INTAKE:
-			loadingState = HumanPlayerLoadingState.GEAR_INTAKE;
-			gearDeployer.set(DoubleSolenoid.Value.kReverse);
-			humanIntakePivot.set(DoubleSolenoid.Value.kForward);
-			break;
-		case GEAR_DEPLOY:
-			loadingState = HumanPlayerLoadingState.GEAR_DEPLOY;
-			gearDeployer.set(DoubleSolenoid.Value.kForward);
-			break;
-		case GEAR_RETRACT:
-			loadingState = HumanPlayerLoadingState.GEAR_RETRACT;
-			gearDeployer.set(DoubleSolenoid.Value.kReverse);
-			break;
-		case BALLS_INTAKE:
-			loadingState = HumanPlayerLoadingState.BALLS_INTAKE;
-			humanIntakePivot.set(DoubleSolenoid.Value.kReverse);
-			gearDeployer.set(DoubleSolenoid.Value.kReverse);
-			break;
-		default:
-			humanIntakePivot.set(DoubleSolenoid.Value.kOff);
-			gearDeployer.set(DoubleSolenoid.Value.kOff);
-			break;
-		}
-
+		loadingState = wantedState;
 	}
 
 	
@@ -89,6 +66,40 @@ public class Manipulator extends Subsystem implements Log {
 	public void logToDashboard() {
 		SmartDashboard.putString("HumanPlayerIntakeState", "" + loadingState);
 		SmartDashboard.putString("Human Player Intake Pivot: ", "" + humanIntakePivot.get());
+	}
+
+	@Override
+	public void initialize() {
+		setHumanLoadingState(HumanPlayerLoadingState.GEAR_INTAKE);
+	}
+
+	@Override
+	public void update() {
+		switch (loadingState) {
+		case GEAR_INTAKE:
+			gearDeployer.set(DoubleSolenoid.Value.kReverse);
+			humanIntakePivot.set(DoubleSolenoid.Value.kForward);
+			break;
+		case GEAR_DEPLOY:
+			gearDeployer.set(DoubleSolenoid.Value.kForward);
+			break;
+		case GEAR_RETRACT:
+			gearDeployer.set(DoubleSolenoid.Value.kReverse);
+			break;
+		case BALLS_INTAKE:
+			humanIntakePivot.set(DoubleSolenoid.Value.kReverse);
+			gearDeployer.set(DoubleSolenoid.Value.kReverse);
+			break;
+		default:
+			humanIntakePivot.set(DoubleSolenoid.Value.kOff);
+			gearDeployer.set(DoubleSolenoid.Value.kOff);
+			break;
+		}
+	}
+
+	@Override
+	public void end() {
+		setHumanLoadingState(HumanPlayerLoadingState.GEAR_INTAKE);
 	}
 
 }
