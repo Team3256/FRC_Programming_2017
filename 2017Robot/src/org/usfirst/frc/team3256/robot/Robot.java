@@ -157,7 +157,7 @@ public class Robot extends IterativeRobot {
 	public void teleopPeriodic() {
 		enabledLooper.log();
 		Scheduler.getInstance().run();
-		operatorInterface.update();
+		operatorInterface.updateRumble();
 	}
 
 	@Override

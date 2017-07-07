@@ -88,7 +88,6 @@ public class Hanger extends Subsystem implements Log, Loop {
 			break;
 		case WINCH_STOP:
 			hangerState = HangerState.WINCH_STOP;
-			//TODO: tune
 			hanger.set(0);
 			break;
 		default:
