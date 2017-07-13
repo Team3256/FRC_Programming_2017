@@ -105,7 +105,6 @@ public class Robot extends IterativeRobot {
 		autonomousChooser.addObject("Left-Side Gear w/ Blue Hopper", new GearLeftAuto());
 		autonomousChooser.addObject("Right-Side Gear", new GearRightAuto(false));
 		autonomousChooser.addObject("Right-Side Gear w/ Red Hopper", new GearRightAuto(true));
-		//autonomousChooser.addObject("TURN SUCKAS", new AlignToVision());
 		autonomousChooser.addObject("Hopper Blue", new HopperAutoBlue());
 		autonomousChooser.addObject("Hopper Red", new HopperAutoRed());
 		autonomousChooser.addObject("Test Path", new TestPath());

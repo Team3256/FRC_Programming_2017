@@ -52,7 +52,7 @@ public class DriveTrain extends Subsystem implements Log, Loop {
 		resetGyro();
 		shiftUp(true);
 	}
-
+	
 	@Override
 	public void update() {
 		switch (driveControlMode){
@@ -87,8 +87,8 @@ public class DriveTrain extends Subsystem implements Log, Loop {
 		leftDrive = new VictorSP(Constants.LEFT_DRIVE);
 		rightDrive = new VictorSP(Constants.RIGHT_DRIVE);
 		//set motor directions
-		leftDrive.setInverted(true);
-		rightDrive.setInverted(false);
+		leftDrive.setInverted(false);
+		rightDrive.setInverted(true);
 		//Encoders for the left and right side of the drivetrain
 		encoderLeft = new Encoder(Constants.ENCODER_LEFT_A, Constants.ENCODER_LEFT_B);
 		encoderRight = new Encoder(Constants.ENCODER_RIGHT_A, Constants.ENCODER_RIGHT_B);
@@ -98,7 +98,7 @@ public class DriveTrain extends Subsystem implements Log, Loop {
 		//set encoder directions
 		encoderLeft.setReverseDirection(false);
 		encoderRight.setReverseDirection(true);
-		//Gyro for the drivetrain
+		//Gyro for the drive train
 		gyro = new ADXRS453_Gyro();
 		//Shifter to shift between high and low gear
 		shifter = new DoubleSolenoid(Constants.DRIVE_SHIFTER_A,Constants.DRIVE_SHIFTER_B);
@@ -121,12 +121,12 @@ public class DriveTrain extends Subsystem implements Log, Loop {
 	private void updateDriveStraight(){
 		DriveSignal signal = driveStraightController.update();
 		if (!goForward){
-			setLeftMotorPower(-signal.leftMotor);
-			setRightMotorPower(-signal.rightMotor);
-		}
-		else{
 			setLeftMotorPower(signal.leftMotor);
 			setRightMotorPower(signal.rightMotor);
+		}
+		else{
+			setLeftMotorPower(-signal.leftMotor);
+			setRightMotorPower(-signal.rightMotor);
 		}
 	}
 	
@@ -146,12 +146,12 @@ public class DriveTrain extends Subsystem implements Log, Loop {
 	public void updateAlign(){
 		double output = alignController.update(Math.abs(getAngle()));
 		if (turnRight){
-			setLeftMotorPower(-output);
-			setRightMotorPower(output);
-		}
-		else{
 			setLeftMotorPower(output);
 			setRightMotorPower(-output);
+		}
+		else{
+			setLeftMotorPower(-output);
+			setRightMotorPower(output);
 		}
 	}
 	
