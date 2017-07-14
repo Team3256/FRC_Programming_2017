@@ -1,5 +1,6 @@
 package org.usfirst.frc.team3256.lib;
 
+import org.usfirst.frc.team3256.robot.Constants;
 import org.usfirst.frc.team3256.robot.subsystems.GearHandler;
 import org.usfirst.frc.team3256.robot.subsystems.GearHandler.GearHandlerState;
 
@@ -13,10 +14,10 @@ public class LEDStrip {
 	private Solenoid green;
 	private Solenoid blue;
 	
-	private int pcmID = 1;
-	private int rPort = 7;
-	private int gPort = 6;
-	private int bPort = 5;
+	private int pcmID = Constants.LED_PCM_ID;
+	private int rPort = Constants.LED_R_PORT;
+	private int gPort = Constants.LED_G_PORT;
+	private int bPort = Constants.LED_B_PORT;
 	
 	private static LEDStrip instance;
 	

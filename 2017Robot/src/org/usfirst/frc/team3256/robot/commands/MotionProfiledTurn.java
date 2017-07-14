@@ -1,6 +1,6 @@
 package org.usfirst.frc.team3256.robot.commands;
 
-import org.usfirst.frc.team3256.lib.TurnInPlaceController;
+import org.usfirst.frc.team3256.lib.control.TurnInPlaceController;
 import org.usfirst.frc.team3256.robot.Constants;
 import org.usfirst.frc.team3256.robot.subsystems.DriveTrain;
 
@@ -14,8 +14,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class MotionProfiledTurn extends Command {
 
 	DriveTrain drive = DriveTrain.getInstance();
-	TurnInPlaceController turnController;
-	Notifier notifier;
 	private double setpoint;
 	private boolean turnRight;
 	
@@ -27,28 +25,10 @@ public class MotionProfiledTurn extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-        turnController = new TurnInPlaceController();
     	drive.resetGyro();
     	drive.resetEncoders();
     	drive.shiftUp(true);	
-    	notifier = new Notifier(new Runnable(){
-			@Override
-			public void run() {
-				double output = turnController.update();
-				SmartDashboard.putNumber("OUTPUT MP TURN", output);
-				if (turnRight){
-					drive.setLeftMotorPower(-output);
-					drive.setRightMotorPower(output);
-				}
-		    	else{
-		    		drive.setLeftMotorPower(output);
-		    		drive.setRightMotorPower(-output);
-		    	}
-			}
-    	});
-    	turnController.reset();
-    	turnController.setSetpoint(setpoint);
-    	notifier.startPeriodic(Constants.CONTROL_LOOP_DT);
+    	drive.setTurnSetpoint(setpoint, turnRight);
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -57,14 +37,12 @@ public class MotionProfiledTurn extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return turnController.isFinished();
+    	return drive.isTurnFinished();
     }
 
     // Called once after isFinished returns true
     protected void end() {
     	drive.setOpenLoop(0, 0);
-    	notifier.stop();
-    	notifier = null;
     }
 
     // Called when another command which requires one or more of the same

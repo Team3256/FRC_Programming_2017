@@ -1,12 +1,13 @@
 package org.usfirst.frc.team3256.robot.subsystems;
 
 import org.usfirst.frc.team3256.lib.ADXRS453_Gyro;
-import org.usfirst.frc.team3256.lib.BangBangController;
 import org.usfirst.frc.team3256.lib.DriveSignal;
-import org.usfirst.frc.team3256.lib.DriveStraightController;
 import org.usfirst.frc.team3256.lib.Log;
 import org.usfirst.frc.team3256.lib.Loop;
 import org.usfirst.frc.team3256.lib.PDP;
+import org.usfirst.frc.team3256.lib.control.BangBangController;
+import org.usfirst.frc.team3256.lib.control.DriveStraightController;
+import org.usfirst.frc.team3256.lib.control.TurnInPlaceController;
 import org.usfirst.frc.team3256.robot.Constants;
 import org.usfirst.frc.team3256.robot.commands.TeleopDrive;
 import org.usfirst.frc.team3256.robot.commands.TeleopDrive.TeleopDriveMode;
@@ -33,13 +34,14 @@ public class DriveTrain extends Subsystem implements Log, Loop {
 	private DriveControlMode driveControlMode = DriveControlMode.OPEN_LOOP;
 	private DriveStraightController driveStraightController;
 	private BangBangController alignController;
+	private TurnInPlaceController turnController;
 	private boolean goForward, turnRight;
 	
 	public enum DriveControlMode{
 		OPEN_LOOP,
 		AUTO_ALIGN,
-		MOTION_PROFILE,
-		SLOW_TURN,
+		TURN_TO_ANGLE,
+		DRIVE_STRAIGHT,
 		PATH_FOLLOWING;
 	}
 	
@@ -47,6 +49,7 @@ public class DriveTrain extends Subsystem implements Log, Loop {
 	public void initialize() {
 		driveStraightController = null;
 		alignController = null;
+		turnController = null;
 		setOpenLoop(0,0);
 		resetEncoders();
 		resetGyro();
@@ -62,11 +65,10 @@ public class DriveTrain extends Subsystem implements Log, Loop {
 		case AUTO_ALIGN:
 			updateAlign();
 			break;
-		case MOTION_PROFILE:
-			updateDriveStraight();
+		case TURN_TO_ANGLE:
 			break;
-		case SLOW_TURN:
-			
+		case DRIVE_STRAIGHT:
+			updateDriveStraight();
 			break;
 		case PATH_FOLLOWING:
 			break;
@@ -108,14 +110,14 @@ public class DriveTrain extends Subsystem implements Log, Loop {
 		this.goForward = goForward;
 		driveStraightController = new DriveStraightController();
 		driveStraightController.setSetpoint(setpoint, !goForward);
-		if (driveControlMode != DriveControlMode.MOTION_PROFILE){
-			driveControlMode = DriveControlMode.MOTION_PROFILE;
+		if (driveControlMode != DriveControlMode.DRIVE_STRAIGHT){
+			driveControlMode = DriveControlMode.DRIVE_STRAIGHT;
 		}
 	}
 	
 	public boolean isFinishedDriveStraight(){
-        return (driveControlMode == DriveControlMode.MOTION_PROFILE && driveStraightController.isFinished())
-        		|| driveControlMode != DriveControlMode.MOTION_PROFILE;
+        return (driveControlMode == DriveControlMode.DRIVE_STRAIGHT && driveStraightController.isFinished())
+        		|| driveControlMode != DriveControlMode.DRIVE_STRAIGHT;
 	}
 	
 	private void updateDriveStraight(){
@@ -155,6 +157,31 @@ public class DriveTrain extends Subsystem implements Log, Loop {
 		}
 	}
 	
+	public void setTurnSetpoint(double setpoint, boolean turnRight){
+		this.turnRight = turnRight;
+		if (driveControlMode != DriveControlMode.TURN_TO_ANGLE){
+			driveControlMode = DriveControlMode.TURN_TO_ANGLE;
+		}
+		turnController = new TurnInPlaceController();
+		turnController.setSetpoint(setpoint);
+	}
+	
+	public void updateTurn(){
+		double output = turnController.update();
+		if (turnRight){
+			setLeftMotorPower(-output);
+			setRightMotorPower(output);
+		}
+    	else{
+    		setLeftMotorPower(output);
+    		setRightMotorPower(-output);
+    	}
+	}
+	
+	public boolean isTurnFinished(){
+		return (driveControlMode == DriveControlMode.TURN_TO_ANGLE && turnController.isFinished() || driveControlMode != DriveControlMode.TURN_TO_ANGLE);
+	}
+	
 	/**
 	 * Sets the default command of the DriveTrain Subsystem, which is the TeleopDrive Command
 	 */
@@ -191,14 +218,6 @@ public class DriveTrain extends Subsystem implements Log, Loop {
 				leftDrive.get());
 		SmartDashboard.putNumber("Right PWM: PWM-" + rightDrive.getChannel() + " ", 
 				rightDrive.get());
-		SmartDashboard.putNumber("Left Front Current: PDP-" + Constants.PDP_LEFT_FRONT + " ", 
-				pdp.getCurrent(Constants.PDP_LEFT_FRONT));
-		SmartDashboard.putNumber("Left Back Current: PDP-" +  Constants.PDP_LEFT_BACK + " ",
-				pdp.getCurrent(Constants.PDP_LEFT_BACK));
-		SmartDashboard.putNumber("Right Front Current: PDP-" + Constants.PDP_RIGHT_FRONT + " ", 
-				pdp.getCurrent(Constants.PDP_RIGHT_FRONT));
-		SmartDashboard.putNumber("Right Back Current: PDP-" + Constants.PDP_RIGHT_BACK + " ",
-				pdp.getCurrent(Constants.PDP_RIGHT_BACK));
 		SmartDashboard.putNumber("Left Velocity", getLeftVelocity());
 		SmartDashboard.putNumber("Right Velocity", getRightVelocity());
 	}

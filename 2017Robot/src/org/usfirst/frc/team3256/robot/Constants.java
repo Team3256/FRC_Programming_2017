@@ -11,6 +11,7 @@ public class Constants {
 	public static final int INNER_MOTOR_ROLLER = 4;	
 	public static final int OUTER_MOTOR_ROLLER = 3; 
 	public static final int GEAR_ROLLER = 2;
+	
 	//CANTalon Motor Controller ports
 	public static final int SHOOTER_1 = 0;
 	public static final int SHOOTER_2 = 1;
@@ -55,6 +56,12 @@ public class Constants {
 	public static final int DRIVER_CONTROLLER = 0;
 	public static final int MANIPULATOR_CONTROLLER = 1;
 	public static final double XBOX_DEADBAND_VALUE = 0.25;
+	
+	//Second PCM
+	public static final int LED_PCM_ID = 1;
+	public static final int LED_R_PORT = 7;
+	public static final int LED_G_PORT = 6;
+	public static final int LED_B_PORT = 5;
 	
 //------------------------------Physical Robot Constants------------------------------
 
@@ -113,7 +120,7 @@ public class Constants {
 	//Turn Motion Profile Gains - HIGH GEAR
 	public static final double KV_TURN = 1.0/MAX_VEL_TURN_LOW_GEAR_DEG_SEC;
 	public static final double KA_TURN = 0.0;
-	public static final double KP_TURN = 0.05;
+	public static final double KP_TURN = 0.0;
 	public static final double KI_TURN = 0.0;
 	public static final double KD_TURN = 0.0;
 	

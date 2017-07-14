@@ -10,8 +10,8 @@ import edu.wpi.first.wpilibj.command.WaitCommand;
 public class TurnTesting extends CommandGroup {
 
     public TurnTesting() {
-        addSequential(new SmallTurn(5, true));
-        //addSequential(new WaitCommand(1));
+        //addSequential(new SmallTurn(5, true));
+        addSequential(new MotionProfiledTurn(90, true));
         //addSequential(new SmallTurn(20, false));
     }
 }

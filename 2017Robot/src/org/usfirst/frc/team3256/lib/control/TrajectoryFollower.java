@@ -1,6 +1,6 @@
-package org.usfirst.frc.team3256.lib;
+package org.usfirst.frc.team3256.lib.control;
 
-import org.usfirst.frc.team3256.lib.Trajectory.Segment;
+import org.usfirst.frc.team3256.lib.control.Trajectory.Segment;
 
 
 /**

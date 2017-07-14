@@ -1,5 +1,6 @@
-package org.usfirst.frc.team3256.lib;
+package org.usfirst.frc.team3256.lib.control;
 
+import org.usfirst.frc.team3256.lib.DriveSignal;
 import org.usfirst.frc.team3256.robot.Constants;
 import org.usfirst.frc.team3256.robot.subsystems.DriveTrain;
 

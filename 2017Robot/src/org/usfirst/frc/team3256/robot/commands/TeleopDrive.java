@@ -1,6 +1,6 @@
 package org.usfirst.frc.team3256.robot.commands;
 
-import org.usfirst.frc.team3256.lib.TeleopDriveController;
+import org.usfirst.frc.team3256.lib.control.TeleopDriveController;
 import org.usfirst.frc.team3256.robot.OI;
 import org.usfirst.frc.team3256.robot.subsystems.DriveTrain;
 

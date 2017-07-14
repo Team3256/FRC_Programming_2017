@@ -1,4 +1,4 @@
-package org.usfirst.frc.team3256.lib;
+package org.usfirst.frc.team3256.lib.control;
 import edu.wpi.first.wpilibj.Timer;
 
 public class TrajectoryController {
