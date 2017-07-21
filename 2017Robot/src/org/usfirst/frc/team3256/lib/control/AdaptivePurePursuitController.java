@@ -28,6 +28,7 @@ public class AdaptivePurePursuitController {
     double mDt;
     boolean mReversed;
     double mPathCompletionTolerance;
+    public boolean firstIteration;
 
     public AdaptivePurePursuitController(double fixed_lookahead, double max_accel, double nominal_dt, Path path,
             boolean reversed, double path_completion_tolerance) {
@@ -38,6 +39,7 @@ public class AdaptivePurePursuitController {
         mLastCommand = null;
         mReversed = reversed;
         mPathCompletionTolerance = path_completion_tolerance;
+        firstIteration = true;
     }
 
     public boolean isDone() {
@@ -46,6 +48,7 @@ public class AdaptivePurePursuitController {
     }
 
     public RigidTransform.Delta update(RigidTransform robot_pose, double now) {
+    	firstIteration = false;
         RigidTransform pose = robot_pose;
         if (mReversed) {
             pose = new RigidTransform(robot_pose.getTranslation(),

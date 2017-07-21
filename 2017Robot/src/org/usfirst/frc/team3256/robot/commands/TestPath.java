@@ -35,16 +35,17 @@ public class TestPath extends Command {
 	
     public TestPath(boolean rev) {
     	requires(drive);
-    	List<Waypoint> path = new ArrayList<>();
-        path.add(new Waypoint(new Translation(0, 0), 48.0));
-        path.add(new Waypoint(new Translation(60, 0), 48.0));
-    	this.path = new Path(path);
     	this.rev = rev;
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	pathController = new AdaptivePurePursuitController(lookaheadDist, maxAccel, 0.01, path, rev, 0.25);
+    	drive.shiftUp(true);
+    	List<Waypoint> path = new ArrayList<>();
+        path.add(new Waypoint(new Translation(0, 0), 48));
+        path.add(new Waypoint(new Translation(60, 0), 48));
+    	this.path = new Path(path);
+    	pathController = new AdaptivePurePursuitController(lookaheadDist, maxAccel, 0.01, this.path, rev, 0.25);
     	notifier = new Notifier(new Runnable(){
     		
     		@Override 
@@ -58,8 +59,12 @@ public class TestPath extends Command {
     				double scaling = maxVelocity/maxV;
     				setpoint = new Kinematics.DriveVelocity(setpoint.left*scaling, setpoint.right*scaling);
     			}
-    			drive.setLeftMotorPower(-kV * setpoint.left);
-    			drive.setRightMotorPower(-kV * setpoint.right);
+    			double leftError = setpoint.left - drive.getLeftVelocity();
+    			double rightError = setpoint.right - drive.getRightVelocity();
+    			double leftOutput = -kV * setpoint.left - 0.01 * leftError;
+    			double rightOutput = -kV * setpoint.right - 0.01 * rightError;
+    			drive.setLeftMotorPower(leftOutput);
+    			drive.setRightMotorPower(rightOutput);
     		}
     	});
     	notifier.startPeriodic(Constants.CONTROL_LOOP_DT);
