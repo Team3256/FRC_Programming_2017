@@ -49,6 +49,10 @@ public class Translation implements Interpolatable<Translation>{
 		return new Translation(x*other.cos() - y*other.sin(), x*other.sin() + y*other.cos());
 	}
 	
+	public double norm(){
+		return Math.hypot(x, y);
+	}
+	
 	@Override
 	public Translation interpolate(Translation other, double x) {
 		if (x <= 0) return new Translation(this);

@@ -41,6 +41,7 @@ public class Robot extends IterativeRobot {
 	
 	Looper disabledLooper;
 	Looper enabledLooper;
+	RobotStateUpdator robotStateUpdator;
 	LEDStrip led;
 	DriveTrain driveTrain;
 	GearHandler gearHandler;
@@ -63,6 +64,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void robotInit() {
 		led = LEDStrip.getInstance();
+		robotStateUpdator = RobotStateUpdator.getInstance();
 		driveTrain = DriveTrain.getInstance();
 		driveTrain.resetEncoders();
 		driveTrain.shiftUp(true);
@@ -82,11 +84,13 @@ public class Robot extends IterativeRobot {
 		logger.start();
 		disabledLooper = new Looper();
 		disabledLooper.addLoop(new GyroCalibrator());
+		disabledLooper.addLoop(robotStateUpdator);
 		enabledLooper = new Looper();
 		enabledLooper.addLoop(driveTrain);
 		enabledLooper.addLoop(gearHandler);
 		enabledLooper.addLoop(manipulator);
 		enabledLooper.addLoop(hanger);
+		enabledLooper.addLoop(robotStateUpdator);
 		/*
 		camera0 = CameraServer.getInstance().startAutomaticCapture();
 		camera0.setResolution(240, 180);
@@ -107,7 +111,7 @@ public class Robot extends IterativeRobot {
 		autonomousChooser.addObject("Right-Side Gear w/ Red Hopper", new GearRightAuto(true));
 		autonomousChooser.addObject("Hopper Blue", new HopperAutoBlue());
 		autonomousChooser.addObject("Hopper Red", new HopperAutoRed());
-		autonomousChooser.addObject("Test Path", new TestPath());
+		autonomousChooser.addObject("Test Path", new TestPath(false));
 		autonomousChooser.addObject("Drive Testing", new DriveTesting());
 		autonomousChooser.addObject("Turn Testing", new TurnTesting());
 		SmartDashboard.putData("Autonomous Chooser", autonomousChooser);
@@ -121,6 +125,7 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void disabledPeriodic() {
+		RobotState.getInstance().outputToDashboard();
 		Scheduler.getInstance().run();
 		disabledLooper.log();
 	}
@@ -139,6 +144,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousPeriodic() {
 		enabledLooper.log();
+		RobotState.getInstance().outputToDashboard();
 		Scheduler.getInstance().run();
 		if (!autonomousCommand.isRunning()){
 			autoEndTime = Timer.getFPGATimestamp();
@@ -154,6 +160,7 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void teleopPeriodic() {
+		RobotState.getInstance().outputToDashboard();
 		enabledLooper.log();
 		Scheduler.getInstance().run();
 		operatorInterface.updateRumble();
