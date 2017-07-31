@@ -11,4 +11,7 @@ public class Constants {
 	// Joystick ports
 	public static final int DRIVER_CONTROLLER = 0;
 	public static final int MANIPULATOR_CONTROLLER = 1;
+	
+	// Motor ports
+	public static final int ROLLER_MOTOR = 7;
 }

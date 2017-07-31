@@ -1,6 +1,9 @@
 package org.usfirst.frc.team3256.robot;
 
+import org.usfirst.frc.team3256.robot.subsystems.Shooter;
+
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
@@ -14,6 +17,7 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 public class Robot extends IterativeRobot {
 	
 	OI operatorInterface;
+	Shooter shooter;
 	
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -23,6 +27,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void robotInit() {
 		operatorInterface = new OI();
+		shooter = Shooter.getInstance();
 	}
 
 	
@@ -74,6 +79,9 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
+		//shooter.setPower(OI.driver.getY(Hand.kLeft));
+		if (shooter.getRPM() != 0)
+			System.out.println("RPM: " + shooter.getRPM());
 	}
 
 	/**

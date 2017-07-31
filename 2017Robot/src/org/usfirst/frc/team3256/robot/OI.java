@@ -1,5 +1,7 @@
 package org.usfirst.frc.team3256.robot;
 
+import org.usfirst.frc.team3256.robot.commands.FlywheelStop;
+import org.usfirst.frc.team3256.robot.commands.FlywheelTest;
 import org.usfirst.frc.team3256.robot.triggers.JoystickTrigger;
 
 import edu.wpi.first.wpilibj.XboxController;
@@ -40,7 +42,8 @@ public class OI{
 	public static Trigger leftTrigger2 = new JoystickTrigger(manipulator,2);
 	
     public OI() {
-
+    	buttonY1.whenPressed(new FlywheelTest());
+    	buttonY1.whenReleased(new FlywheelStop());
     }
 
 }
