@@ -1,5 +1,6 @@
 package org.usfirst.frc.team3256.robot;
 
+import org.usfirst.frc.team3256.robot.subsystems.Roller;
 import org.usfirst.frc.team3256.robot.subsystems.Shooter;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -15,7 +16,7 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
  * directory.
  */
 public class Robot extends IterativeRobot {
-	
+	public static double startTime;
 	OI operatorInterface;
 	Shooter shooter;
 	
@@ -79,9 +80,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
-		//shooter.setPower(OI.driver.getY(Hand.kLeft));
-		if (shooter.getRPM() != 0)
-			System.out.println("RPM: " + shooter.getRPM());
+		Roller.getInstance().set(OI.driver.getY(Hand.kLeft));
 	}
 
 	/**

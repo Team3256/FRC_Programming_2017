@@ -13,5 +13,5 @@ public class Constants {
 	public static final int MANIPULATOR_CONTROLLER = 1;
 	
 	// Motor ports
-	public static final int ROLLER_MOTOR = 7;
+	public static final int ROLLER_MOTOR = 3;
 }

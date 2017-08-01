@@ -19,17 +19,18 @@ public class Shooter extends Subsystem {
 		flywheelA.changeControlMode(TalonControlMode.PercentVbus);
 		flywheelA.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
 		flywheelA.reverseSensor(true);
-		flywheelA.reverseOutput(false);
+		flywheelA.reverseOutput(true);
 		flywheelA.setF(0.00832519531);
 		flywheelA.setP(0.005);
 		flywheelA.setI(flywheelA.getP() / 100D);
 		flywheelA.setD(flywheelA.getP() * 15D);
+		flywheelA.setCurrentLimit(30);
 		
 		flywheelB = new CANTalon(Constants.FLYWHEEL_B);
 		flywheelB.changeControlMode(TalonControlMode.Follower);
 		flywheelB.set(flywheelA.getDeviceID());
-		flywheelB.reverseSensor(true);
 		flywheelB.reverseOutput(false);
+		flywheelB.setCurrentLimit(30);
 	}
 
 	public static Shooter getInstance() {
@@ -43,12 +44,19 @@ public class Shooter extends Subsystem {
 	
 	public void setSpeed(double speed) {
 		flywheelA.changeControlMode(TalonControlMode.Speed);
-		//System.out.println(speed * 3/2);
 		flywheelA.set(speed * 1.5); // gear ratio is 3/2
 	}
 	
 	public double getRPM() {
-		return flywheelA.getSpeed();
+		return flywheelA.getSpeed() * 2 / 3;
+	}
+	
+	public double getCurrentA() {
+		return flywheelA.getOutputCurrent();
+	}
+	
+	public double getCurrentB() {
+		return flywheelB.getOutputCurrent();
 	}
 	
 	@Override
