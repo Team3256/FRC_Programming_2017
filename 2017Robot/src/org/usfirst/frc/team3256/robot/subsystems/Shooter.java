@@ -11,26 +11,29 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 public class Shooter extends Subsystem {
 	private static Shooter instance;
 	
-	CANTalon flywheelA;
-	CANTalon flywheelB;
+	private CANTalon flywheelMaster;
+	private CANTalon flywheelSlave;
 	
 	private Shooter(){
-		flywheelA = new CANTalon(Constants.FLYWHEEL_A);
-		flywheelA.changeControlMode(TalonControlMode.PercentVbus);
-		flywheelA.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
-		flywheelA.reverseSensor(true);
-		flywheelA.reverseOutput(true);
-		flywheelA.setF(0.00832519531);
-		flywheelA.setP(0.005);
-		flywheelA.setI(flywheelA.getP() / 100D);
-		flywheelA.setD(flywheelA.getP() * 15D);
-		flywheelA.setCurrentLimit(30);
+		flywheelMaster = new CANTalon(Constants.FLYWHEEL_MASTER);
+		flywheelMaster.changeControlMode(TalonControlMode.PercentVbus);
+		flywheelMaster.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
+		flywheelMaster.reverseSensor(true);
+		flywheelMaster.reverseOutput(true);
+		flywheelMaster.setF(Constants.kShooterF);
+		flywheelMaster.setP(Constants.kShooterP);
+		flywheelMaster.setI(Constants.kShooterI);
+		flywheelMaster.setD(Constants.kShooterD);
+		flywheelMaster.setCurrentLimit(Constants.kCurrentLimit);
+		flywheelMaster.EnableCurrentLimit(true);
+
 		
-		flywheelB = new CANTalon(Constants.FLYWHEEL_B);
-		flywheelB.changeControlMode(TalonControlMode.Follower);
-		flywheelB.set(flywheelA.getDeviceID());
-		flywheelB.reverseOutput(false);
-		flywheelB.setCurrentLimit(30);
+		flywheelSlave = new CANTalon(Constants.FLYWHEEL_SLAVE);
+		flywheelSlave.changeControlMode(TalonControlMode.Follower);
+		flywheelSlave.set(flywheelMaster.getDeviceID());
+		flywheelSlave.reverseOutput(false);
+		flywheelSlave.setCurrentLimit(Constants.kCurrentLimit);
+		flywheelSlave.EnableCurrentLimit(true);
 	}
 
 	public static Shooter getInstance() {
@@ -38,25 +41,25 @@ public class Shooter extends Subsystem {
 	}
 	
 	public void setPower(double power) {
-		flywheelA.changeControlMode(TalonControlMode.PercentVbus);
-		flywheelA.set(Math.abs(power) < 0.25 ? 0 : power);
+		flywheelMaster.changeControlMode(TalonControlMode.PercentVbus);
+		flywheelMaster.set(Math.abs(power) < 0.25 ? 0 : power);
 	}
 	
 	public void setSpeed(double speed) {
-		flywheelA.changeControlMode(TalonControlMode.Speed);
-		flywheelA.set(speed * 1.5); // gear ratio is 3/2
+		flywheelMaster.changeControlMode(TalonControlMode.Speed);
+		flywheelMaster.set(speed * Constants.kGearRatio); 
 	}
 	
 	public double getRPM() {
-		return flywheelA.getSpeed() * 2 / 3;
+		return flywheelMaster.getSpeed() / Constants.kGearRatio;
 	}
 	
 	public double getCurrentA() {
-		return flywheelA.getOutputCurrent();
+		return flywheelMaster.getOutputCurrent();
 	}
 	
 	public double getCurrentB() {
-		return flywheelB.getOutputCurrent();
+		return flywheelSlave.getOutputCurrent();
 	}
 	
 	@Override

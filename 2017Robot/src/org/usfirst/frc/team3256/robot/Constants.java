@@ -5,8 +5,8 @@ public class Constants {
 //------------------------------ELECTRICAL PORTS------------------------------
 	
 	// CAN IDs
-	public static final int FLYWHEEL_A = 2;
-	public static final int FLYWHEEL_B = 3;
+	public static final int FLYWHEEL_MASTER = 2;
+	public static final int FLYWHEEL_SLAVE = 3;
 	
 	// Joystick ports
 	public static final int DRIVER_CONTROLLER = 0;
@@ -14,4 +14,12 @@ public class Constants {
 	
 	// Motor ports
 	public static final int ROLLER_MOTOR = 3;
+	
+	//Shooter Constants
+	public static final double kShooterF = 0.00832519531;
+	public static final double kShooterP = 0.005;
+	public static final double kShooterI = kShooterP/100.0;
+	public static final double kShooterD = kShooterP*15.0;
+	public static final double kGearRatio = 3.0/2.0;
+	public static final int kCurrentLimit = 30;
 }
