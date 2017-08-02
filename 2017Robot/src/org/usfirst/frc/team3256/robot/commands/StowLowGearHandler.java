@@ -8,18 +8,18 @@ import edu.wpi.first.wpilibj.command.InstantCommand;
 /**
  *
  */
-public class StowGearHandler extends InstantCommand {
-
+public class StowLowGearHandler extends InstantCommand {
+	
 	GearHandler gearHandler = GearHandler.getInstance();
 	
-    public StowGearHandler() {
+    public StowLowGearHandler() {
         super();
         requires(gearHandler);
     }
 
-    // Called once when the command executes
+    // Called just before this Command runs the first time
     protected void initialize() {
-    	gearHandler.setState(GearHandlerState.START_PIVOT_FOR_STOW_WITH_GEAR);
+    	gearHandler.setState(GearHandlerState.START_PIVOT_FOR_STOW_LOW);
     }
 
 }

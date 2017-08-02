@@ -65,7 +65,7 @@ public class LEDStrip {
 		GearHandlerState gearHandlerState = GearHandler.getInstance().getGearHandlerState();
 		boolean hasGear = GearHandler.getInstance().hasGear();
 		
-		if (gearHandlerState == GearHandlerState.START_PIVOT_FOR_STOW) {
+		if (gearHandlerState == GearHandlerState.START_PIVOT_FOR_STOW_WITH_GEAR) {
 			lastPickupTime = Timer.getFPGATimestamp();
 		}
 		
@@ -76,7 +76,7 @@ public class LEDStrip {
 		boolean flashTime = timeDecimal < 0.25 || (timeDecimal >= 0.5 && timeDecimal < 0.75);
 		boolean enableLEDs = !flash || flashTime; 
 		
-		if (gearHandlerState == GearHandlerState.START_PIVOT_FOR_STOW) {
+		if (gearHandlerState == GearHandlerState.START_PIVOT_FOR_STOW_WITH_GEAR) {
 			lastPickupTime = Timer.getFPGATimestamp();
 		}
 		

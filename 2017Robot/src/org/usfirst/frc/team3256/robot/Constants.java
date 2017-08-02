@@ -92,6 +92,7 @@ public class Constants {
 	
 	public static final double GEAR_PIVOT_STOW_POS = 24.0;
 	public static final double GEAR_PIVOT_INTAKE_POS = -23.5;
+	public static final double GEAR_PIVOT_STOW_LOS_POS = -23.5;
 	public static final double GEAR_PIVOT_CALIBRATE_POS = -24;
 	public static final double GEAR_PIVOT_DEPLOY_POS = -18.0;
 	public static final double GEAR_PIVOT_RELEASE_BALL_POS = -15;

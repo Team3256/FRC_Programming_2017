@@ -163,7 +163,7 @@ public class Robot extends IterativeRobot {
 		RobotState.getInstance().outputToDashboard();
 		enabledLooper.log();
 		Scheduler.getInstance().run();
-		operatorInterface.updateRumble();
+		operatorInterface.update();
 	}
 
 	@Override

@@ -7,12 +7,12 @@ import org.usfirst.frc.team3256.robot.commands.DeployFrontGear;
 import org.usfirst.frc.team3256.robot.commands.HoldBackGearDeploy;
 import org.usfirst.frc.team3256.robot.commands.HumanPlayerBallsIntake;
 import org.usfirst.frc.team3256.robot.commands.HumanPlayerGearIntake;
-import org.usfirst.frc.team3256.robot.commands.RunHang;
 import org.usfirst.frc.team3256.robot.commands.StartIntakeGear;
-import org.usfirst.frc.team3256.robot.commands.StopHang;
-import org.usfirst.frc.team3256.robot.commands.StowGearHandler;
+import org.usfirst.frc.team3256.robot.commands.RunHang;
+import org.usfirst.frc.team3256.robot.commands.StowLowGearHandler;
 import org.usfirst.frc.team3256.robot.commands.ZeroGearHandler;
 import org.usfirst.frc.team3256.robot.subsystems.GearHandler;
+import org.usfirst.frc.team3256.robot.commands.StopHang;
 import org.usfirst.frc.team3256.robot.triggers.JoystickTrigger;
 
 import edu.wpi.first.wpilibj.GenericHID.Hand;
@@ -36,7 +36,6 @@ public class OI implements Log{
 	boolean rumbling = false;
 	boolean hasGear = false;
 	double startRumblingTimeStamp;
-	
 	//Controller 1
 	public static Button buttonA1 = new JoystickButton(driver, 1);
 	public static Button buttonB1 = new JoystickButton(driver, 2);
@@ -64,6 +63,8 @@ public class OI implements Log{
     				Reverse Front/Back: Hold Right Trigger
     				Run Hanger: Hold Left Bumper
     	*/
+   
+    	
     	rightBumper1.toggleWhenActive(new RunHang());
     	rightBumper1.whenInactive(new StopHang());
     	leftBumper1.toggleWhenActive(new AttachVelcro());
@@ -75,18 +76,19 @@ public class OI implements Log{
     	 				Hold Right Trigger: Spits Balls
     	 				Hold Left Trigger: Intake Balls
     	 */
+    	
     	buttonY2.whenPressed(new HumanPlayerGearIntake());
     	buttonA2.whenPressed(new HumanPlayerBallsIntake());
     	buttonX2.whileHeld(new HoldBackGearDeploy());
     	buttonX2.whenReleased(new CloseBackGear());
-    	leftBumper2.whenPressed(new StartIntakeGear());
-    	leftBumper2.whenReleased(new StowGearHandler());
-   		buttonB2.whenPressed(new DeployFrontGear());
-   		buttonB2.whenReleased(new StowGearHandler());
-   		rightBumper2.whenActive(new ZeroGearHandler());
+		leftBumper2.whenPressed(new StartIntakeGear());
+		leftBumper2.whenReleased(new StowLowGearHandler());
+		buttonB2.whenPressed(new DeployFrontGear());
+		buttonB2.whenReleased(new StowLowGearHandler());
+		rightBumper2.whenActive(new ZeroGearHandler());
     }
     
-    public void updateRumble() {
+    public void update() {
     	if (GearHandler.getInstance().hasGear()) {
     		// If we detect a gear but the flag hasn't been set yet
     		// (this is the first iteration of update() after picking up the gear),
