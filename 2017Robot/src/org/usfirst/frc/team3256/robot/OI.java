@@ -15,6 +15,7 @@ import org.usfirst.frc.team3256.robot.commands.StartIntakeGear;
 import org.usfirst.frc.team3256.robot.commands.RunHang;
 import org.usfirst.frc.team3256.robot.commands.NoGearHandlerShootBalls;
 import org.usfirst.frc.team3256.robot.commands.StowGearHandler;
+import org.usfirst.frc.team3256.robot.commands.StowLowGearHandler;
 import org.usfirst.frc.team3256.robot.commands.ZeroGearHandler;
 import org.usfirst.frc.team3256.robot.subsystems.GearHandler;
 import org.usfirst.frc.team3256.robot.commands.StopHang;
@@ -89,23 +90,15 @@ public class OI implements Log{
     	buttonA2.whenPressed(new HumanPlayerBallsIntake());
     	buttonX2.whileHeld(new HoldBackGearDeploy());
     	buttonX2.whenReleased(new CloseBackGear());
-    	if (Constants.useGearIntakeSubsystem){
-    		leftBumper2.whenPressed(new StartIntakeGear());
-    		leftBumper2.whenReleased(new StowGearHandler());
-    		buttonB2.whenPressed(new DeployFrontGear());
-    		buttonB2.whenReleased(new StowGearHandler());
-    		rightBumper2.whenActive(new ZeroGearHandler());
-    		rightTrigger2.toggleWhenActive(new GearHandlerShootBalls());
-    		rightTrigger2.whenInactive(new GearHandlerStopBalls());
-    		leftTrigger2.toggleWhenActive(new GearHandlerIntakeBalls());
-    		leftTrigger2.whenInactive(new GearHandlerStopBalls());
-    	}
-    	else{
-    		rightTrigger2.toggleWhenActive(new NoGearHandlerShootBalls());
-        	rightTrigger2.whenInactive(new NoGearHandlerStopBalls());
-        	leftTrigger2.toggleWhenActive(new NoGearHandlerGroundIntakeBalls());
-        	leftTrigger2.whenInactive(new NoGearHandlerStopBalls());
-    	}
+		leftBumper2.whenPressed(new StartIntakeGear());
+		leftBumper2.whenReleased(new StowLowGearHandler());
+		buttonB2.whenPressed(new DeployFrontGear());
+		buttonB2.whenReleased(new StowLowGearHandler());
+		rightBumper2.whenActive(new ZeroGearHandler());
+		rightTrigger2.toggleWhenActive(new GearHandlerShootBalls());
+		rightTrigger2.whenInactive(new GearHandlerStopBalls());
+		leftTrigger2.toggleWhenActive(new GearHandlerIntakeBalls());
+		leftTrigger2.whenInactive(new GearHandlerStopBalls());
     }
     
     public void update() {
