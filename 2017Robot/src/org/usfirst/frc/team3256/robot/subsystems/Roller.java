@@ -14,7 +14,7 @@ public class Roller extends Subsystem {
 	}
 	
 	public void set(double speed) {
-		roller.set(Math.abs(speed) < 0.15 ? 0 : speed);
+		roller.set(speed);
 	}
 	
 	public static Roller getInstance() {

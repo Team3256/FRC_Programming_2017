@@ -20,6 +20,6 @@ public class Constants {
 	public static final double kShooterP = 0.005;
 	public static final double kShooterI = kShooterP/100.0;
 	public static final double kShooterD = kShooterP*15.0;
-	public static final double kGearRatio = 3.0/2.0;
+	public static final double kGearRatio = 1;
 	public static final int kCurrentLimit = 30;
 }

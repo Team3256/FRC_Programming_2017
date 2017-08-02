@@ -72,6 +72,7 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void teleopInit() {
+		shooter.setPower(0);
 	}
 
 	/**
@@ -80,7 +81,8 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
-		Roller.getInstance().set(OI.driver.getY(Hand.kLeft));
+		double yLeft = OI.driver.getY(Hand.kLeft);
+		Roller.getInstance().set(Math.abs(yLeft) < 0.25 ? 0 : yLeft);
 	}
 
 	/**

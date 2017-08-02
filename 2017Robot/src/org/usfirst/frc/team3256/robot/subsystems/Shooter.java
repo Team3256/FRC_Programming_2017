@@ -1,6 +1,7 @@
 package org.usfirst.frc.team3256.robot.subsystems;
 
 import org.usfirst.frc.team3256.robot.Constants;
+import org.usfirst.frc.team3256.robot.commands.FlywheelControl;
 
 import com.ctre.CANTalon;
 import com.ctre.CANTalon.FeedbackDevice;
@@ -42,7 +43,7 @@ public class Shooter extends Subsystem {
 	
 	public void setPower(double power) {
 		flywheelMaster.changeControlMode(TalonControlMode.PercentVbus);
-		flywheelMaster.set(Math.abs(power) < 0.25 ? 0 : power);
+		flywheelMaster.set(power);
 	}
 	
 	public void setSpeed(double speed) {
@@ -64,6 +65,6 @@ public class Shooter extends Subsystem {
 	
 	@Override
 	protected void initDefaultCommand() {
-
+		
 	}
 }
