@@ -227,7 +227,7 @@ public class GearHandler extends Subsystem implements Log, Loop {
 		pivot.setPosition(pos);
 	}
 	
-	public GearHandlerState getState(){
+	public GearHandlerState getState() {
 		return gearHandlerState;
 	}
 
@@ -249,7 +249,11 @@ public class GearHandler extends Subsystem implements Log, Loop {
 	
 	public boolean hasGear(){
 		// Gear bumper switch is set to true when open; gear falling into gear handler sets it to false
-		return gearRoller.getOutputCurrent() > 10;
+		return getRollerCurrent() > 10;
+	}
+	
+	public double getRollerCurrent() {
+		return gearRoller.getOutputCurrent();
 	}
 	
 	public void initDefaultCommand() {
@@ -262,5 +266,6 @@ public class GearHandler extends Subsystem implements Log, Loop {
 		SmartDashboard.putString("Gear Handler Pivot Control Mode", "" + pivotControlMode);
 		SmartDashboard.putNumber("Has gear?",!hasGear() ? 0 : 1);
 		SmartDashboard.putNumber("Pivot Position", pivot.getPosition());
+		SmartDashboard.putNumber("Roller Current", getRollerCurrent());
 	}
 }

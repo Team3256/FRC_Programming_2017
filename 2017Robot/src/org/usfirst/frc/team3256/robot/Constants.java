@@ -10,16 +10,16 @@ public class Constants {
 	public static final int HANGER = 7;
 	public static final int INNER_MOTOR_ROLLER = 4;	
 	public static final int OUTER_MOTOR_ROLLER = 3; 
-	public static final int GEAR_ROLLER = 2; //Talon
 	
 	//CANTalon Motor Controller ports
+	
+	// CAN IDs
+	public static final int GEAR_INTAKE_PIVOT = 1;
 	public static final int SHOOTER_1 = 0;
 	public static final int SHOOTER_2 = 1;
 	public static final int SHOOTER_3 = 2;
 	public static final int SHOOTER_4 = 3;
-	
-	// CAN IDs
-	public static final int GEAR_INTAKE_PIVOT = 1;
+	public static final int GEAR_ROLLER = 2;
 	
 	//PDP Motor ports
 	public static final int PDP_LEFT_FRONT = 0;  
