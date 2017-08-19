@@ -27,9 +27,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class GearHandler extends Subsystem implements Log, Loop {
 
 	private static GearHandler instance;
-	private VictorSP gearRoller;
+	private CANTalon gearRoller;
 	private CANTalon pivot;
-	private DigitalInput gearBumperSwitch;
 	private GearHandlerState gearHandlerState;
 	private double startDeployTime = 0.0;
 	private double manualPivotInput = 0.0;
@@ -68,7 +67,7 @@ public class GearHandler extends Subsystem implements Log, Loop {
 	}
 
 	private GearHandler(){
-		gearRoller = new VictorSP(Constants.GEAR_ROLLER);
+		gearRoller = new CANTalon(Constants.GEAR_ROLLER);
 		pivot = new CANTalon(Constants.GEAR_INTAKE_PIVOT);
 		pivotControlMode = TalonControlMode.PercentVbus;
 		pivot.changeControlMode(pivotControlMode);
@@ -96,7 +95,6 @@ public class GearHandler extends Subsystem implements Log, Loop {
 		pivot.setMotionMagicAcceleration(Constants.MAGIC_ACCELERATION);
 		pivot.setMotionMagicCruiseVelocity(Constants.MAGIC_CRUISE_VELOCITY);
 		pivot.set(0);
-		gearBumperSwitch = new DigitalInput(Constants.GEAR_BUMPER_SWITCH);
 	}
 
 	@Override
@@ -251,7 +249,7 @@ public class GearHandler extends Subsystem implements Log, Loop {
 	
 	public boolean hasGear(){
 		// Gear bumper switch is set to true when open; gear falling into gear handler sets it to false
-		return !gearBumperSwitch.get();
+		return gearRoller.getOutputCurrent() > 10;
 	}
 	
 	public void initDefaultCommand() {

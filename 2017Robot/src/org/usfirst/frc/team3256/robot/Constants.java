@@ -10,7 +10,7 @@ public class Constants {
 	public static final int HANGER = 7;
 	public static final int INNER_MOTOR_ROLLER = 4;	
 	public static final int OUTER_MOTOR_ROLLER = 3; 
-	public static final int GEAR_ROLLER = 2;
+	public static final int GEAR_ROLLER = 2; //Talon
 	
 	//CANTalon Motor Controller ports
 	public static final int SHOOTER_1 = 0;

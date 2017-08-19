@@ -203,7 +203,7 @@ public class DriveTrain extends Subsystem implements Log, Loop {
 	 */
 	@Override
 	public void logToDashboard(){
-		if (!DriverStation.getInstance().isDisabled()){
+		if (true/*!DriverStation.getInstance().isDisabled()*/){
 			SmartDashboard.putNumber("Gyro Angle - SPI 0 ", getAngle());
 			SmartDashboard.putNumber("GYRO RATE", getAngularVelocity());
 			SmartDashboard.putBoolean("GYRO IS CALIBRATING", false);

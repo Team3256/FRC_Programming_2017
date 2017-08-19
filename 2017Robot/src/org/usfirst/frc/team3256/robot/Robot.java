@@ -83,7 +83,7 @@ public class Robot extends IterativeRobot {
 		//logger.addLog(PDP.getInstance());
 		logger.start();
 		disabledLooper = new Looper();
-		disabledLooper.addLoop(new GyroCalibrator());
+		//disabledLooper.addLoop(new GyroCalibrator());
 		disabledLooper.addLoop(robotStateUpdator);
 		enabledLooper = new Looper();
 		enabledLooper.addLoop(driveTrain);
