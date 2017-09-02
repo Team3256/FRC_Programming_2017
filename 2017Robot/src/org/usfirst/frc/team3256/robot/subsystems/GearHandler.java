@@ -35,6 +35,7 @@ public class GearHandler extends Subsystem implements Log, Loop {
 	private double manualRollerInput = 0.0;
 	private boolean currentlyDeploying = false;
 	private boolean encoderDetected;
+	private boolean hasGear = false;
 	private TalonControlMode pivotControlMode;
 	
 	public enum GearHandlerState{
@@ -177,6 +178,7 @@ public class GearHandler extends Subsystem implements Log, Loop {
 				currentlyDeploying = true;
 				pivot.set(Constants.GEAR_PIVOT_DEPLOY_POS);
 				setState(GearHandlerState.GEAR_EXHAUST);
+				hasGear = false;
 				break;
 			case GEAR_EXHAUST:
 				if (releasedGear()){
@@ -184,14 +186,6 @@ public class GearHandler extends Subsystem implements Log, Loop {
 					currentlyDeploying = false;
 				}
 				gearRoller.set(Constants.GEAR_EXHAUST_POWER);
-				break;
-			case START_PIVOT_FOR_BALL_CONTROl:
-				if (pivot.getControlMode()!=TalonControlMode.Position){
-					pivot.changeControlMode(TalonControlMode.Position);
-					pivot.setProfile(Constants.PIVOT_TALON_SLOT_POSITION);
-				}
-				pivot.set(Constants.GEAR_PIVOT_RELEASE_BALL_POS);
-				gearRoller.set(0);
 				break;
 			case STOPPED:
 				gearRoller.set(0);
@@ -202,6 +196,7 @@ public class GearHandler extends Subsystem implements Log, Loop {
 				break;
 			case START_PIVOT_FOR_STOW_LOW:
 				gearRoller.set(0);
+				if (hasGear) return;
 				if (pivotControlMode != TalonControlMode.Position){
 					pivot.changeControlMode(TalonControlMode.Position);
 					pivot.setProfile(Constants.PIVOT_TALON_SLOT_POSITION);
@@ -232,7 +227,7 @@ public class GearHandler extends Subsystem implements Log, Loop {
 	}
 
 	private boolean releasedGear(){
-		return Timer.getFPGATimestamp()-startDeployTime > 5.0 && currentlyDeploying && !hasGear();
+		return Timer.getFPGATimestamp()-startDeployTime > 5.0 && currentlyDeploying && !hasGear;
 	}
 	
 	public void setState(GearHandlerState wantedState){
@@ -248,8 +243,11 @@ public class GearHandler extends Subsystem implements Log, Loop {
 	}
 	
 	public boolean hasGear(){
-		// Gear bumper switch is set to true when open; gear falling into gear handler sets it to false
-		return getRollerCurrent() > 10;
+		if (getRollerCurrent() > 20){
+			hasGear = true;
+			return true;
+		}
+		return false;
 	}
 	
 	public double getRollerCurrent() {
