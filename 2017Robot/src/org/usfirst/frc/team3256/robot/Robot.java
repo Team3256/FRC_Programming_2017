@@ -91,13 +91,15 @@ public class Robot extends IterativeRobot {
 		enabledLooper.addLoop(manipulator);
 		enabledLooper.addLoop(hanger);
 		enabledLooper.addLoop(robotStateUpdator);
-		/*
 		camera0 = CameraServer.getInstance().startAutomaticCapture();
-		camera0.setResolution(240, 180);
+		camera0.setResolution(160, 120);
+		camera0.setFPS(10);
 		camera0.setExposureManual(75);
+		/*
 		camera1 = CameraServer.getInstance().startAutomaticCapture();
-		camera1.setResolution(240, 180);
+		camera1.setResolution(160, 120);
 		camera1.setExposureManual(75);
+		camera1.setFPS(10);
 		*/
 		driveTrain.calibrateGyro();
 		operatorInterface = new OI();

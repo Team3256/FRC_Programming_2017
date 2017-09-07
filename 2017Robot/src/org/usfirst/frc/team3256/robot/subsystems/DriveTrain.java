@@ -188,7 +188,7 @@ public class DriveTrain extends Subsystem implements Log, Loop {
 	 * Sets the default command of the DriveTrain Subsystem, which is the TeleopDrive Command
 	 */
 	protected void initDefaultCommand() {
-		setDefaultCommand(new TeleopDrive(TeleopDriveMode.CHEESY));
+		setDefaultCommand(new TeleopDrive(TeleopDriveMode.ARCADE));
 	}
 	
 	/**

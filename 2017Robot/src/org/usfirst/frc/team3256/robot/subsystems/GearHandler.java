@@ -69,6 +69,7 @@ public class GearHandler extends Subsystem implements Log, Loop {
 
 	private GearHandler(){
 		gearRoller = new CANTalon(Constants.GEAR_ROLLER);
+		gearRoller.setVoltageRampRate(24);
 		pivot = new CANTalon(Constants.GEAR_INTAKE_PIVOT);
 		pivotControlMode = TalonControlMode.PercentVbus;
 		pivot.changeControlMode(pivotControlMode);
