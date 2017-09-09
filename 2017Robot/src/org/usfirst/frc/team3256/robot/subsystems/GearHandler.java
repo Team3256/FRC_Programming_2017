@@ -19,8 +19,6 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-// NOTE: This code depends on the VersaPlanetary Integrated Encoder
-
 /**
  *
  */

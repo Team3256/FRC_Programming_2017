@@ -6,13 +6,12 @@ import org.usfirst.frc.team3256.lib.Logger;
 import org.usfirst.frc.team3256.lib.Looper;
 import org.usfirst.frc.team3256.robot.automodes.BaselineCross;
 import org.usfirst.frc.team3256.robot.automodes.DoNothingAuto;
+import org.usfirst.frc.team3256.robot.automodes.FrontGearCenterAuto;
 import org.usfirst.frc.team3256.robot.automodes.GearCenterAuto;
 import org.usfirst.frc.team3256.robot.automodes.GearLeftAuto;
 import org.usfirst.frc.team3256.robot.automodes.GearRightAuto;
-import org.usfirst.frc.team3256.robot.automodes.HopperAutoBlue;
-import org.usfirst.frc.team3256.robot.automodes.HopperAutoRed;
+import org.usfirst.frc.team3256.robot.commands.AutoDeployFrontGear;
 import org.usfirst.frc.team3256.robot.commands.DriveTesting;
-import org.usfirst.frc.team3256.robot.commands.TestPath;
 import org.usfirst.frc.team3256.robot.commands.TurnTesting;
 import org.usfirst.frc.team3256.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team3256.robot.subsystems.GearHandler;
@@ -41,7 +40,6 @@ public class Robot extends IterativeRobot {
 	
 	Looper disabledLooper;
 	Looper enabledLooper;
-	RobotStateUpdator robotStateUpdator;
 	LEDStrip led;
 	DriveTrain driveTrain;
 	GearHandler gearHandler;
@@ -64,7 +62,6 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void robotInit() {
 		led = LEDStrip.getInstance();
-		robotStateUpdator = RobotStateUpdator.getInstance();
 		driveTrain = DriveTrain.getInstance();
 		driveTrain.resetEncoders();
 		driveTrain.shiftUp(true);
@@ -84,13 +81,11 @@ public class Robot extends IterativeRobot {
 		logger.start();
 		disabledLooper = new Looper();
 		//disabledLooper.addLoop(new GyroCalibrator());
-		disabledLooper.addLoop(robotStateUpdator);
 		enabledLooper = new Looper();
 		enabledLooper.addLoop(driveTrain);
 		enabledLooper.addLoop(gearHandler);
 		enabledLooper.addLoop(manipulator);
 		enabledLooper.addLoop(hanger);
-		enabledLooper.addLoop(robotStateUpdator);
 		camera0 = CameraServer.getInstance().startAutomaticCapture();
 		camera0.setResolution(160, 120);
 		camera0.setFPS(10);
@@ -111,11 +106,10 @@ public class Robot extends IterativeRobot {
 		autonomousChooser.addObject("Left-Side Gear w/ Blue Hopper", new GearLeftAuto());
 		autonomousChooser.addObject("Right-Side Gear", new GearRightAuto(false));
 		autonomousChooser.addObject("Right-Side Gear w/ Red Hopper", new GearRightAuto(true));
-		autonomousChooser.addObject("Hopper Blue", new HopperAutoBlue());
-		autonomousChooser.addObject("Hopper Red", new HopperAutoRed());
-		autonomousChooser.addObject("Test Path", new TestPath(false));
 		autonomousChooser.addObject("Drive Testing", new DriveTesting());
 		autonomousChooser.addObject("Turn Testing", new TurnTesting());
+		autonomousChooser.addObject("Gear Auto Deploy Testing", new AutoDeployFrontGear());
+		autonomousChooser.addObject("Center Front Gear Auto", new FrontGearCenterAuto());
 		SmartDashboard.putData("Autonomous Chooser", autonomousChooser);
 	}
 
@@ -127,7 +121,6 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void disabledPeriodic() {
-		RobotState.getInstance().outputToDashboard();
 		Scheduler.getInstance().run();
 		disabledLooper.log();
 	}
@@ -146,7 +139,6 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousPeriodic() {
 		enabledLooper.log();
-		RobotState.getInstance().outputToDashboard();
 		Scheduler.getInstance().run();
 		if (!autonomousCommand.isRunning()){
 			autoEndTime = Timer.getFPGATimestamp();
@@ -162,7 +154,6 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void teleopPeriodic() {
-		RobotState.getInstance().outputToDashboard();
 		enabledLooper.log();
 		Scheduler.getInstance().run();
 		operatorInterface.update();
