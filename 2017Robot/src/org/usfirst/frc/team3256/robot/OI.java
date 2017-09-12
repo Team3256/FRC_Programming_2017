@@ -5,6 +5,8 @@ import org.usfirst.frc.team3256.robot.commands.AttachVelcro;
 import org.usfirst.frc.team3256.robot.commands.CloseBackGear;
 import org.usfirst.frc.team3256.robot.commands.DeployFrontGear;
 import org.usfirst.frc.team3256.robot.commands.HoldBackGearDeploy;
+import org.usfirst.frc.team3256.robot.commands.HumanPlayerBallsIntake;
+import org.usfirst.frc.team3256.robot.commands.HumanPlayerGearIntake;
 import org.usfirst.frc.team3256.robot.commands.StartIntakeGear;
 import org.usfirst.frc.team3256.robot.commands.RunHang;
 import org.usfirst.frc.team3256.robot.commands.StowLowGearHandler;
@@ -76,6 +78,8 @@ public class OI implements Log{
     	 				Hold Left Trigger: Intake Balls
     	 */
     	
+    	buttonY2.whenPressed(new HumanPlayerGearIntake());
+    	buttonA2.whenPressed(new HumanPlayerBallsIntake());
     	buttonX2.whileHeld(new HoldBackGearDeploy());
     	buttonX2.whenReleased(new CloseBackGear());
 		leftBumper2.whenPressed(new StartIntakeGear());
