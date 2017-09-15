@@ -155,6 +155,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		enabledLooper.log();
+		led.update(false);
 		Scheduler.getInstance().run();
 		operatorInterface.update();
 	}

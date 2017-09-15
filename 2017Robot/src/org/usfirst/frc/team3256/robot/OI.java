@@ -86,11 +86,11 @@ public class OI implements Log{
 		leftBumper2.whenReleased(new StowLowGearHandler());
 		buttonB2.whileHeld(new DeployFrontGear());
 		buttonB2.whenReleased(new StowGearHandler());
-		rightBumper2.whenActive(new ZeroGearHandler());
+		rightBumper2.whenPressed(new ZeroGearHandler());
     }
     
     public void update() {
-    	if (GearHandler.getInstance().hasGear()) {
+    	if (GearHandler.getInstance().hasGear) {
     		// If we detect a gear but the flag hasn't been set yet
     		// (this is the first iteration of update() after picking up the gear),
     		if (!hasGear) {

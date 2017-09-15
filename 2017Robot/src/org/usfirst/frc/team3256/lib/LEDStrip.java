@@ -14,6 +14,8 @@ public class LEDStrip {
 	private Solenoid green;
 	private Solenoid blue;
 	
+	private boolean prevHasGear = false;
+	
 	private int pcmID = Constants.LED_PCM_ID;
 	private int rPort = Constants.LED_R_PORT;
 	private int gPort = Constants.LED_G_PORT;
@@ -63,9 +65,9 @@ public class LEDStrip {
 	
 	public void update(boolean flash) {
 		GearHandlerState gearHandlerState = GearHandler.getInstance().getGearHandlerState();
-		boolean hasGear = GearHandler.getInstance().hasGear();
+		boolean hasGear = GearHandler.getInstance().hasGear;
 		
-		if (gearHandlerState == GearHandlerState.START_PIVOT_FOR_STOW_WITH_GEAR) {
+		if (hasGear && !prevHasGear) {
 			lastPickupTime = Timer.getFPGATimestamp();
 		}
 		
@@ -76,16 +78,13 @@ public class LEDStrip {
 		boolean flashTime = timeDecimal < 0.25 || (timeDecimal >= 0.5 && timeDecimal < 0.75);
 		boolean enableLEDs = !flash || flashTime; 
 		
-		if (gearHandlerState == GearHandlerState.START_PIVOT_FOR_STOW_WITH_GEAR) {
-			lastPickupTime = Timer.getFPGATimestamp();
-		}
-		
 		// These conditionals are expanded into if/else statements rather than boolean algebra
 		// for clarity
 		// Convert them back into boolean algebra at your own risk :)
 
 		// The encoder case overrides the rest of the cases
 		if (!GearHandler.getInstance().hasEncoder()) {
+			/*
 			if (flashTime) {
 				this.blue.set(true);
 				this.red.set(true);
@@ -93,7 +92,7 @@ public class LEDStrip {
 			else {
 				this.blue.set(false);
 				this.red.set(false);
-			}
+			}*/
 			return;
 		}
 		
@@ -101,10 +100,11 @@ public class LEDStrip {
 		// according to our rules for when the LEDs should be turned on
 		if (enableLEDs) {
 			
+			/*
 			// Blue
 			if (gearHandlerState != GearHandlerState.GEAR_INTAKE) {
 				if (Timer.getFPGATimestamp() - lastPickupTime >= 3 || !hasGear) {
-					this.blue.set(true);
+					this.blue.set(false);
 				}
 				else {
 					this.blue.set(false);
@@ -113,6 +113,7 @@ public class LEDStrip {
 			else {
 				this.blue.set(false);
 			}
+			*/
 			
 			// Red
 			if (gearHandlerState == GearHandlerState.GEAR_INTAKE) {
@@ -126,14 +127,18 @@ public class LEDStrip {
 			if (hasGear) {
 				if (Timer.getFPGATimestamp() - lastPickupTime < 3) {
 					this.green.set(true);
+					this.blue.set(false);
 				}
 				else {
 					this.green.set(false);
+					this.blue.set(true);                        
 				}
 			}
 			else {
 				this.green.set(false);
+				this.blue.set(false);
 			}
+			prevHasGear = hasGear;
 		}
 		
 		

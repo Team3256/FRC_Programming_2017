@@ -33,7 +33,7 @@ public class GearHandler extends Subsystem implements Log, Loop {
 	private double manualRollerInput = 0.0;
 	private boolean currentlyDeploying = false;
 	private boolean encoderDetected;
-	private boolean hasGear = false;
+	public boolean hasGear = false;
 	private TalonControlMode pivotControlMode;
 	
 	public enum GearHandlerState{
@@ -139,7 +139,7 @@ public class GearHandler extends Subsystem implements Log, Loop {
 				else gearRoller.set(0);
 				break;
 			case START_PIVOT_FOR_GEAR_INTAKE:
-				if (hasGear()) {
+				if (hasGear) {
 					setState(GearHandlerState.STOW_WITH_GEAR);
 					break;
 				}
@@ -151,8 +151,9 @@ public class GearHandler extends Subsystem implements Log, Loop {
 				setState(GearHandlerState.GEAR_INTAKE);
 				break;
 			case GEAR_INTAKE:
+				updateHasGear();
 				gearRoller.set(Constants.GEAR_INTAKE_POWER);
-				if (hasGear())
+				if (hasGear)
 					setState(GearHandlerState.START_PIVOT_FOR_STOW_WITH_GEAR);
 				break;
 			case START_PIVOT_FOR_STOW_WITH_GEAR:
@@ -177,13 +178,13 @@ public class GearHandler extends Subsystem implements Log, Loop {
 				currentlyDeploying = true;
 				pivot.set(Constants.GEAR_PIVOT_DEPLOY_POS);
 				setState(GearHandlerState.GEAR_EXHAUST);
-				hasGear = false;
 				break;
 			case GEAR_EXHAUST:
 				if (releasedGear()){
 					setState(GearHandlerState.START_PIVOT_FOR_STOW_LOW);
 					currentlyDeploying = false;
 				}
+				if (getRollerCurrent() > 2) hasGear = false;
 				gearRoller.set(Constants.GEAR_EXHAUST_POWER);
 				break;
 			case STOPPED:
@@ -241,7 +242,7 @@ public class GearHandler extends Subsystem implements Log, Loop {
 		return encoderDetected;
 	}
 	
-	public boolean hasGear(){
+	public boolean updateHasGear(){
 		if (getRollerCurrent() > 20){
 			hasGear = true;
 			return true;
@@ -261,7 +262,7 @@ public class GearHandler extends Subsystem implements Log, Loop {
 	public void logToDashboard() {
 		SmartDashboard.putString("Gear Intake State", "" + gearHandlerState);
 		SmartDashboard.putString("Gear Handler Pivot Control Mode", "" + pivotControlMode);
-		SmartDashboard.putNumber("Has gear?",!hasGear() ? 0 : 1);
+		SmartDashboard.putNumber("Has gear?",!hasGear ? 0 : 1);
 		SmartDashboard.putNumber("Pivot Position", pivot.getPosition());
 		SmartDashboard.putNumber("Roller Current", getRollerCurrent());
 	}
