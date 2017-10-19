@@ -54,6 +54,7 @@ public class OI implements Log{
     public static Button buttonY2 = new JoystickButton(manipulator, 4);
     public static Button leftBumper2 = new JoystickButton(manipulator, 5);
     public static Button rightBumper2 = new JoystickButton(manipulator, 6);
+    public static Button startButton =  new JoystickButton(manipulator, 8);
 	public static Trigger rightTrigger2 = new JoystickTrigger(manipulator,3);
 	public static Trigger leftTrigger2 = new JoystickTrigger(manipulator,2);
 	
@@ -86,7 +87,7 @@ public class OI implements Log{
 		leftBumper2.whenReleased(new StowLowGearHandler());
 		buttonB2.whileHeld(new DeployFrontGear());
 		buttonB2.whenReleased(new StowGearHandler());
-		rightBumper2.whenPressed(new ZeroGearHandler());
+		startButton.whenPressed(new ZeroGearHandler());
     }
     
     public void update() {

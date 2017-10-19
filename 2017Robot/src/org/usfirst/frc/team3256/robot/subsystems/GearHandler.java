@@ -107,6 +107,7 @@ public class GearHandler extends Subsystem implements Log, Loop {
 	public void update(){
 		if (pivot.isSensorPresent(FeedbackDevice.CtreMagEncoder_Relative) != FeedbackDeviceStatus.FeedbackStatusPresent){
 			gearHandlerState = GearHandlerState.MANUAL_CONTROL;
+			DriverStation.reportError("GEAR PIVOT ENCODER NOT DETECTED\n\n\n\n\n", false);
 			encoderDetected = false;
 		}
 		else {
@@ -184,7 +185,7 @@ public class GearHandler extends Subsystem implements Log, Loop {
 					setState(GearHandlerState.START_PIVOT_FOR_STOW_LOW);
 					currentlyDeploying = false;
 				}
-				if (getRollerCurrent() > 2) hasGear = false;
+				hasGear = false;
 				gearRoller.set(Constants.GEAR_EXHAUST_POWER);
 				break;
 			case STOPPED:
@@ -219,6 +220,7 @@ public class GearHandler extends Subsystem implements Log, Loop {
 
 	
 	public void setEncoderPosition(double pos) {
+		DriverStation.reportWarning("Gear Handler Rest \n\n\n\n\n\n" + DriverStation.getInstance().getMatchTime(), false);
 		pivot.setPosition(pos);
 	}
 	
