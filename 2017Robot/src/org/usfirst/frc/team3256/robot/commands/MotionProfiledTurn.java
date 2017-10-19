@@ -25,7 +25,6 @@ public class MotionProfiledTurn extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	drive.resetGyro();
     	drive.resetEncoders();
     	drive.shiftUp(true);	
     	drive.setTurnSetpoint(setpoint, turnRight);

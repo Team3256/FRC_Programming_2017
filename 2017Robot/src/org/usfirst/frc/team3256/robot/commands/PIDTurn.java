@@ -37,13 +37,12 @@ public class PIDTurn extends Command {
  
     // Called just before this Command runs the first time
     protected void initialize() {
-    	drive.resetGyro();
     	drive.shiftUp(false);
     	pid.setSetpoint(setpoint);  
         notifier = new Notifier(new Runnable(){
 			@Override
 			public void run() {
-		    	double output = pid.update(Math.abs(drive.getAngle()));
+		    	double output = 0;//pid.update(Math.abs(drive.getAngle()));
 		    	if (turnRight){
 		    		drive.setLeftMotorPower(output);
 		    		drive.setRightMotorPower(oneWheel ? 0 : -output);
@@ -66,7 +65,7 @@ public class PIDTurn extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return (pid.isFinished() && Math.abs(setpoint-drive.getAngle()) <= 1 && Timer.getFPGATimestamp()-startTime > 1) || Timer.getFPGATimestamp()-startTime > 2.5;
+        return true;//(pid.isFinished() && Math.abs(setpoint-drive.getAngle()) <= 1 && Timer.getFPGATimestamp()-startTime > 1) || Timer.getFPGATimestamp()-startTime > 2.5;
     }
 
     /**

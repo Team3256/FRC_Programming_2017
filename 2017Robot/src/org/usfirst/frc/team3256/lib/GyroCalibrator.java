@@ -11,7 +11,7 @@ public class GyroCalibrator implements Loop{
 	private double previousTime = 0.0;
 	
 	public GyroCalibrator(){
-		gyro = DriveTrain.getInstance().getGyro();
+		//gyro = DriveTrain.getInstance().getGyro();
 	}
 
 	@Override

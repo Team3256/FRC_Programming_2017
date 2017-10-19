@@ -28,7 +28,6 @@ public class DriveTrain extends Subsystem implements Log, Loop {
 	private VictorSP rightDrive;
 	private Encoder encoderLeft;
 	private Encoder encoderRight;
-	private ADXRS453_Gyro gyro;
 	private DoubleSolenoid shifter;
 	PDP pdp = PDP.getInstance();
 	private DriveControlMode driveControlMode = DriveControlMode.OPEN_LOOP;
@@ -52,7 +51,6 @@ public class DriveTrain extends Subsystem implements Log, Loop {
 		turnController = null;
 		setOpenLoop(0,0);
 		resetEncoders();
-		resetGyro();
 		shiftUp(true);
 	}
 	
@@ -100,8 +98,6 @@ public class DriveTrain extends Subsystem implements Log, Loop {
 		//set encoder directions
 		encoderLeft.setReverseDirection(false);
 		encoderRight.setReverseDirection(true);
-		//Gyro for the drive train
-		gyro = new ADXRS453_Gyro();
 		//Shifter to shift between high and low gear
 		shifter = new DoubleSolenoid(Constants.DRIVE_SHIFTER_A,Constants.DRIVE_SHIFTER_B);
 	}
@@ -146,7 +142,7 @@ public class DriveTrain extends Subsystem implements Log, Loop {
 	}
 	
 	public void updateAlign(){
-		double output = alignController.update(Math.abs(getAngle()));
+		double output = 0; //alignController.update(Math.abs(getAngle()));
 		if (turnRight){
 			setLeftMotorPower(output);
 			setRightMotorPower(-output);
@@ -201,14 +197,6 @@ public class DriveTrain extends Subsystem implements Log, Loop {
 	 */
 	@Override
 	public void logToDashboard(){
-		if (!DriverStation.getInstance().isDisabled()){
-			SmartDashboard.putNumber("Gyro Angle - SPI 0 ", getAngle());
-			SmartDashboard.putNumber("GYRO RATE", getAngularVelocity());
-			SmartDashboard.putBoolean("GYRO IS CALIBRATING", false);
-		}
-		else{
-			SmartDashboard.putBoolean("GYRO IS CALIBRATING", true);
-		}
 		SmartDashboard.putString("Drive Control Mode", "" + driveControlMode);
 		SmartDashboard.putNumber("Left Encoder: MXP- " + Constants.ENCODER_LEFT_A +
 				"," + Constants.ENCODER_LEFT_B + " ", getLeftPosition());
@@ -303,38 +291,6 @@ public class DriveTrain extends Subsystem implements Log, Loop {
 	public void resetEncoders() {
 		encoderLeft.reset();
 		encoderRight.reset();
-	}
-
-	public ADXRS453_Gyro getGyro(){
-		return gyro;
-	}
-	
-	/**
-	 * Calibrates the ADXRS453 Gyro on the Spartan Board
-	 */
-	public void calibrateGyro() {
-		gyro.calibrate();
-	}
-	
-	/**
-	 * Sets the current yaw of the gyro to zero
-	 */
-	public void resetGyro() {
-		gyro.reset();
-	}
-	
-	/**
-	 * @return the current angle in degrees of the robot from the gyro since the last reset
-	 */
-	public double getAngle() {
-		return gyro.getAngle();
-	}
-	
-	/**
-	 * @return the angular velocity of the robot, in degrees per second
-	 */
-	public double getAngularVelocity(){
-		return gyro.getRate();
 	}
 
 }

@@ -37,7 +37,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * directory.
  */
 public class Robot extends IterativeRobot {
-	
+
 	Looper disabledLooper;
 	Looper enabledLooper;
 	LEDStrip led;
@@ -53,19 +53,18 @@ public class Robot extends IterativeRobot {
 	Command autonomousCommand;
 	double autoStartTime = 0;
 	double autoEndTime = 0;
-	
+
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
 	 */
-	
+
 	@Override
 	public void robotInit() {
 		led = LEDStrip.getInstance();
 		driveTrain = DriveTrain.getInstance();
 		driveTrain.resetEncoders();
 		driveTrain.shiftUp(true);
-		driveTrain.calibrateGyro();
 		manipulator = Manipulator.getInstance();
 		hanger = Hanger.getInstance();
 		gearHandler = GearHandler.getInstance();
@@ -77,10 +76,10 @@ public class Robot extends IterativeRobot {
 		logger.addLog(manipulator);
 		logger.addLog(hanger);
 		logger.addLog(gearHandler);
-		//logger.addLog(PDP.getInstance());
+		// logger.addLog(PDP.getInstance());
 		logger.start();
 		disabledLooper = new Looper();
-		disabledLooper.addLoop(new GyroCalibrator());
+		//disabledLooper.addLoop(new GyroCalibrator());
 		enabledLooper = new Looper();
 		enabledLooper.addLoop(driveTrain);
 		enabledLooper.addLoop(gearHandler);
@@ -88,15 +87,13 @@ public class Robot extends IterativeRobot {
 		enabledLooper.addLoop(hanger);
 		camera0 = CameraServer.getInstance().startAutomaticCapture();
 		camera0.setResolution(160, 120);
-		camera0.setFPS(10);
-		camera0.setExposureManual(75);
+		camera0.setFPS(30);
+		camera0.setExposureAuto();
 		/*
-		camera1 = CameraServer.getInstance().startAutomaticCapture();
-		camera1.setResolution(160, 120);
-		camera1.setExposureManual(75);
-		camera1.setFPS(10);
-		*/
-		driveTrain.calibrateGyro();
+		 * camera1 = CameraServer.getInstance().startAutomaticCapture();
+		 * camera1.setResolution(160, 120); camera1.setExposureManual(75);
+		 * camera1.setFPS(10);
+		 */
 		operatorInterface = new OI();
 		autonomousChooser = new SendableChooser<>();
 		autonomousChooser.addDefault("Do Nothing Auto", new DoNothingAuto());
@@ -124,7 +121,7 @@ public class Robot extends IterativeRobot {
 		Scheduler.getInstance().run();
 		disabledLooper.log();
 	}
-	
+
 	@Override
 	public void autonomousInit() {
 		disabledLooper.stop();
@@ -140,9 +137,9 @@ public class Robot extends IterativeRobot {
 	public void autonomousPeriodic() {
 		enabledLooper.log();
 		Scheduler.getInstance().run();
-		if (!autonomousCommand.isRunning()){
+		if (!autonomousCommand.isRunning()) {
 			autoEndTime = Timer.getFPGATimestamp();
-			SmartDashboard.putNumber("AUTONOMOUS ELAPSED TIME", autoEndTime-autoStartTime);
+			SmartDashboard.putNumber("AUTONOMOUS ELAPSED TIME", autoEndTime - autoStartTime);
 		}
 	}
 
@@ -164,5 +161,5 @@ public class Robot extends IterativeRobot {
 	public void testPeriodic() {
 		LiveWindow.run();
 	}
-	
+
 }

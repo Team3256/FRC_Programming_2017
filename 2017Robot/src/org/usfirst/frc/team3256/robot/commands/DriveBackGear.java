@@ -16,8 +16,7 @@ public class DriveBackGear extends Command {
 	}
 
 	protected void initialize() {
-		drive.resetEncoders();
-    	drive.resetGyro();        
+		drive.resetEncoders();        
     	drive.shiftUp(true);
 	}
 	

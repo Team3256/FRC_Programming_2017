@@ -38,7 +38,6 @@ public class TurnInPlaceController {
 	 * resets the motion profiling controller and the gyro
 	 */
 	public void reset(){	
-		drive.resetGyro();
 		drive.resetEncoders();
 	}
 	
@@ -53,7 +52,7 @@ public class TurnInPlaceController {
 	 * @return output the calculated motor output of the trajectory follower
 	 */
 	public double update(){	
-		output = trajectoryController.calculate(drive.getAngle(), drive.getAngularVelocity());
+		output = 0;//trajectoryController.calculate(drive.getAngle(), drive.getAngularVelocity());
 		return output;
 	}
 	

@@ -49,7 +49,6 @@ public class DriveStraightController {
 		trajectoryFollower.resetController();
 		headingController.reset();
 		drive.resetEncoders();
-		drive.resetGyro();
 	}
 	
 	/**
@@ -67,7 +66,7 @@ public class DriveStraightController {
 		//follower output for distance
 		output = trajectoryFollower.update(Math.abs(drive.getAveragePosition()));
 		//pid output for driving straight
-		headingAdjustment = headingController.update(drive.getAngle() * (reversed ? -1 : 1));
+		headingAdjustment = 0;//headingController.update(drive.getAngle() * (reversed ? -1 : 1));
 		//adjust values for the left and right sides of the drivetrain
 		leftOutput = output - headingAdjustment;
 		rightOutput = output + headingAdjustment;
