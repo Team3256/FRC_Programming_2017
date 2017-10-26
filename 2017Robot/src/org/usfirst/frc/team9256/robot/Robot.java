@@ -1,15 +1,14 @@
 package org.usfirst.frc.team9256.robot;
 
-import org.usfirst.frc.team9256.lib.GyroCalibrator;
 import org.usfirst.frc.team9256.lib.LEDStrip;
 import org.usfirst.frc.team9256.lib.Logger;
 import org.usfirst.frc.team9256.lib.Looper;
 import org.usfirst.frc.team9256.robot.automodes.BaselineCross;
 import org.usfirst.frc.team9256.robot.automodes.DoNothingAuto;
 import org.usfirst.frc.team9256.robot.automodes.FrontGearCenterAuto;
+import org.usfirst.frc.team9256.robot.automodes.FrontGearLeftAuto;
+import org.usfirst.frc.team9256.robot.automodes.FrontGearRightAuto;
 import org.usfirst.frc.team9256.robot.automodes.GearCenterAuto;
-import org.usfirst.frc.team9256.robot.automodes.GearLeftAuto;
-import org.usfirst.frc.team9256.robot.automodes.GearRightAuto;
 import org.usfirst.frc.team9256.robot.commands.AutoDeployFrontGear;
 import org.usfirst.frc.team9256.robot.commands.DriveTesting;
 import org.usfirst.frc.team9256.robot.commands.TurnTesting;
@@ -99,10 +98,8 @@ public class Robot extends IterativeRobot {
 		autonomousChooser.addDefault("Do Nothing Auto", new DoNothingAuto());
 		autonomousChooser.addObject("Cross Baseline Only", new BaselineCross());
 		autonomousChooser.addObject("Center Gear", new GearCenterAuto());
-		autonomousChooser.addObject("Left-Side Gear", new GearLeftAuto());
-		autonomousChooser.addObject("Left-Side Gear w/ Blue Hopper", new GearLeftAuto());
-		autonomousChooser.addObject("Right-Side Gear", new GearRightAuto(false));
-		autonomousChooser.addObject("Right-Side Gear w/ Red Hopper", new GearRightAuto(true));
+		autonomousChooser.addObject("Left-Side Gear", new FrontGearLeftAuto());
+		autonomousChooser.addObject("Right-Side Gear", new FrontGearRightAuto());
 		autonomousChooser.addObject("Drive Testing", new DriveTesting());
 		autonomousChooser.addObject("Turn Testing", new TurnTesting());
 		autonomousChooser.addObject("Gear Auto Deploy Testing", new AutoDeployFrontGear());

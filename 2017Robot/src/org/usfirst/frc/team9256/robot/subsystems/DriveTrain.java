@@ -247,7 +247,7 @@ public class DriveTrain extends Subsystem implements Log, Loop {
 	 * @return The angle of the robot using encoder positions rather than a gyro
 	 */
 	public double getEncoderAngle() {
-		double sideDifference = getRightPosition() - getLeftPosition();
+		double sideDifference = getLeftPosition() - getRightPosition();
 		return (sideDifference / 2) * 360 / (Constants.ROBOT_TRACK * Math.PI);
 	}
 	

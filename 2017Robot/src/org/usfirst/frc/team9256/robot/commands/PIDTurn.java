@@ -37,6 +37,7 @@ public class PIDTurn extends Command {
  
     // Called just before this Command runs the first time
     protected void initialize() {
+    	drive.resetEncoders();
     	drive.shiftUp(false);
     	pid.setSetpoint(setpoint);  
         notifier = new Notifier(new Runnable(){
@@ -65,7 +66,7 @@ public class PIDTurn extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return true;//(pid.isFinished() && Math.abs(setpoint-drive.getAngle()) <= 1 && Timer.getFPGATimestamp()-startTime > 1) || Timer.getFPGATimestamp()-startTime > 2.5;
+        return (pid.isFinished() && Math.abs(setpoint-drive.getEncoderAngle()) <= 1 && Timer.getFPGATimestamp()-startTime > 1) || Timer.getFPGATimestamp()-startTime > 2.5;
     }
 
     /**
