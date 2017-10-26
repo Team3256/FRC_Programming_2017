@@ -244,6 +244,14 @@ public class DriveTrain extends Subsystem implements Log, Loop {
 	}
 	
 	/**
+	 * @return The angle of the robot using encoder positions rather than a gyro
+	 */
+	public double getEncoderAngle() {
+		double sideDifference = getRightPosition() - getLeftPosition();
+		return (sideDifference / 2) * 360 / (Constants.ROBOT_TRACK * Math.PI);
+	}
+	
+	/**
 	 * @return The current traveled distance of the left drive encoder since the last reset
 	 */
 	public double getLeftPosition() {
@@ -292,5 +300,4 @@ public class DriveTrain extends Subsystem implements Log, Loop {
 		encoderLeft.reset();
 		encoderRight.reset();
 	}
-
 }

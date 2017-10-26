@@ -42,7 +42,7 @@ public class PIDTurn extends Command {
         notifier = new Notifier(new Runnable(){
 			@Override
 			public void run() {
-		    	double output = 0;//pid.update(Math.abs(drive.getAngle()));
+		    	double output = pid.update(Math.abs(drive.getEncoderAngle()));
 		    	if (turnRight){
 		    		drive.setLeftMotorPower(output);
 		    		drive.setRightMotorPower(oneWheel ? 0 : -output);

@@ -52,7 +52,7 @@ public class TurnInPlaceController {
 	 * @return output the calculated motor output of the trajectory follower
 	 */
 	public double update(){	
-		output = 0;//trajectoryController.calculate(drive.getAngle(), drive.getAngularVelocity());
+		output = 0; //trajectoryController.calculate(drive.getEncoderAngle(), drive.getAngularVelocity());
 		return output;
 	}
 	
