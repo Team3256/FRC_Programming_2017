@@ -8,14 +8,12 @@ import org.usfirst.frc.team9256.robot.automodes.DoNothingAuto;
 import org.usfirst.frc.team9256.robot.automodes.FrontGearCenterAuto;
 import org.usfirst.frc.team9256.robot.automodes.FrontGearLeftAuto;
 import org.usfirst.frc.team9256.robot.automodes.FrontGearRightAuto;
-import org.usfirst.frc.team9256.robot.automodes.GearCenterAuto;
 import org.usfirst.frc.team9256.robot.commands.AutoDeployFrontGear;
 import org.usfirst.frc.team9256.robot.commands.DriveTesting;
 import org.usfirst.frc.team9256.robot.commands.TurnTesting;
 import org.usfirst.frc.team9256.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team9256.robot.subsystems.GearHandler;
 import org.usfirst.frc.team9256.robot.subsystems.Hanger;
-import org.usfirst.frc.team9256.robot.subsystems.Manipulator;
 
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
@@ -42,7 +40,6 @@ public class Robot extends IterativeRobot {
 	LEDStrip led;
 	DriveTrain driveTrain;
 	GearHandler gearHandler;
-	Manipulator manipulator;
 	Hanger hanger;
 	Compressor compressor;
 	OI operatorInterface;
@@ -64,7 +61,6 @@ public class Robot extends IterativeRobot {
 		driveTrain = DriveTrain.getInstance();
 		driveTrain.resetEncoders();
 		driveTrain.shiftUp(true);
-		manipulator = Manipulator.getInstance();
 		hanger = Hanger.getInstance();
 		gearHandler = GearHandler.getInstance();
 		gearHandler.setEncoderPosition(Constants.GEAR_PIVOT_CALIBRATE_POS);
@@ -72,7 +68,6 @@ public class Robot extends IterativeRobot {
 		compressor.setClosedLoopControl(true);
 		logger = new Logger();
 		logger.addLog(driveTrain);
-		logger.addLog(manipulator);
 		logger.addLog(hanger);
 		logger.addLog(gearHandler);
 		// logger.addLog(PDP.getInstance());
@@ -82,7 +77,6 @@ public class Robot extends IterativeRobot {
 		enabledLooper = new Looper();
 		enabledLooper.addLoop(driveTrain);
 		enabledLooper.addLoop(gearHandler);
-		enabledLooper.addLoop(manipulator);
 		enabledLooper.addLoop(hanger);
 		camera0 = CameraServer.getInstance().startAutomaticCapture();
 		camera0.setResolution(160, 120);
@@ -96,13 +90,12 @@ public class Robot extends IterativeRobot {
 		operatorInterface = new OI();
 		autonomousChooser = new SendableChooser<>();
 		autonomousChooser.addDefault("Do Nothing Auto", new DoNothingAuto());
-		autonomousChooser.addObject("Cross Baseline Only", new BaselineCross());
-		autonomousChooser.addObject("Center Gear", new GearCenterAuto());
-		autonomousChooser.addObject("Left-Side Gear", new FrontGearLeftAuto());
-		autonomousChooser.addObject("Right-Side Gear", new FrontGearRightAuto());
-		autonomousChooser.addObject("Drive Testing", new DriveTesting());
-		autonomousChooser.addObject("Turn Testing", new TurnTesting());
-		autonomousChooser.addObject("Gear Auto Deploy Testing", new AutoDeployFrontGear());
+		autonomousChooser.addObject("Cross Baseline Forward", new BaselineCross());
+		autonomousChooser.addObject("Left-Side Gear Forward", new FrontGearLeftAuto());
+		autonomousChooser.addObject("Right-Side Gear Forward", new FrontGearRightAuto());
+		//autonomousChooser.addObject("Drive Testing", new DriveTesting());
+		//autonomousChooser.addObject("Turn Testing", new TurnTesting());
+		//autonomousChooser.addObject("Gear Auto Deploy Testing", new AutoDeployFrontGear());
 		autonomousChooser.addObject("Center Front Gear Auto", new FrontGearCenterAuto());
 		SmartDashboard.putData("Autonomous Chooser", autonomousChooser);
 	}

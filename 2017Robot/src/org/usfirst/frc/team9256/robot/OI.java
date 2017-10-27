@@ -2,11 +2,7 @@ package org.usfirst.frc.team9256.robot;
 
 import org.usfirst.frc.team9256.lib.Log;
 import org.usfirst.frc.team9256.robot.commands.AttachVelcro;
-import org.usfirst.frc.team9256.robot.commands.CloseBackGear;
 import org.usfirst.frc.team9256.robot.commands.DeployFrontGear;
-import org.usfirst.frc.team9256.robot.commands.HoldBackGearDeploy;
-import org.usfirst.frc.team9256.robot.commands.HumanPlayerBallsIntake;
-import org.usfirst.frc.team9256.robot.commands.HumanPlayerGearIntake;
 import org.usfirst.frc.team9256.robot.commands.RunHang;
 import org.usfirst.frc.team9256.robot.commands.StartIntakeGear;
 import org.usfirst.frc.team9256.robot.commands.StopHang;
@@ -78,11 +74,6 @@ public class OI implements Log{
     	 				Hold Right Trigger: Spits Balls
     	 				Hold Left Trigger: Intake Balls
     	 */
-    	
-    	buttonY2.whenPressed(new HumanPlayerGearIntake());
-    	buttonA2.whenPressed(new HumanPlayerBallsIntake());
-    	buttonX2.whileHeld(new HoldBackGearDeploy());
-    	buttonX2.whenReleased(new CloseBackGear());
 		leftBumper2.whenPressed(new StartIntakeGear());
 		leftBumper2.whenReleased(new StowLowGearHandler());
 		buttonB2.whileHeld(new DeployFrontGear());

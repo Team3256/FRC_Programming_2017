@@ -32,6 +32,8 @@ public class GearHandler extends Subsystem implements Log, Loop {
 	private double manualPivotInput = 0.0;
 	private double manualRollerInput = 0.0;
 	private boolean currentlyDeploying = false;
+	private double startSpikeTime = 0.0;
+	private boolean hasSpiked = false;
 	private boolean encoderDetected;
 	public boolean hasGear = false;
 	private TalonControlMode pivotControlMode;
@@ -245,8 +247,13 @@ public class GearHandler extends Subsystem implements Log, Loop {
 	}
 	
 	public boolean updateHasGear(){
-		if (getRollerCurrent() > 20){
+		if (getRollerCurrent() > 20 && !hasSpiked){
+			hasSpiked = true;
+			startSpikeTime = Timer.getFPGATimestamp();
+		}
+		if (hasSpiked && Timer.getFPGATimestamp() - startSpikeTime > 0.15){
 			hasGear = true;
+			hasSpiked = false;
 			return true;
 		}
 		return false;

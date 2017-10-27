@@ -6,6 +6,6 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 
 public class BaselineCross extends CommandGroup {
 	public BaselineCross() {
-		addSequential(new DriveToDistance(70, false));
+		addSequential(new DriveToDistance(70, true));
 	}
 }
